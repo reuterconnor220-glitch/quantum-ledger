@@ -16,6 +16,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/darpa-qbi',
     '/qnt-ipo-watch',
     '/learn',
+    '/learn/applications',
+    '/learn/risks',
+    '/learn/resources',
     '/methodology',
     '/about',
   ].map((p) => ({

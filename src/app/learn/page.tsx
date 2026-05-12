@@ -55,16 +55,17 @@ export default function LearnPage() {
         {/* Article */}
         <article className="prose-editorial">
           {/* Hero */}
-          <header className="mb-12">
+          <header className="mb-10">
             <p className="text-xs uppercase tracking-[0.2em] text-accent-quantum font-mono mb-4">
-              The Primer
+              Start here
             </p>
             <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight leading-[1.05]">
-              Quantum computing — for the curious investor, and for the physicist.
+              What is quantum computing? Why does it matter?
             </h1>
             <p className="mt-6 text-xl text-editorial-ink/75 leading-relaxed max-w-[60ch]">
-              Quantum computers are not faster classical computers. Sixteen concepts, on one page,
-              with expandable depth toggles for the math, code, and citations.
+              In one sentence: a fundamentally new kind of computer that isn&apos;t faster at everything —
+              but is dramatically faster at a small, important set of problems that classical computers
+              can&apos;t solve.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3 text-xs font-mono text-editorial-ink/60">
               <span>~15 min surface read</span>
@@ -74,6 +75,127 @@ export default function LearnPage() {
               <span>Last updated May 2026</span>
             </div>
           </header>
+
+          {/* High-level intro for total newbies */}
+          <section className="not-prose mb-12">
+            <div className="bg-white border border-editorial-ink/10 rounded-md p-6 md:p-8 mb-6">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-accent-quantum font-mono mb-3">
+                The 60-second mental model
+              </p>
+              <p className="text-[17px] leading-[1.7] text-editorial-ink/85 mb-4">
+                Your laptop has a <strong>CPU</strong> for general tasks. It may have a <strong>GPU</strong> for
+                graphics and AI. Both are <em>classical</em> computers — they crunch through ones and zeros.
+              </p>
+              <p className="text-[17px] leading-[1.7] text-editorial-ink/85 mb-4">
+                A <strong>QPU</strong> (Quantum Processing Unit) is a third kind of co-processor. Instead of
+                bits, it uses <em>qubits</em>: physical objects (atoms, photons, superconducting circuits)
+                that exploit the weird rules of quantum mechanics. You won&apos;t put one in your laptop. You
+                also won&apos;t need to — quantum computers are specialists. You&apos;ll call them from the
+                cloud, the same way you call a GPU, for very specific problems where they win.
+              </p>
+              <p className="text-[17px] leading-[1.7] text-editorial-ink/85">
+                Those problems happen to include some of the most economically important ones we have:
+                designing new drugs, simulating new materials, breaking certain kinds of encryption, and
+                optimizing complex systems. That&apos;s why $11+ billion of private capital and $30–40 billion
+                of government money have flowed into this space — and why every major tech company has a
+                quantum division.
+              </p>
+            </div>
+
+            {/* The CPU/GPU/QPU card comparison */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+              <ComputeKindCard
+                title="CPU"
+                subtitle="Classical general-purpose"
+                bullets={['Everything your computer does', 'Sequential, versatile', 'Used since the 1950s']}
+                color="text-blue-700 bg-blue-500/10"
+              />
+              <ComputeKindCard
+                title="GPU"
+                subtitle="Classical specialist"
+                bullets={['Graphics + AI training', 'Massively parallel', 'Coprocessor — you call it']}
+                color="text-emerald-700 bg-emerald-500/10"
+              />
+              <ComputeKindCard
+                title="QPU"
+                subtitle="Quantum specialist"
+                bullets={['Chemistry, cryptography, optimization', 'Different rules entirely', 'Coprocessor — you call it']}
+                color="text-violet-700 bg-violet-500/10 ring-1 ring-violet-500/30"
+                highlight
+              />
+            </div>
+
+            {/* The "if I only ask 5 questions" panel */}
+            <details className="bg-white border border-editorial-ink/10 rounded-md p-6 group">
+              <summary className="cursor-pointer text-sm font-mono uppercase tracking-wider text-accent-quantum font-medium select-none flex justify-between items-center">
+                <span>Five questions everyone asks · click to expand</span>
+                <span className="text-editorial-ink/40 group-open:rotate-180 transition">⌄</span>
+              </summary>
+              <div className="mt-5 space-y-5">
+                <QA
+                  q="Will quantum break encryption?"
+                  a="Yes, eventually — RSA and ECC (the math behind most internet security) fall to Shor's algorithm. But you need millions of physical qubits or thousands of logical ones. That&apos;s a 2030+ problem. NIST already standardized post-quantum replacements in 2024 (ML-KEM, ML-DSA). Apple and Cloudflare have already deployed them."
+                />
+                <QA
+                  q="When will quantum computers be useful?"
+                  a="For chemistry and materials simulation: 2028–2032 is the credible window. For optimization: parts of it work today on D-Wave annealers. For machine learning: highly speculative. For breaking RSA at scale: 2030+. Anyone promising 'universal fault-tolerance by 2030' is selling a roadmap, not a product."
+                />
+                <QA
+                  q="Do I need a quantum computer in my office?"
+                  a="No. You'll never own one personally and most companies won't either. Like GPUs in the cloud era, you'll rent compute through AWS Braket, Azure Quantum, IBM Quantum Platform, or IonQ Cloud for specific jobs."
+                />
+                <QA
+                  q="Will quantum replace classical computing?"
+                  a="No. They&apos;re complements. Quantum computers are specialists — they only outperform classical for problems with specific mathematical structure (factoring, simulating quantum systems, certain searches). Your laptop and the world&apos;s data centers stay classical."
+                />
+                <QA
+                  q="What about AI plus quantum?"
+                  a="Mostly hype today. There are real but narrow theoretical results. No demonstrated quantum advantage on real-world ML benchmarks exists. The honest near-term story is: classical AI orchestrating quantum subroutines (chemistry, optimization), not 'quantum AI takes over.'"
+                />
+              </div>
+            </details>
+          </section>
+
+          {/* Navigation cards to sub-pages */}
+          <nav className="not-prose mb-14">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-editorial-ink/50 font-mono mb-3">
+              Three companion pages
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <SubPageCard
+                href="/learn/applications"
+                eyebrow="Applications"
+                title="How quantum changes the world"
+                body="Ten domains where quantum could create — or destroy — enormous value. Drug discovery, climate, materials, cryptography, more."
+              />
+              <SubPageCard
+                href="/learn/risks"
+                eyebrow="Risks"
+                title="The dangers & tradeoffs"
+                body="Ten serious risks scored on impact and likelihood. Harvest-now-decrypt-later, geopolitical asymmetry, capital bubble, more."
+              />
+              <SubPageCard
+                href="/learn/resources"
+                eyebrow="Go deeper"
+                title="Best books, videos, podcasts"
+                body="Forty hand-picked resources from newbie to research-physicist. Searchable, filterable, free where possible."
+              />
+            </div>
+          </nav>
+
+          <hr className="border-editorial-ink/15 my-12" />
+
+          <p className="text-[10px] uppercase tracking-[0.2em] text-accent-quantum font-mono mb-3">
+            The primer · sixteen concepts
+          </p>
+          <h2 className="font-display text-3xl tracking-tight mb-3 mt-0">
+            Now, the actual physics — for the curious investor and the physicist
+          </h2>
+          <p className="text-editorial-ink/75 leading-relaxed text-[17px]">
+            Sixteen concepts from <em>what is a qubit</em> through <em>fault-tolerant computing</em>.
+            Surface text reads in 15 minutes. Every concept has expandable toggles for the math,
+            the code, and the citations.
+          </p>
 
           {/* Section 0 — Misconceptions */}
           <section id="misconceptions">
@@ -474,6 +596,67 @@ H|1⟩ = (|0⟩ − |1⟩) / √2 = |−⟩`}
           </section>
         </article>
       </div>
+    </div>
+  );
+}
+
+function ComputeKindCard({
+  title,
+  subtitle,
+  bullets,
+  color,
+  highlight = false,
+}: {
+  title: string;
+  subtitle: string;
+  bullets: string[];
+  color: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div className={`rounded-md p-5 ${color} ${highlight ? '' : 'border border-editorial-ink/10 bg-white'}`}>
+      <p className="font-display text-2xl tracking-tight">{title}</p>
+      <p className="text-xs uppercase tracking-wider font-mono mt-1 opacity-70">{subtitle}</p>
+      <ul className="mt-3 space-y-1 text-sm text-editorial-ink/80">
+        {bullets.map((b, i) => (
+          <li key={i}>· {b}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function SubPageCard({
+  href,
+  eyebrow,
+  title,
+  body,
+}: {
+  href: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="block bg-white border border-editorial-ink/10 hover:border-accent-quantum/50 hover:shadow-md transition rounded-md p-5 group"
+    >
+      <p className="text-[10px] uppercase tracking-wider text-accent-quantum font-mono mb-2">{eyebrow}</p>
+      <h3 className="font-display text-lg tracking-tight text-editorial-ink mb-2 group-hover:text-accent-quantum">
+        {title}
+      </h3>
+      <p className="text-sm text-editorial-ink/70 leading-relaxed">{body}</p>
+      <span className="mt-3 inline-block text-xs font-mono text-accent-quantum">Open →</span>
+    </a>
+  );
+}
+
+function QA({ q, a }: { q: string; a: string }) {
+  return (
+    <div>
+      <p className="font-display text-lg text-editorial-ink mb-1">{q}</p>
+      <p className="text-[15px] leading-relaxed text-editorial-ink/80">{a}</p>
     </div>
   );
 }
