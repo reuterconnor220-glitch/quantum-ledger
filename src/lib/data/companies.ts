@@ -1,10 +1,11 @@
 import type { Company } from '@/lib/types';
+import { COMPANIES_EXTRA } from './companies-extra';
 
 /**
  * v1 seed company data — all figures sourced from research conducted May 2026.
  * Move to Supabase post-deploy; this file is the canonical seed for migrations.
  */
-export const COMPANIES: Company[] = [
+const CORE_COMPANIES: Company[] = [
   // ============== PUBLIC PURE-PLAYS ==============
   {
     slug: 'ionq',
@@ -352,6 +353,8 @@ export const COMPANIES: Company[] = [
     asOfDate: '2026-05-12',
   },
 ];
+
+export const COMPANIES: Company[] = [...CORE_COMPANIES, ...COMPANIES_EXTRA];
 
 export function getCompany(slug: string): Company | undefined {
   return COMPANIES.find((c) => c.slug === slug);

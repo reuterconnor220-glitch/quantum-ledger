@@ -8,13 +8,21 @@ export type TechnologyApproach =
   | 'nv_center'
   | 'annealing'
   | 'diversified'
-  | 'encryption';
+  | 'encryption'
+  | 'cat_qubit'
+  | 'bosonic'
+  | 'software'
+  | 'controls'
+  | 'qec_stack'
+  | 'sensing';
 
 export type Purity =
   | 'pure_play'
   | 'diversified'
   | 'government_focused'
-  | 'encryption_adjacent';
+  | 'encryption_adjacent'
+  | 'software_layer'
+  | 'sensing_adjacent';
 
 export type ValuationImpact = 'bullish' | 'bearish' | 'neutral' | 'mixed';
 
@@ -117,4 +125,10 @@ export const TECHNOLOGY_LABEL: Record<TechnologyApproach, string> = {
   annealing: 'Annealing',
   diversified: 'Diversified',
   encryption: 'PQ Encryption',
+  cat_qubit: 'Cat Qubit',
+  bosonic: 'Bosonic',
+  software: 'Software',
+  controls: 'Controls',
+  qec_stack: 'QEC Stack',
+  sensing: 'Sensing',
 };

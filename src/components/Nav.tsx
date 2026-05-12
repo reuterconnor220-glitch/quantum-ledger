@@ -9,9 +9,12 @@ const links = [
   { href: '/brief', label: 'Brief' },
   { href: '/news', label: 'News' },
   { href: '/companies', label: 'Companies' },
+  { href: '/benchmarks', label: 'Benchmarks' },
+  { href: '/roadmaps', label: 'Roadmaps' },
   { href: '/revenue', label: 'Revenue' },
-  { href: '/learn', label: 'Learn' },
+  { href: '/darpa-qbi', label: 'DARPA QBI' },
   { href: '/qnt-ipo-watch', label: 'QNT IPO' },
+  { href: '/learn', label: 'Learn' },
 ];
 
 export function Nav() {

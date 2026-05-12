@@ -10,9 +10,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/brief',
     '/news',
     '/companies',
+    '/benchmarks',
+    '/roadmaps',
     '/revenue',
-    '/learn',
+    '/darpa-qbi',
     '/qnt-ipo-watch',
+    '/learn',
     '/methodology',
     '/about',
   ].map((p) => ({

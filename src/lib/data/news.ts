@@ -1,10 +1,11 @@
 import type { NewsArticle } from '@/lib/types';
+import { NEWS_EXTRA } from './news-extra';
 
 /**
  * v1 seed news — recent real stories curated from research (May 2026).
  * The daily cron pipeline will append to this dataset post-launch.
  */
-export const SEED_NEWS: NewsArticle[] = [
+const CORE_NEWS: NewsArticle[] = [
   {
     id: 'n-2026-05-08-quantinuum-s1',
     source: 'quantum_insider',
@@ -244,6 +245,8 @@ export const SEED_NEWS: NewsArticle[] = [
     topicTags: ['milestone', 'technical'],
   },
 ];
+
+export const SEED_NEWS: NewsArticle[] = [...CORE_NEWS, ...NEWS_EXTRA];
 
 export function getRecentNews(limit = 20): NewsArticle[] {
   return [...SEED_NEWS]
