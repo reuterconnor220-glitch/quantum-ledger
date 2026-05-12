@@ -1,0 +1,150 @@
+import type { QuantumEvent } from '@/lib/types';
+
+export const EVENTS: QuantumEvent[] = [
+  {
+    id: 'e-2024-12-09-willow',
+    eventDate: '2024-12-09',
+    eventType: 'milestone',
+    title: 'Google Willow demonstrates below-threshold QEC',
+    description: '105-qubit chip; error rate halves with each lattice scale-up — most important QEC milestone of the decade.',
+    companySlugs: ['google'],
+    sourceUrl: 'https://blog.google/innovation-and-ai/technology/research/google-willow-quantum-chip/',
+  },
+  {
+    id: 'e-2025-02-19-majorana1',
+    eventDate: '2025-02-19',
+    eventType: 'milestone',
+    title: 'Microsoft announces Majorana 1 (contested)',
+    description: 'Topological qubit claim using InAs/Al heterostructure. Scientifically contested by Aaronson and 2025 Australian team.',
+    companySlugs: ['microsoft'],
+    sourceUrl: 'https://azure.microsoft.com/en-us/blog/quantum/2025/02/19/microsoft-unveils-majorana-1/',
+  },
+  {
+    id: 'e-2025-04-15-darpa-qbi-stagea',
+    eventDate: '2025-04-15',
+    eventType: 'gov_contract',
+    title: 'DARPA QBI Stage A — 18 companies selected',
+    description: 'Concept characterization phase of the Quantum Benchmarking Initiative.',
+    companySlugs: [],
+    sourceUrl: 'https://www.darpa.mil/research/programs/quantum-benchmarking-initiative',
+  },
+  {
+    id: 'e-2025-09-10-psiquantum-1b',
+    eventDate: '2025-09-10',
+    eventType: 'funding_round',
+    title: 'PsiQuantum closes $1B Series E at $7B',
+    description: 'Led by BlackRock — first major public asset manager anchoring a quantum hardware round.',
+    companySlugs: ['psiquantum'],
+    amountUsd: 1e9,
+  },
+  {
+    id: 'e-2025-09-15-quantinuum-600',
+    eventDate: '2025-09-15',
+    eventType: 'funding_round',
+    title: 'Quantinuum raises $600M at $10B pre-money',
+    description: 'Honeywell + JPMorgan led; later expanded to ~$800M with NVIDIA and Quanta Computer joining.',
+    companySlugs: ['quantinuum'],
+    amountUsd: 800e6,
+  },
+  {
+    id: 'e-2025-11-01-doe-625',
+    eventDate: '2025-11-01',
+    eventType: 'gov_contract',
+    title: 'DOE commits $625M to renew five National QIS Centers',
+    description: 'Largest US quantum funding announcement to date; $125M in FY25.',
+    companySlugs: [],
+    amountUsd: 625e6,
+  },
+  {
+    id: 'e-2025-11-05-helios',
+    eventDate: '2025-11-05',
+    eventType: 'milestone',
+    title: 'Quantinuum Helios launches: 96 physical / 48 logical qubits',
+    description: '99.99% SPAM fidelity; first universal fault-tolerant gate set with repeatable QEC.',
+    companySlugs: ['quantinuum'],
+  },
+  {
+    id: 'e-2025-11-11-qbi-stageb',
+    eventDate: '2025-11-11',
+    eventType: 'gov_contract',
+    title: 'DARPA QBI Stage B — 11 companies advance',
+    description: 'IBM, Quantinuum, IonQ, Atom Computing, PsiQuantum, Diraq, Nord Quantique, Photonic Inc., Quantum Motion, QuEra, SQC, Xanadu.',
+    companySlugs: ['ibm', 'quantinuum', 'ionq', 'atom-computing', 'psiquantum', 'diraq', 'quera', 'xanadu'],
+  },
+  {
+    id: 'e-2025-11-12-ibm-summit',
+    eventDate: '2025-11-12',
+    eventType: 'technical',
+    title: 'IBM Quantum Summit: Nighthawk + Loon + Kookaburra roadmap',
+    description: '120-qubit Nighthawk GA, qLDPC C-couplers tested in Loon, 10× QEC decoder speedup delivered a year ahead of plan.',
+    companySlugs: ['ibm'],
+  },
+  {
+    id: 'e-2026-03-04-pasqal-spac',
+    eventDate: '2026-03-04',
+    eventType: 'spac',
+    title: 'Pasqal announces SPAC at $2.6B pro forma',
+    description: 'Merger with Bleichroeder Acquisition Corp II; €340M PIPE+convertible.',
+    companySlugs: ['pasqal'],
+    amountUsd: 370e6,
+  },
+  {
+    id: 'e-2026-03-26-xanadu-listing',
+    eventDate: '2026-03-26',
+    eventType: 'ipo',
+    title: 'Xanadu lists on Nasdaq/TSX as XNDU',
+    description: '$302M gross proceeds via SPAC; first photonic public pure-play.',
+    companySlugs: ['xanadu'],
+    amountUsd: 302e6,
+  },
+  {
+    id: 'e-2026-04-15-skywater',
+    eventDate: '2026-04-15',
+    eventType: 'milestone',
+    title: 'IonQ announces $1.8B SkyWater acquisition',
+    description: 'Creates only US vertically integrated quantum-plus-chip-fab company; DoD Trusted Foundry access.',
+    companySlugs: ['ionq'],
+    amountUsd: 1.8e9,
+  },
+  {
+    id: 'e-2026-05-04-xanadu-resale',
+    eventDate: '2026-05-04',
+    eventType: 'milestone',
+    title: 'Xanadu drops 67% premarket on 294M share resale filing',
+    description: 'Float-management warning shot for upcoming Pasqal and Quantinuum listings.',
+    companySlugs: ['xanadu'],
+  },
+  {
+    id: 'e-2026-05-06-ionq-q1',
+    eventDate: '2026-05-06',
+    eventType: 'earnings',
+    title: 'IonQ Q1: $64.7M revenue (+755% YoY); guidance raised to $260-270M',
+    description: 'RPOs $470M (+554% YoY); adj. EBITDA loss $96.8M.',
+    companySlugs: ['ionq'],
+  },
+  {
+    id: 'e-2026-05-08-quantinuum-s1',
+    eventDate: '2026-05-08',
+    eventType: 'ipo',
+    title: 'Quantinuum files S-1 targeting $20B+ IPO under QNT',
+    description: 'Defining pricing event for the public quantum cohort; 2025 revenue $30.9M.',
+    companySlugs: ['quantinuum'],
+  },
+  {
+    id: 'e-2026-05-12-dwave-q1',
+    eventDate: '2026-05-12',
+    eventType: 'earnings',
+    title: 'D-Wave Q1: Revenue -81% on lumpy comp; bookings +1,994% to $33.4M',
+    description: 'QCaaS subscription revenue +2,015% YoY shows real subscription inflection.',
+    companySlugs: ['dwave'],
+  },
+];
+
+export function upcomingEvents(): QuantumEvent[] {
+  const now = new Date().toISOString().slice(0, 10);
+  return EVENTS.filter((e) => e.eventDate > now).sort((a, b) => a.eventDate.localeCompare(b.eventDate));
+}
+
+export function recentEvents(limit = 10): QuantumEvent[] {
+  return [...EVENTS].sort((a, b) => b.eventDate.localeCompare(a.eventDate)).slice(0, limit);
+}

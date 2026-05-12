@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-bg text-text-primary font-sans;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+  }
+
+  /* Tabular numerals everywhere */
+  .tabular,
+  table,
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Editorial / learn long-form */
+  .editorial {
+    @apply bg-editorial-cream text-editorial-ink;
+  }
+
+  .editorial h1,
+  .editorial h2,
+  .editorial h3 {
+    @apply font-display;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: rgba(124, 92, 255, 0.35);
+    color: #fff;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0B0D10;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2A2F37;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3A3F47;
+  }
+}
+
+@layer components {
+  /* Quantum-dot bullet — signature visual motif */
+  .qdot {
+    @apply inline-block w-1.5 h-1.5 rounded-full bg-accent-quantum;
+  }
+
+  .qdot-live {
+    @apply qdot animate-pulse-dot;
+    box-shadow: 0 0 8px rgba(124, 92, 255, 0.6);
+  }
+
+  /* Terminal-style data table */
+  .ql-table {
+    @apply w-full text-sm font-mono;
+  }
+  .ql-table thead th {
+    @apply text-text-muted text-xs uppercase tracking-wider font-sans font-medium pb-3 border-b border-border;
+    text-align: left;
+  }
+  .ql-table tbody td {
+    @apply py-3 border-b border-border-muted;
+  }
+  .ql-table tbody tr:hover {
+    @apply bg-bg-surface;
+  }
+  .ql-table .num {
+    @apply text-right tabular-nums;
+  }
+
+  /* Sentiment chip */
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm text-xs font-mono font-medium;
+  }
+  .chip-bull {
+    @apply bg-accent-data/10 text-accent-data;
+  }
+  .chip-bear {
+    @apply bg-accent-down/10 text-accent-down;
+  }
+  .chip-neutral {
+    @apply bg-text-muted/10 text-text-secondary;
+  }
+  .chip-mixed {
+    @apply bg-accent-warn/10 text-accent-warn;
+  }
+
+  /* Card */
+  .card {
+    @apply bg-bg-surface border border-border rounded-md;
+  }
+  .card-hover {
+    @apply transition-colors hover:bg-bg-elevated;
+  }
+
+  /* Section labels */
+  .eyebrow {
+    @apply text-xs uppercase tracking-[0.2em] text-text-muted font-mono;
+  }
+
+  /* Editorial prose for /learn */
+  .prose-editorial {
+    @apply max-w-[68ch] mx-auto;
+  }
+  .prose-editorial p {
+    @apply text-[17px] leading-[1.7] mb-5 text-editorial-ink/90;
+  }
+  .prose-editorial h2 {
+    @apply font-display text-3xl md:text-4xl font-medium mt-16 mb-5 tracking-tight;
+  }
+  .prose-editorial h3 {
+    @apply font-display text-xl md:text-2xl font-medium mt-10 mb-3;
+  }
+  .prose-editorial details {
+    @apply my-6 border-l-2 border-accent-quantum/40 pl-5 py-1;
+  }
+  .prose-editorial details > summary {
+    @apply cursor-pointer font-sans text-sm uppercase tracking-wider text-accent-quantum font-medium;
+  }
+  .prose-editorial details[open] > summary {
+    @apply mb-3;
+  }
+}
