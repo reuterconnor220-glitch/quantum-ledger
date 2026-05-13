@@ -13,6 +13,16 @@ export interface Essay {
 
 export const ESSAYS: Essay[] = [
   {
+    slug: 'quantinuum-s1-reading',
+    title: "Reading Quantinuum's S-1",
+    subtitle: "Six numbers that matter, four that don't, and where the IPO actually prices. The closest reading we have produced of any S-1 to date.",
+    publishDate: '2026-05-13',
+    readMinutes: 13,
+    author: 'Connor Reuter',
+    teaser: "The closest reading we have produced of any S-1 to date.",
+    category: 'analysis',
+  },
+  {
     slug: 'how-to-think-about-quantum',
     title: 'How to think about quantum computing as an investor',
     subtitle: 'A framework for separating physics from financials, distinguishing utility from supremacy, and using DARPA to discount marketing budgets.',

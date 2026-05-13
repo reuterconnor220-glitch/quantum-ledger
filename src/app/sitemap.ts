@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/earnings',
     '/essays',
     '/essays/how-to-think-about-quantum',
+    '/essays/quantinuum-s1-reading',
     '/learn',
     '/learn/double-slit',
     '/learn/bell-test',
