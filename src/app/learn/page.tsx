@@ -6,6 +6,7 @@ import { InterferenceVisualizer } from '@/components/learn/InterferenceVisualize
 import { EntanglementExplorer } from '@/components/learn/EntanglementExplorer';
 import { CircuitBuilder } from '@/components/learn/CircuitBuilder';
 import { GroverTrace } from '@/components/learn/GroverTrace';
+import { Giscus } from '@/components/Giscus';
 
 export const metadata = {
   title: 'Learn · Quantum Computing for Newcomers and Physicists',
@@ -643,6 +644,8 @@ H|1⟩ = (|0⟩ − |1⟩) / √2 = |−⟩`}
               </li>
             </ul>
           </section>
+
+          <Giscus />
         </article>
       </div>
     </div>

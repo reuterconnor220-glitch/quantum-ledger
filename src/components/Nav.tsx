@@ -17,6 +17,7 @@ const links = [
   { href: '/qnt-ipo-watch', label: 'QNT IPO' },
   { href: '/learn', label: 'Learn' },
   { href: '/faq', label: 'FAQ' },
+  { href: '/community', label: 'Community' },
 ];
 
 export function Nav() {

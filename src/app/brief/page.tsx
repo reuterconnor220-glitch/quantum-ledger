@@ -3,6 +3,7 @@ import { fetchLatestBrief, fetchRecentNews } from '@/lib/data/live';
 import { formatDate, formatPct, formatUsd } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
 import { ArticleLd } from '@/components/JsonLd';
+import { Giscus } from '@/components/Giscus';
 
 export const metadata = {
   title: 'Daily Brief · Today\'s Quantum Computing Intelligence',
@@ -112,9 +113,11 @@ export default async function BriefPage() {
       </section>
 
       <p className="mt-12 text-xs text-text-muted">
-        The brief is generated daily by Claude Haiku 4.5 from the prior day&apos;s top-ranked news and market
-        moves, then human-reviewed before publication. <Link href="/methodology" className="text-accent-quantum hover:underline">Methodology</Link>.
+        The brief is updated daily by an automated cron at 6am MT, blending RSS-aggregated news with
+        market moves. <Link href="/methodology" className="text-accent-quantum hover:underline">Methodology</Link>.
       </p>
+
+      <Giscus />
     </div>
   );
 }

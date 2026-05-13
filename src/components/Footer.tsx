@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { NewsletterForm } from './NewsletterForm';
+import { DiscordCTA } from './DiscordCTA';
 
 export function Footer() {
   return (
@@ -32,10 +33,14 @@ export function Footer() {
         <div>
           <p className="eyebrow mb-3">Resource</p>
           <ul className="space-y-2 text-sm">
+            <li><Link href="/today" className="text-text-secondary hover:text-text-primary">Today (deployed)</Link></li>
             <li><Link href="/qnt-ipo-watch" className="text-text-secondary hover:text-text-primary">QNT IPO Watch</Link></li>
+            <li><Link href="/faq" className="text-text-secondary hover:text-text-primary">FAQ</Link></li>
             <li><Link href="/methodology" className="text-text-secondary hover:text-text-primary">Methodology</Link></li>
             <li><Link href="/about" className="text-text-secondary hover:text-text-primary">About</Link></li>
             <li><a href="/rss.xml" className="text-text-secondary hover:text-text-primary">RSS Feed</a></li>
+            <li className="pt-2"><DiscordCTA variant="footer" /></li>
+            <li><Link href="/community" className="text-text-secondary hover:text-text-primary">Community</Link></li>
           </ul>
         </div>
       </div>

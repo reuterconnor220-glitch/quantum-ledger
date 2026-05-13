@@ -22,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/learn/risks',
     '/learn/resources',
     '/faq',
+    '/community',
     '/methodology',
     '/about',
   ].map((p) => ({

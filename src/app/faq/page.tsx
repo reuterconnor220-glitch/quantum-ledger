@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { FAQLd } from '@/components/JsonLd';
+import { Giscus } from '@/components/Giscus';
 
 export const metadata = {
   title: 'FAQ · Quantum Computing Questions, Honestly Answered',
@@ -85,6 +86,8 @@ export default function FAQPage() {
           </article>
         ))}
       </div>
+
+      <Giscus />
 
       <p className="mt-10 text-sm text-text-secondary">
         Want more depth? Read{' '}
