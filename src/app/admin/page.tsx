@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils';
 import { AdminControls } from './AdminControls';
+import { LivePresence } from './LivePresence';
 
 export const metadata = {
   title: 'Admin Dashboard',
@@ -163,6 +164,9 @@ export default async function AdminPage() {
         </div>
         <AdminControls />
       </header>
+
+      {/* Live presence — who is on the site right now */}
+      <LivePresence />
 
       {/* DB counts */}
       {counts && (
