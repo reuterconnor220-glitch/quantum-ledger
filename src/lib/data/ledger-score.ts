@@ -280,7 +280,7 @@ export const LEDGER_SCORES: LedgerScoreEntry[] = [
     'Topological qubit operation at system scale remains unproven; if Majorana fails, falls back on Atom Computing partnership.',
   ),
   entry(
-    'qubt',
+    'qci',
     'Quantum Computing Inc.',
     'QUBT',
     true,
@@ -297,7 +297,7 @@ export const LEDGER_SCORES: LedgerScoreEntry[] = [
     'Multiple is extreme relative to revenue; no DARPA validation; tech score lags peers materially.',
   ),
   entry(
-    'arqq',
+    'arqit',
     'Arqit Quantum',
     'ARQQ',
     true,
@@ -479,7 +479,7 @@ export const LEDGER_SCORES: LedgerScoreEntry[] = [
   ),
 
   entry(
-    'sqc',
+    'silicon-quantum-computing',
     'Silicon Quantum Computing (SQC)',
     undefined,
     false,

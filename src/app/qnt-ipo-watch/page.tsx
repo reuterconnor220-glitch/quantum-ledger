@@ -28,39 +28,95 @@ export default function QntPage() {
   if (!q) return null;
 
   return (
-    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12">
-      <header className="mb-12 max-w-3xl">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="qdot-live" />
-          <span className="eyebrow">Active Catalyst Tracker</span>
+    <div className="max-w-7xl mx-auto px-5 sm:px-8 pb-24">
+      {/* ────────── Masthead ────────── */}
+      <header className="pt-8 pb-5 border-b border-text-primary/90">
+        <div className="flex flex-wrap items-end justify-between gap-3 pb-5 border-b border-border-muted text-[11px] tracking-[0.08em] uppercase text-text-muted font-mono">
+          <div className="flex flex-wrap items-baseline gap-3 whitespace-nowrap">
+            <span className="qdot-live" />
+            <span>Active catalyst</span>
+            <span className="text-text-muted/60">·</span>
+            <span className="font-display text-[22px] tracking-tight text-text-primary normal-case">Ticker QNT</span>
+            <span className="text-text-muted/60">·</span>
+            <span>Nasdaq Global Select (proposed)</span>
+          </div>
+          <div className="font-display italic text-sm normal-case tracking-tight text-text-secondary">
+            S-1 filed 2026-05-08 · Pricing expected ~June 2026
+          </div>
+          <div className="text-right leading-relaxed">
+            JPM · MS · Jefferies · Evercore ISI
+          </div>
         </div>
-        <h1 className="font-display text-display-2 font-medium tracking-tight">
-          QNT IPO Watch
+
+        <h1 className="mt-6 font-display font-medium leading-[0.92] tracking-[-0.025em] text-[clamp(46px,8vw,112px)]">
+          The Quantinuum <em className="not-italic font-normal text-accent-data">IPO</em>.
         </h1>
-        <p className="mt-4 text-lg text-text-secondary leading-relaxed">
-          Quantinuum publicly filed its S-1 on May 8, 2026 targeting a Nasdaq listing under ticker{' '}
-          <span className="font-mono text-accent-quantum">QNT</span> at a $20B+ valuation. This is the
-          single most important pricing event for the public quantum cohort in 2026 — it sets a ceiling
-          (or floor) that every pure-play trades against.
+        <p className="mt-3 font-display italic text-text-muted text-base sm:text-lg max-w-[60ch]">
+          The single pricing event that re-rates every public quantum name. Tracked daily.
         </p>
       </header>
 
-      {/* Key facts */}
-      <section className="mb-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-md overflow-hidden">
-          <Stat label="Target valuation" value="$15–20B+" />
-          <Stat label="Target raise" value="Up to $1.5B" />
-          <Stat label="2025 revenue" value="$30.9M" />
-          <Stat label="Implied P/S" value="~485–650×" emphasis />
+      {/* ────────── Hero with KPIs ────────── */}
+      <section className="mt-9 py-7 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-10 border-b border-border">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-3">
+            Why this matters for everyone else
+          </p>
+          <p className="font-display italic text-xl text-text-secondary leading-snug mb-4 max-w-[60ch]">
+            A $20B price tag against $30.9M of 2025 revenue is roughly{' '}
+            <span className="not-italic font-normal text-text-primary">~485–650× sales</span>. That
+            multiple either drags every public pure-play upward, or — if QNT prices badly — becomes
+            the ceiling everyone else trades against.
+          </p>
+          <p className="text-sm text-text-secondary leading-relaxed max-w-[60ch] mb-3">
+            Honeywell (~54% pre-IPO owner) gets the most direct mark-to-market. IonQ holders should
+            expect their multiple compressed against a higher-fidelity competitor with Microsoft
+            Azure distribution. The narrative shifts from &ldquo;IonQ is the only public quantum
+            pure-play&rdquo; to &ldquo;Quantinuum vs IonQ vs everyone else.&rdquo;
+          </p>
+          <p className="text-sm text-accent-warn leading-relaxed max-w-[60ch] mb-3">
+            <strong>Float-management warning:</strong> Xanadu (XNDU) dropped 67% premarket on May 4
+            after filing to register 294M resale shares. The lesson for QNT — and for Pasqal&apos;s
+            pending SPAC — is that newly-public quantum names must manage post-IPO float carefully
+            or retail flows turn fast.
+          </p>
         </div>
-        <p className="mt-3 text-xs font-mono uppercase tracking-wider text-text-muted">
-          Bookrunners: J.P. Morgan · Morgan Stanley · Jefferies · Evercore ISI · Exchange: Nasdaq Global Select (proposed)
-        </p>
+
+        <div className="space-y-2">
+          <div className="card p-4 border-accent-data/40 bg-gradient-to-b from-accent-data/5 to-transparent">
+            <p className="text-[10px] uppercase tracking-[0.08em] text-text-secondary font-mono font-semibold">Target valuation</p>
+            <p className="font-display text-3xl text-accent-data tracking-tight tabular-nums mt-1">$15–20B+</p>
+            <p className="text-[10px] font-mono text-text-muted mt-0.5">~485–650× FY25 P/S</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="card p-3">
+              <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono">Target raise</p>
+              <p className="font-display text-lg text-text-primary tracking-tight mt-1 tabular-nums">Up to $1.5B</p>
+            </div>
+            <div className="card p-3">
+              <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono">FY25 revenue</p>
+              <p className="font-display text-lg text-text-primary tracking-tight mt-1 tabular-nums">$30.9M</p>
+            </div>
+            <div className="card p-3">
+              <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono">HON stake</p>
+              <p className="font-display text-lg text-text-primary tracking-tight mt-1 tabular-nums">~54%</p>
+            </div>
+            <div className="card p-3">
+              <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono">Q1 cash</p>
+              <p className="font-display text-lg text-text-primary tracking-tight mt-1 tabular-nums">$677M</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Valuation history */}
-      <section className="mb-12">
-        <p className="eyebrow mb-4">Valuation history</p>
+      <section className="mt-14">
+        <div className="mb-5 pb-3 border-b border-text-primary/90">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+            Valuation history
+          </p>
+          <h2 className="font-display font-normal text-3xl tracking-tight">From $5B to $20B in 20 months.</h2>
+        </div>
         <div className="card overflow-x-auto">
           <table className="ql-table w-full">
             <thead>
@@ -105,35 +161,14 @@ export default function QntPage() {
         </p>
       </section>
 
-      {/* Why this matters */}
-      <section className="mb-12">
-        <h2 className="font-display text-3xl tracking-tight mb-4">Why this matters for everyone else</h2>
-        <div className="space-y-4 text-text-secondary leading-relaxed">
-          <p>
-            A $20B price tag against $30.9M of 2025 revenue is roughly <span className="font-mono text-text-primary">650× sales</span>.
-            That multiple either drags every public pure-play upward (IonQ at ~111×, Rigetti at ~900×,
-            D-Wave at ~670×, QUBT at ~460×) or — if QNT prices badly — becomes the ceiling everyone
-            else trades against.
-          </p>
-          <p>
-            Honeywell (HON) holders are the most direct beneficiaries: ~54% pre-IPO ownership translates
-            into partial liquidity and a likely special dividend at listing. IonQ holders should expect
-            their multiple compressed against a higher-fidelity competitor with Microsoft Azure
-            distribution. The narrative shifts from &quot;IonQ is the only public quantum company&quot; to
-            &quot;Quantinuum vs IonQ vs everyone else.&quot;
-          </p>
-          <p>
-            <strong className="text-accent-warn">Float-management warning:</strong> Xanadu (XNDU) dropped
-            67% premarket on May 4 after filing to register 294M resale shares. The lesson for QNT —
-            and for Pasqal&apos;s pending SPAC — is that newly-public quantum names must manage post-IPO
-            float carefully or retail flows turn fast.
-          </p>
-        </div>
-      </section>
-
       {/* Timeline */}
-      <section className="mb-12">
-        <p className="eyebrow mb-4">Path to pricing</p>
+      <section className="mt-14">
+        <div className="mb-5 pb-3 border-b border-text-primary/90">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+            Path to pricing
+          </p>
+          <h2 className="font-display font-normal text-3xl tracking-tight">The timeline.</h2>
+        </div>
         <ol className="relative border-l-2 border-border ml-3 space-y-6">
           {TIMELINE.map((t, i) => (
             <li key={i} className="ml-6">
@@ -168,7 +203,12 @@ export default function QntPage() {
 
       {/* Quantinuum financials snapshot */}
       <section className="mb-12">
-        <p className="eyebrow mb-4">Filed financials (from S-1)</p>
+        <div className="mb-5 pb-3 border-b border-text-primary/90">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+            Filed financials · from the S-1
+          </p>
+          <h2 className="font-display font-normal text-3xl tracking-tight">The numbers underneath the price.</h2>
+        </div>
         <div className="card p-6">
           <table className="ql-table w-full">
             <thead>
@@ -216,7 +256,12 @@ export default function QntPage() {
 
       {/* Risk factors */}
       <section className="mb-12">
-        <p className="eyebrow mb-4">Key risk factors disclosed in S-1</p>
+        <div className="mb-5 pb-3 border-b border-text-primary/90">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+            Risk factors · from the S-1
+          </p>
+          <h2 className="font-display font-normal text-3xl tracking-tight">What could go wrong.</h2>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <RiskCard
             title="Customer concentration"
@@ -253,7 +298,12 @@ export default function QntPage() {
 
       {/* Peer multiples */}
       <section className="mb-12">
-        <p className="eyebrow mb-4">Peer multiples · public quantum cohort</p>
+        <div className="mb-5 pb-3 border-b border-text-primary/90">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+            Peer multiples · public quantum cohort
+          </p>
+          <h2 className="font-display font-normal text-3xl tracking-tight">The comp set.</h2>
+        </div>
         <div className="card overflow-x-auto">
           <table className="ql-table w-full">
             <thead>
@@ -321,7 +371,12 @@ export default function QntPage() {
 
       {/* Product roadmap */}
       <section className="mb-12">
-        <p className="eyebrow mb-4">Product roadmap (as disclosed)</p>
+        <div className="mb-5 pb-3 border-b border-text-primary/90">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+            Product roadmap · as disclosed
+          </p>
+          <h2 className="font-display font-normal text-3xl tracking-tight">Helios. Sol. Apollo. Lumos.</h2>
+        </div>
         <div className="card overflow-x-auto">
           <table className="ql-table w-full">
             <thead>
@@ -370,7 +425,12 @@ export default function QntPage() {
       {/* Coverage */}
       {news.length > 0 && (
         <section className="mb-12">
-          <p className="eyebrow mb-4">QNT-related coverage</p>
+          <div className="mb-5 pb-3 border-b border-text-primary/90">
+            <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+              Coverage
+            </p>
+            <h2 className="font-display font-normal text-3xl tracking-tight">QNT in the news.</h2>
+          </div>
           <ul className="space-y-2">
             {news.map((n) => (
               <li key={n.id}>

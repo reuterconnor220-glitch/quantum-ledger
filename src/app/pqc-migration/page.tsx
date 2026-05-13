@@ -35,43 +35,70 @@ export default function PqcMigrationPage() {
   };
 
   return (
-    <div>
-      {/* Hero */}
-      <section className="relative border-b border-border overflow-hidden">
-        <div className="absolute inset-0 bg-hero-gradient pointer-events-none" />
-        <div className="relative max-w-6xl mx-auto px-5 sm:px-8 pt-14 pb-10">
-          <div className="flex items-center gap-2 mb-3">
+    <div className="max-w-7xl mx-auto px-5 sm:px-8 pb-24">
+      {/* ────────── Masthead ────────── */}
+      <header className="pt-8 pb-5 border-b border-text-primary/90">
+        <div className="flex flex-wrap items-end justify-between gap-3 pb-5 border-b border-border-muted text-[11px] tracking-[0.08em] uppercase text-text-muted font-mono">
+          <div className="flex flex-wrap items-baseline gap-3 whitespace-nowrap">
             <span className="qdot-live" />
-            <span className="eyebrow">PQC migration · live tracker</span>
+            <span>The Migration</span>
+            <span className="text-text-muted/60">·</span>
+            <span className="font-display text-[22px] tracking-tight text-text-primary normal-case">ML-KEM · ML-DSA · SLH-DSA</span>
+            <span className="text-text-muted/60">·</span>
+            <span>FIPS 203 / 204 / 205</span>
           </div>
-          <h1 className="font-display text-display-1 font-medium tracking-tight max-w-4xl">
-            Who has actually shipped post-quantum.
-          </h1>
-          <p className="mt-5 text-lg text-text-secondary leading-relaxed max-w-3xl">
-            NIST standardized ML-KEM, ML-DSA, and SLH-DSA in August 2024. The most consequential
-            quantum-driven enterprise project is not buying a quantum computer; it is replacing the
-            cryptographic plumbing on every system that needs to survive past 2030. This page tracks
-            who has actually shipped, who is hybrid-live, who has committed, and — the most
-            interesting list — who is silent despite obvious exposure.
+          <div className="font-display italic text-sm normal-case tracking-tight text-text-secondary">
+            NIST standards finalized 2024-08-13 · CNSA 2.0 deadlines 2027–2030
+          </div>
+          <div className="text-right leading-relaxed">
+            {PQC_DEPLOYMENTS.length} organizations tracked
+          </div>
+        </div>
+
+        <h1 className="mt-6 font-display font-medium leading-[0.92] tracking-[-0.025em] text-[clamp(46px,8vw,112px)]">
+          The <em className="not-italic font-normal text-accent-data">PQC</em> Migration.
+        </h1>
+        <p className="mt-3 font-display italic text-text-muted text-base sm:text-lg max-w-[60ch]">
+          Who has shipped post-quantum cryptography, who has committed, who is silent.
+        </p>
+      </header>
+
+      {/* ────────── Hero ────────── */}
+      <section className="mt-9 py-7 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-10 border-b border-border">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-3">
+            The largest commercial impact of quantum, by an order of magnitude
+          </p>
+          <p className="font-display italic text-xl text-text-secondary leading-snug mb-4 max-w-[60ch]">
+            Is not buying a quantum computer. It is replacing the cryptographic plumbing on every
+            system that needs to survive past 2030.
+          </p>
+          <p className="text-sm text-text-secondary leading-relaxed max-w-[60ch]">
+            NIST standardized ML-KEM, ML-DSA, and SLH-DSA in August 2024. Apple, Cloudflare, Google,
+            Mozilla, and AWS have already migrated meaningful portions of TLS traffic to hybrid PQC.
+            This page tracks who has actually shipped, who is hybrid-live, who has committed, and —
+            the most interesting list — who is silent despite obvious exposure.
           </p>
         </div>
-      </section>
 
-      {/* Status totals */}
-      <section className="border-b border-border bg-bg-elevated/40">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-6">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-px bg-border rounded-md overflow-hidden">
-            <StatusTotal label="Shipped" value={totals.shipped} color="text-accent-data" />
-            <StatusTotal label="Hybrid live" value={totals.hybrid} color="text-accent-quantum" />
-            <StatusTotal label="Announced" value={totals.announced} color="text-accent-warn" />
-            <StatusTotal label="Committed" value={totals.committed} color="text-blue-300" />
-            <StatusTotal label="Silent" value={totals.silent} color="text-accent-down" />
-          </div>
+        <div className="grid grid-cols-2 gap-2">
+          <StatusTotal label="Shipped" value={totals.shipped} color="text-accent-data" />
+          <StatusTotal label="Hybrid live" value={totals.hybrid} color="text-accent-quantum" />
+          <StatusTotal label="Announced" value={totals.announced} color="text-accent-warn" />
+          <StatusTotal label="Committed" value={totals.committed} color="text-blue-300" />
+          <StatusTotal label="Silent" value={totals.silent} color="text-accent-down" />
+          <StatusTotal label="Total tracked" value={PQC_DEPLOYMENTS.length} color="text-text-primary" />
         </div>
       </section>
 
-      {/* Status legend + framing */}
-      <section className="max-w-6xl mx-auto px-5 sm:px-8 py-8">
+      {/* ────────── Status legend ────────── */}
+      <section className="mt-9">
+        <div className="mb-5 pb-3 border-b border-text-primary/90">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+            Status taxonomy
+          </p>
+          <h2 className="font-display font-normal text-3xl tracking-tight">Five buckets, defined.</h2>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
           <Legend
             badge="Shipped"
@@ -103,42 +130,37 @@ export default function PqcMigrationPage() {
 
       {/* Full table grouped by status */}
       {(['shipped', 'hybrid', 'announced', 'committed', 'silent'] as PqcStatus[]).map((status) => (
-        <section
-          key={status}
-          className={
-            status === 'hybrid' || status === 'committed'
-              ? 'border-y border-border bg-bg-elevated/40'
-              : ''
-          }
-        >
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10">
-            <header className="mb-5">
-              <p className="eyebrow mb-2">
-                {PQC_STATUS_LABEL[status]} · {byStatus[status].length} {byStatus[status].length === 1 ? 'entry' : 'entries'}
-              </p>
-              <h2 className="font-display text-2xl tracking-tight">
-                {status === 'shipped' && 'Live in production — what runs today.'}
+        <section key={status} className="mt-14">
+          <div className="mb-5 pb-3 border-b border-text-primary/90">
+            <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+              {PQC_STATUS_LABEL[status]} · {byStatus[status].length} {byStatus[status].length === 1 ? 'entry' : 'entries'}
+            </p>
+            <h2 className="font-display font-normal text-3xl tracking-tight">
+              {status === 'shipped' && 'Live in production — what runs today.'}
                 {status === 'hybrid' && 'Hybrid deployments — PQC alongside classical.'}
                 {status === 'announced' && 'Committed with a deadline.'}
                 {status === 'committed' && 'Committed without a date.'}
                 {status === 'silent' && 'Silent despite obvious exposure.'}
-              </h2>
-            </header>
+            </h2>
+          </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-              {byStatus[status].map((d, i) => (
-                <DeploymentCard key={`${d.org}-${i}`} deployment={d} />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            {byStatus[status].map((d, i) => (
+              <DeploymentCard key={`${d.org}-${i}`} deployment={d} />
+            ))}
           </div>
         </section>
       ))}
 
       {/* Why this matters */}
-      <section className="border-t border-border">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-12">
-          <p className="eyebrow mb-3">Why this tracker matters</p>
-          <div className="space-y-4 text-text-secondary leading-relaxed">
+      <section className="mt-16 max-w-3xl">
+        <div className="mb-5 pb-3 border-b border-text-primary/90">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono mb-1.5">
+            Why this tracker matters
+          </p>
+          <h2 className="font-display font-normal text-3xl tracking-tight">The PQC market is real today.</h2>
+        </div>
+        <div className="space-y-4 text-text-secondary leading-relaxed">
             <p>
               The largest commercial impact of quantum computing, by an order of magnitude, is not
               the new compute paradigm but the cryptographic transition forced by Shor&apos;s
@@ -160,7 +182,6 @@ export default function PqcMigrationPage() {
               <Link href="/learn/bb84" className="text-accent-quantum hover:underline">/learn/bb84</Link> for
               the QKD alternative architecture and the NSA&apos;s reasoning for preferring PQC over QKD.
             </p>
-          </div>
         </div>
       </section>
     </div>
@@ -169,9 +190,9 @@ export default function PqcMigrationPage() {
 
 function StatusTotal({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <div className="bg-bg-surface p-4">
-      <p className="text-[10px] uppercase tracking-wider text-text-muted font-mono">{label}</p>
-      <p className={`mt-1 font-mono text-2xl ${color}`}>{value}</p>
+    <div className="card p-3">
+      <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono">{label}</p>
+      <p className={`mt-1 font-display text-2xl tracking-tight tabular-nums ${color}`}>{value}</p>
     </div>
   );
 }
