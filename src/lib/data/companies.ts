@@ -375,3 +375,69 @@ export function privateCompanies(): Company[] {
 export function purePlays(): Company[] {
   return COMPANIES.filter((c) => c.purity === 'pure_play');
 }
+
+/**
+ * Listing shape used by the /companies directory page.
+ * Derived from Company + LEDGER_SCORES; cap is in MILLIONS of USD; chgD/chgY are percent values.
+ */
+export interface CompanyListing {
+  slug: string;
+  name: string;
+  sym?: string;
+  listed: boolean;
+  modality: string;
+  hq: string;
+  cap?: number;
+  chgD?: number;
+  chgY?: number;
+  score?: number;
+  stage?: string;
+  focus?: string;
+}
+
+const TECH_LABEL: Record<string, string> = {
+  superconducting: 'Superconducting',
+  trapped_ion: 'Trapped ion',
+  neutral_atom: 'Neutral atom',
+  silicon_spin: 'Silicon spin',
+  photonic: 'Photonic',
+  topological: 'Topological',
+  cat_qubit: 'Cat qubit',
+  bosonic: 'Bosonic',
+  annealing: 'Annealing',
+  software: 'Software / QEC',
+  diamond_nv: 'Diamond NV',
+  hybrid: 'Hybrid',
+};
+
+/**
+ * Returns every company in the unified listing shape, joined with the Ledger Score.
+ * chgD / chgY left undefined here — the directory page can populate from live quotes when async.
+ */
+export function getAllCompanies(): CompanyListing[] {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { LEDGER_SCORES } = require('./ledger-score') as {
+    LEDGER_SCORES: Array<{ slug: string; scores: { total: number } }>;
+  };
+  const scoreBySlug = new Map<string, number>();
+  for (const e of LEDGER_SCORES) scoreBySlug.set(e.slug, e.scores.total);
+
+  return COMPANIES.map((c) => {
+    const hq = c.hqCity && c.hqCountry ? `${c.hqCity}, ${c.hqCountry}` : (c.hqCity ?? c.hqCountry ?? '—');
+    const modality = TECH_LABEL[c.technologyApproach as string] ?? c.technologyApproach;
+    return {
+      slug: c.slug,
+      name: c.name,
+      sym: c.ticker,
+      listed: !!c.isPublic,
+      modality,
+      hq,
+      cap: c.marketCapUsd ? c.marketCapUsd / 1e6 : undefined,
+      chgD: undefined,
+      chgY: undefined,
+      score: scoreBySlug.get(c.slug),
+      stage: !c.isPublic ? 'Private' : undefined,
+      focus: c.oneLineThesis,
+    };
+  });
+}
