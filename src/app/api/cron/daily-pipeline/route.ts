@@ -112,25 +112,48 @@ export async function GET(request: Request) {
       }
     }
 
-    // 5) Pull stock prices (best-effort — yfinance can be flaky from serverless;
-    //    failures are non-fatal and don't pollute the error log)
+    // 5) Pull stock prices — prefer Finnhub (works reliably from serverless) when
+    //    FINNHUB_API_KEY is set; fall back to yfinance otherwise.
+    const finnhubKey = process.env.FINNHUB_API_KEY;
+    const today = new Date().toISOString().slice(0, 10);
     for (const ticker of FINNHUB_TICKERS) {
       try {
+        if (finnhubKey) {
+          const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(ticker)}&token=${finnhubKey}`;
+          const res = await fetch(url);
+          if (res.ok) {
+            const q: any = await res.json();
+            // Finnhub: c=current, d=change, dp=change%, h=high, l=low, o=open, pc=prev close
+            if (q && typeof q.c === 'number' && q.c > 0) {
+              await supabase.from('stock_prices').upsert({
+                ticker,
+                trade_date: today,
+                open: q.o ?? null,
+                high: q.h ?? null,
+                low: q.l ?? null,
+                close: q.c,
+                pct_change: typeof q.dp === 'number' ? q.dp / 100 : null,
+              });
+              pricesFetched++;
+              continue;
+            }
+          }
+        }
+        // Fallback: yfinance (flaky from Vercel but works locally)
         const quote = await yahooFinance.quote(ticker);
-        const today = new Date().toISOString().slice(0, 10);
         await supabase.from('stock_prices').upsert({
           ticker,
           trade_date: today,
           close: quote.regularMarketPrice,
           volume: quote.regularMarketVolume ?? null,
-          pct_change: quote.regularMarketChangePercent !== undefined
-            ? quote.regularMarketChangePercent / 100
-            : null,
+          pct_change:
+            quote.regularMarketChangePercent !== undefined
+              ? quote.regularMarketChangePercent / 100
+              : null,
         });
         pricesFetched++;
       } catch {
-        // intentionally silent — stock prices are best-effort enhancement,
-        // not core to the daily pipeline
+        // Silent — best-effort enhancement, not core to the daily pipeline
       }
     }
 
