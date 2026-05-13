@@ -4,10 +4,6 @@
     {
       "path": "/api/cron/daily-pipeline",
       "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/api/cron/intraday-prices",
-      "schedule": "0 14,18,21 * * 1-5"
     }
   ]
 }

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
+import { OrganizationLd, WebsiteLd } from '@/components/JsonLd';
 import './globals.css';
 
 const inter = Inter({
@@ -43,11 +44,37 @@ export const metadata: Metadata = {
     description: 'Investor-grade quantum computing intelligence.',
   },
   robots: { index: true, follow: true },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION ?? undefined,
+  },
+  alternates: {
+    canonical: '/',
+    types: { 'application/rss+xml': '/rss.xml' },
+  },
+  keywords: [
+    'quantum computing',
+    'quantum stocks',
+    'IonQ',
+    'Quantinuum',
+    'PsiQuantum',
+    'D-Wave',
+    'Rigetti',
+    'quantum benchmarks',
+    'quantum news',
+    'DARPA QBI',
+    'post-quantum cryptography',
+    'quantum primer',
+  ],
+  authors: [{ name: 'Quantum Ledger' }],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${fraunces.variable} ${jetbrains.variable}`}>
+      <head>
+        <OrganizationLd />
+        <WebsiteLd />
+      </head>
       <body>
         <Nav />
         <main className="min-h-screen">{children}</main>

@@ -1,18 +1,17 @@
 import Link from 'next/link';
-import { TODAYS_BRIEF } from '@/lib/data/brief';
 import { COMPANIES, publicCompanies } from '@/lib/data/companies';
-import { getRecentNews } from '@/lib/data/news';
 import { recentEvents } from '@/lib/data/events';
+import { fetchLatestBrief, fetchRecentNews } from '@/lib/data/live';
 import { SentimentChip, MaterialityBadge } from '@/components/SentimentChip';
 import { Sparkline, generateSparkData } from '@/components/Sparkline';
 import { formatDate, formatPct, formatUsd, timeAgo } from '@/lib/utils';
 import { TECHNOLOGY_LABEL } from '@/lib/types';
 
-export const revalidate = 3600;
+export const revalidate = 600;
+export const dynamic = 'force-dynamic';
 
-export default function Home() {
-  const brief = TODAYS_BRIEF;
-  const news = getRecentNews(6);
+export default async function Home() {
+  const [brief, news] = await Promise.all([fetchLatestBrief(), fetchRecentNews(6)]);
   const tracker = publicCompanies()
     .filter((c) => c.marketCapUsd && c.purity === 'pure_play')
     .sort((a, b) => (b.marketCapUsd ?? 0) - (a.marketCapUsd ?? 0));
@@ -198,22 +197,22 @@ export default function Home() {
       <section className="border-b border-border">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12 grid grid-cols-1 md:grid-cols-3 gap-5">
           <CTACard
-            href="/qnt-ipo-watch"
-            eyebrow="IPO Watch"
-            title="Quantinuum (QNT) — $20B+ pricing event"
-            body="S-1 filed May 8. We track pricing range, roadshow signals, and how the price tag drags every public pure-play comp."
+            href="/today"
+            eyebrow="Already real"
+            title="Quantum running in production today"
+            body="Apple, Cloudflare, HSBC, BMW, the Royal Navy. Every verified commercial deployment — quantum isn't future tense for these customers."
           />
           <CTACard
-            href="/revenue"
-            eyebrow="Reality Check"
-            title="Where quantum revenue actually comes from"
-            body="$1.0–1.5B annual sector revenue vs $11.1B private capital + $30–40B government commitments. The honest burn-to-revenue gauge."
+            href="/learn/timeline"
+            eyebrow="The horizon"
+            title="5, 10, 15 years out — and your life"
+            body="Concrete upside scenarios + downside risks at each horizon. How this technology will reshape your medicine, money, energy, work."
           />
           <CTACard
             href="/learn"
             eyebrow="Primer"
-            title="Quantum computing — for newcomers and physicists, on one page"
-            body="16 concepts from qubit to fault tolerance. Surface-level for the curious, expandable depth toggles for the math, code, and citations."
+            title="Quantum computing — for the curious and the physicist"
+            body="16 concepts from qubit to fault tolerance. Interactive widgets — drag a phase slider, build a Bell state, watch Grover work."
           />
         </div>
       </section>

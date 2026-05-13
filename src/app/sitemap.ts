@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages = [
     '',
     '/brief',
+    '/today',
     '/news',
     '/companies',
     '/benchmarks',
@@ -17,8 +18,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/qnt-ipo-watch',
     '/learn',
     '/learn/applications',
+    '/learn/timeline',
     '/learn/risks',
     '/learn/resources',
+    '/faq',
     '/methodology',
     '/about',
   ].map((p) => ({

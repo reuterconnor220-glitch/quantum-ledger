@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 
 const links = [
   { href: '/brief', label: 'Brief' },
+  { href: '/today', label: 'Today' },
   { href: '/news', label: 'News' },
   { href: '/companies', label: 'Companies' },
   { href: '/benchmarks', label: 'Benchmarks' },
@@ -15,6 +16,7 @@ const links = [
   { href: '/darpa-qbi', label: 'DARPA QBI' },
   { href: '/qnt-ipo-watch', label: 'QNT IPO' },
   { href: '/learn', label: 'Learn' },
+  { href: '/faq', label: 'FAQ' },
 ];
 
 export function Nav() {

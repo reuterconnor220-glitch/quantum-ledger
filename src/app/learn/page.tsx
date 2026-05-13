@@ -163,19 +163,31 @@ export default function LearnPage() {
           {/* Navigation cards to sub-pages */}
           <nav className="not-prose mb-14">
             <p className="text-[10px] uppercase tracking-[0.2em] text-editorial-ink/50 font-mono mb-3">
-              Three companion pages
+              Five companion pages
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              <SubPageCard
+                href="/today"
+                eyebrow="Already real"
+                title="What\&apos;s deployed right now"
+                body="Apple, Cloudflare, HSBC, BMW, the Royal Navy — quantum already runs in production for paying customers. Every verified deployment."
+              />
+              <SubPageCard
+                href="/learn/timeline"
+                eyebrow="The horizon"
+                title="5, 10, 15 years out — and your life"
+                body="Concrete upside scenarios + downside risks at each year. How quantum will affect your medicine, money, encryption, energy."
+              />
               <SubPageCard
                 href="/learn/applications"
                 eyebrow="Applications"
                 title="How quantum changes the world"
-                body="Ten domains where quantum could create — or destroy — enormous value. Drug discovery, climate, materials, cryptography, more."
+                body="Ten domains by domain — drug discovery, climate, materials, cryptography, finance, sensing. Honest timelines, bull and bear."
               />
               <SubPageCard
                 href="/learn/risks"
                 eyebrow="Risks"
-                title="The dangers & tradeoffs"
+                title="The dangers &amp; tradeoffs"
                 body="Ten serious risks scored on impact and likelihood. Harvest-now-decrypt-later, geopolitical asymmetry, capital bubble, more."
               />
               <SubPageCard
@@ -183,6 +195,12 @@ export default function LearnPage() {
                 eyebrow="Go deeper"
                 title="Best books, videos, podcasts"
                 body="Forty hand-picked resources from newbie to research-physicist. Searchable, filterable, free where possible."
+              />
+              <SubPageCard
+                href="/faq"
+                eyebrow="Quick answers"
+                title="Ten common questions, honestly answered"
+                body="When useful? Will it break encryption? Will quantum AI take over? The non-hype answers."
               />
             </div>
           </nav>

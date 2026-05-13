@@ -1,24 +1,31 @@
 import Link from 'next/link';
-import { TODAYS_BRIEF } from '@/lib/data/brief';
-import { SEED_NEWS } from '@/lib/data/news';
+import { fetchLatestBrief, fetchRecentNews } from '@/lib/data/live';
 import { formatDate, formatPct, formatUsd } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
+import { ArticleLd } from '@/components/JsonLd';
 
 export const metadata = {
   title: 'Daily Brief · Today\'s Quantum Computing Intelligence',
   description: 'Today\'s daily brief — the most important quantum computing stories, market summary, sector sentiment, and editorial analysis. Updated every weekday at 6am MT.',
 };
 
-export const revalidate = 1800;
+export const revalidate = 600;
+export const dynamic = 'force-dynamic';
 
-export default function BriefPage() {
-  const b = TODAYS_BRIEF;
+export default async function BriefPage() {
+  const [b, recentNews] = await Promise.all([fetchLatestBrief(), fetchRecentNews(30)]);
   const topStories = b.topStoryIds
-    .map((id) => SEED_NEWS.find((n) => n.id === id))
+    .map((id) => recentNews.find((n) => n.id === id))
     .filter(Boolean);
 
   return (
     <div className="max-w-4xl mx-auto px-5 sm:px-8 py-12">
+      <ArticleLd
+        headline={b.headline}
+        description={b.oneLineSummary}
+        url={(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantum-ledger-vert.vercel.app') + '/brief'}
+        datePublished={b.briefDate}
+      />
       <header className="mb-10">
         <div className="flex items-center gap-2 mb-3">
           <span className="qdot-live" />

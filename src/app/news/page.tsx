@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { SEED_NEWS, getRecentNews } from '@/lib/data/news';
 import { getCompany } from '@/lib/data/companies';
+import { fetchRecentNews } from '@/lib/data/live';
 import { SentimentChip, MaterialityBadge } from '@/components/SentimentChip';
 import { formatDate, timeAgo } from '@/lib/utils';
 
@@ -9,13 +9,13 @@ export const metadata = {
   description: 'Daily quantum computing news with sentiment scoring, materiality ratings, and valuation impact tagging across the public and private sector.',
 };
 
-export const revalidate = 1800;
+export const revalidate = 600;
+export const dynamic = 'force-dynamic';
 
-const SOURCES = Array.from(new Set(SEED_NEWS.map((n) => n.source)));
-const TOPICS = Array.from(new Set(SEED_NEWS.flatMap((n) => n.topicTags)));
-
-export default function NewsPage() {
-  const news = getRecentNews(50);
+export default async function NewsPage() {
+  const news = await fetchRecentNews(80);
+  const SOURCES = Array.from(new Set(news.map((n) => n.source)));
+  const TOPICS = Array.from(new Set(news.flatMap((n) => n.topicTags)));
 
   return (
     <div className="max-w-6xl mx-auto px-5 sm:px-8 py-12">

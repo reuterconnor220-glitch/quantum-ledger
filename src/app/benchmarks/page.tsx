@@ -7,6 +7,7 @@ import { BenchmarksGlossary } from '@/components/benchmarks/Glossary';
 import { ScatterMap } from '@/components/benchmarks/ScatterMap';
 import { ModalityLeaderboard } from '@/components/benchmarks/ModalityLeaderboard';
 import { FtqcTracker } from '@/components/benchmarks/FtqcTracker';
+import { DatasetLd } from '@/components/JsonLd';
 
 export const metadata = {
   title: 'Benchmark Scorecard · Live Qubit Counts, Fidelities, Coherence Times',
@@ -62,6 +63,12 @@ export default function BenchmarksPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
+      <DatasetLd
+        name="Quantum Computing Hardware Benchmark Scorecard"
+        description="Live scorecard of every major quantum computing system — qubit counts, gate fidelities, coherence times, gate speeds, connectivity, with confidence flags. Updated as vendors publish."
+        url={(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantum-ledger-vert.vercel.app') + '/benchmarks'}
+        keywords={['quantum benchmarks', 'qubit count', 'gate fidelity', 'IBM Heron', 'Google Willow', 'Quantinuum Helios', 'logical qubits', 'quantum error correction']}
+      />
       <header className="mb-10 max-w-3xl">
         <p className="eyebrow mb-2">Benchmarks</p>
         <h1 className="font-display text-display-2 font-medium tracking-tight">Live hardware scorecard</h1>

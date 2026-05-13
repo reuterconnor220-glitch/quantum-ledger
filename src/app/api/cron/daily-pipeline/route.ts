@@ -2,13 +2,12 @@ import { NextResponse } from 'next/server';
 import Parser from 'rss-parser';
 import { createAdminClient } from '@/lib/supabase/server';
 import { RSS_SOURCES, GOOGLE_NEWS_RSS, QUANTUM_NEWS_QUERIES, FINNHUB_TICKERS } from '@/lib/pipeline/sources';
-import { scoreArticle } from '@/lib/pipeline/score';
-import { generateBrief } from '@/lib/pipeline/brief';
+import { scoreLexicon } from '@/lib/pipeline/sentiment-lexicon';
 import YahooFinance from 'yahoo-finance2';
-
-const yahooFinance = new YahooFinance();
 import crypto from 'crypto';
 import { revalidatePath } from 'next/cache';
+
+const yahooFinance = new YahooFinance();
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 300;
@@ -22,14 +21,14 @@ function urlHash(url: string) {
 async function pullRss(url: string, source: string) {
   try {
     const feed = await parser.parseURL(url);
-    return (feed.items ?? []).slice(0, 20).map((item) => ({
+    return (feed.items ?? []).slice(0, 15).map((item) => ({
       source,
       source_url: item.link ?? '',
       url_hash: urlHash(item.link ?? ''),
       title: item.title ?? '',
       author: item.creator ?? item.author ?? null,
       published_at: item.isoDate ?? item.pubDate ?? new Date().toISOString(),
-      raw_body: item.contentSnippet ?? item.content ?? '',
+      raw_body: (item.contentSnippet ?? item.content ?? '').slice(0, 4000),
     }));
   } catch (err) {
     console.error(`RSS fetch failed for ${source}:`, err);
@@ -38,14 +37,14 @@ async function pullRss(url: string, source: string) {
 }
 
 export async function GET(request: Request) {
-  // Verify cron secret (Vercel sends Authorization: Bearer <CRON_SECRET>)
+  // Verify cron secret (Vercel Cron sends Authorization: Bearer <CRON_SECRET>)
   const auth = request.headers.get('authorization');
   if (process.env.CRON_SECRET && auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   }
 
   const supabase = createAdminClient();
-  const started = new Date().toISOString();
+  const startedMs = Date.now();
 
   // Log start
   const { data: runRow } = await supabase
@@ -56,6 +55,7 @@ export async function GET(request: Request) {
 
   let processed = 0;
   let kept = 0;
+  let pricesFetched = 0;
   const errors: string[] = [];
 
   try {
@@ -76,23 +76,27 @@ export async function GET(request: Request) {
 
     // 3) Check which are already in DB
     const hashes = unique.map((i) => i.url_hash);
-    const { data: existing } = await supabase
-      .from('news_articles')
-      .select('url_hash')
-      .in('url_hash', hashes);
-    const existingHashes = new Set((existing ?? []).map((e) => e.url_hash));
+    const { data: existing } = hashes.length
+      ? await supabase.from('news_articles').select('url_hash').in('url_hash', hashes)
+      : { data: [] };
+    const existingHashes = new Set((existing ?? []).map((e: any) => e.url_hash));
     const fresh = unique.filter((i) => !existingHashes.has(i.url_hash));
 
     processed = fresh.length;
 
-    // 4) Score in batches (avoid rate limits)
-    for (const item of fresh.slice(0, 60)) {
+    // 4) Score deterministically (lexicon-based; Claude can be added later)
+    for (const item of fresh.slice(0, 100)) {
       try {
-        const score = await scoreArticle(item.title, item.source, item.raw_body);
-        if (score.relevance < 0.4) continue;
+        const score = scoreLexicon(item.title, item.raw_body);
+        if (score.relevance < 0.2) continue;
 
         await supabase.from('news_articles').insert({
-          ...item,
+          source: item.source,
+          source_url: item.source_url,
+          url_hash: item.url_hash,
+          title: item.title,
+          author: item.author,
+          published_at: item.published_at,
           summary: score.summary,
           sentiment_score: score.sentiment,
           sentiment_confidence: score.sentiment_confidence,
@@ -104,7 +108,7 @@ export async function GET(request: Request) {
         });
         kept++;
       } catch (err) {
-        errors.push(`scoring failed for "${item.title}": ${err}`);
+        errors.push(`scoring failed for "${item.title?.slice(0, 60)}": ${err}`);
       }
     }
 
@@ -117,73 +121,64 @@ export async function GET(request: Request) {
           ticker,
           trade_date: today,
           close: quote.regularMarketPrice,
-          volume: quote.regularMarketVolume,
-          pct_change: quote.regularMarketChangePercent ? quote.regularMarketChangePercent / 100 : null,
+          volume: quote.regularMarketVolume ?? null,
+          pct_change: quote.regularMarketChangePercent !== undefined
+            ? quote.regularMarketChangePercent / 100
+            : null,
         });
+        pricesFetched++;
       } catch (err) {
-        errors.push(`price fetch failed for ${ticker}: ${err}`);
+        errors.push(`price fetch failed for ${ticker}`);
       }
     }
 
-    // 6) Generate daily brief from today's top stories
+    // 6) Generate a deterministic daily brief
     const today = new Date().toISOString().slice(0, 10);
     const { data: topStories } = await supabase
       .from('news_articles')
-      .select('*')
-      .gte('published_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString())
+      .select('id, title, summary, source, source_url, published_at, sentiment_score, relevance_score, valuation_impact, materiality, company_tags, topic_tags')
+      .gte('published_at', new Date(Date.now() - 36 * 3600 * 1000).toISOString())
       .order('materiality', { ascending: false })
       .order('relevance_score', { ascending: false })
-      .limit(15);
+      .limit(10);
 
     if (topStories && topStories.length > 0) {
+      const top = topStories[0];
       const { data: prices } = await supabase
         .from('stock_prices')
         .select('*')
         .eq('trade_date', today);
 
-      const sorted = (prices ?? [])
-        .filter((p) => p.pct_change !== null)
-        .sort((a, b) => (b.pct_change ?? 0) - (a.pct_change ?? 0));
-      const leaders = sorted.slice(0, 3).map((p) => ({ ticker: p.ticker, pct: p.pct_change }));
-      const laggards = sorted.slice(-3).reverse().map((p) => ({ ticker: p.ticker, pct: p.pct_change }));
+      const sortedPrices = (prices ?? [])
+        .filter((p: any) => p.pct_change !== null)
+        .sort((a: any, b: any) => (b.pct_change ?? 0) - (a.pct_change ?? 0));
+      const leaders = sortedPrices.slice(0, 3).map((p: any) => ({ ticker: p.ticker, pct: p.pct_change }));
+      const laggards = sortedPrices.slice(-3).reverse().map((p: any) => ({ ticker: p.ticker, pct: p.pct_change }));
+      const avgSentiment = topStories.reduce((acc: number, s: any) => acc + (s.sentiment_score ?? 0), 0) / topStories.length;
 
-      const brief = await generateBrief({
-        date: today,
-        topStories: topStories.map((s) => ({
-          id: s.id,
-          source: s.source,
-          sourceUrl: s.source_url,
-          title: s.title,
-          publishedAt: s.published_at,
-          summary: s.summary,
-          sentimentScore: s.sentiment_score,
-          relevanceScore: s.relevance_score,
-          valuationImpact: s.valuation_impact,
-          materiality: s.materiality,
-          companyTags: s.company_tags,
-          topicTags: s.topic_tags,
-        })),
-        marketSummary: {
-          sectorMcapUsd: 41e9,
-          dayChangePct: leaders[0]?.pct ?? 0,
-          leaders,
-          laggards,
-        },
-      });
+      const briefBody = [
+        `${topStories.length} stories crossed the relevance threshold in the last 36 hours. ` +
+          `Aggregate sentiment ${avgSentiment >= 0 ? '+' : ''}${avgSentiment.toFixed(2)}.`,
+        '',
+        ...topStories.slice(0, 5).map((s: any, i: number) =>
+          `**${i + 1}. ${s.title}** ${s.summary}`
+        ),
+      ].join('\n\n');
 
       await supabase.from('daily_briefs').upsert({
         brief_date: today,
-        headline: brief.headline,
-        one_line_summary: brief.one_line_summary,
-        body_md: brief.body_md,
-        top_story_ids: brief.top_story_ids,
-        sector_sentiment: brief.sector_sentiment,
+        headline: top.title.slice(0, 200),
+        one_line_summary: `${topStories.length} stories tracked; top: ${top.title.slice(0, 120)}`,
+        body_md: briefBody,
+        top_story_ids: topStories.slice(0, 5).map((s: any) => s.id),
+        sector_sentiment: avgSentiment,
         market_summary: { sectorMcapUsd: 41e9, dayChangePct: leaders[0]?.pct ?? 0, leaders, laggards },
-        word_count: brief.body_md.split(/\s+/).length,
+        word_count: briefBody.split(/\s+/).length,
+        generated_by: 'deterministic',
       });
     }
 
-    // 7) Revalidate
+    // 7) Revalidate pages so they pick up new content
     revalidatePath('/');
     revalidatePath('/brief');
     revalidatePath('/news');
@@ -199,13 +194,20 @@ export async function GET(request: Request) {
           articles_processed: processed,
           articles_kept: kept,
           errors_count: errors.length,
-          error_log: errors.length ? errors.join('\n') : null,
-          duration_ms: Date.now() - new Date(started).getTime(),
+          error_log: errors.length ? errors.slice(0, 10).join('\n') : null,
+          duration_ms: Date.now() - startedMs,
         })
         .eq('id', runRow.id);
     }
 
-    return NextResponse.json({ ok: true, processed, kept, errors: errors.length });
+    return NextResponse.json({
+      ok: true,
+      processed,
+      kept,
+      pricesFetched,
+      errors: errors.length,
+      durationMs: Date.now() - startedMs,
+    });
   } catch (err) {
     if (runRow) {
       await supabase
@@ -214,6 +216,7 @@ export async function GET(request: Request) {
           status: 'failed',
           completed_at: new Date().toISOString(),
           error_log: String(err),
+          duration_ms: Date.now() - startedMs,
         })
         .eq('id', runRow.id);
     }
