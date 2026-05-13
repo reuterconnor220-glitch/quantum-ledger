@@ -3,6 +3,7 @@ import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { OrganizationLd, WebsiteLd } from '@/components/JsonLd';
+import { PageViewBeacon } from '@/components/PageViewBeacon';
 import './globals.css';
 
 const inter = Inter({
@@ -79,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <PageViewBeacon />
       </body>
     </html>
   );
