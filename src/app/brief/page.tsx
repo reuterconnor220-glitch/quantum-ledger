@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { fetchLatestBrief, fetchRecentNews } from '@/lib/data/live';
+import { fetchQuantumQuotes, pickLeadersAndLaggards } from '@/lib/pipeline/quotes';
 import { formatDate, formatPct, formatUsd } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
 import { ArticleLd } from '@/components/JsonLd';
@@ -14,10 +15,26 @@ export const revalidate = 600;
 export const dynamic = 'force-dynamic';
 
 export default async function BriefPage() {
-  const [b, recentNews] = await Promise.all([fetchLatestBrief(), fetchRecentNews(30)]);
+  const [b, recentNews, liveQuotes] = await Promise.all([
+    fetchLatestBrief(),
+    fetchRecentNews(30),
+    fetchQuantumQuotes(),
+  ]);
   const topStories = b.topStoryIds
     .map((id) => recentNews.find((n) => n.id === id))
     .filter(Boolean);
+
+  // Prefer live quotes if we got them; fall back to stored brief if not.
+  const live = pickLeadersAndLaggards(liveQuotes);
+  const leaders = live.leaders.length > 0
+    ? live.leaders.map((q) => ({ ticker: q.ticker, pct: q.pct }))
+    : b.marketSummary.leaders;
+  const laggards = live.laggards.length > 0
+    ? live.laggards.map((q) => ({ ticker: q.ticker, pct: q.pct }))
+    : b.marketSummary.laggards;
+  const dayChangePct = liveQuotes.length > 0
+    ? liveQuotes.reduce((s, q) => s + q.pct, 0) / liveQuotes.length
+    : b.marketSummary.dayChangePct;
 
   return (
     <div className="max-w-4xl mx-auto px-5 sm:px-8 py-12">
@@ -49,12 +66,12 @@ export default async function BriefPage() {
         <Stat label="Sector Mkt Cap" value={formatUsd(b.marketSummary.sectorMcapUsd)} />
         <Stat
           label="Day"
-          value={formatPct(b.marketSummary.dayChangePct, { signed: true })}
-          positive={b.marketSummary.dayChangePct > 0}
+          value={formatPct(dayChangePct, { signed: true })}
+          positive={dayChangePct > 0}
         />
         <Stat
           label="Top Mover"
-          value={`${b.marketSummary.leaders[0]?.ticker} ${formatPct(b.marketSummary.leaders[0]?.pct ?? 0, { signed: true })}`}
+          value={leaders[0] ? `${leaders[0].ticker} ${formatPct(leaders[0].pct, { signed: true })}` : '—'}
         />
         <Stat
           label="Sentiment"
@@ -67,25 +84,33 @@ export default async function BriefPage() {
       <section className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="card p-5">
           <p className="eyebrow mb-3">Leaders</p>
-          <ul className="space-y-2 font-mono text-sm">
-            {b.marketSummary.leaders.map((l) => (
-              <li key={l.ticker} className="flex justify-between">
-                <span>{l.ticker}</span>
-                <span className="text-accent-data">{formatPct(l.pct, { signed: true })}</span>
-              </li>
-            ))}
-          </ul>
+          {leaders.length === 0 ? (
+            <p className="text-sm text-text-muted">Awaiting market data.</p>
+          ) : (
+            <ul className="space-y-2 font-mono text-sm">
+              {leaders.map((l) => (
+                <li key={l.ticker} className="flex justify-between">
+                  <span>{l.ticker}</span>
+                  <span className="text-accent-data">{formatPct(l.pct, { signed: true })}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <div className="card p-5">
           <p className="eyebrow mb-3">Laggards</p>
-          <ul className="space-y-2 font-mono text-sm">
-            {b.marketSummary.laggards.map((l) => (
-              <li key={l.ticker} className="flex justify-between">
-                <span>{l.ticker}</span>
-                <span className="text-accent-down">{formatPct(l.pct, { signed: true })}</span>
-              </li>
-            ))}
-          </ul>
+          {laggards.length === 0 ? (
+            <p className="text-sm text-text-muted">Awaiting market data.</p>
+          ) : (
+            <ul className="space-y-2 font-mono text-sm">
+              {laggards.map((l) => (
+                <li key={l.ticker} className="flex justify-between">
+                  <span>{l.ticker}</span>
+                  <span className="text-accent-down">{formatPct(l.pct, { signed: true })}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
 
