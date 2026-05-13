@@ -164,14 +164,32 @@ export default function LearnPage() {
           {/* Navigation cards to sub-pages */}
           <nav className="not-prose mb-14">
             <p className="text-[10px] uppercase tracking-[0.2em] text-editorial-ink/50 font-mono mb-3">
-              Five companion pages
+              Companion pages
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               <SubPageCard
+                href="/learn/double-slit"
+                eyebrow="The experiment"
+                title="The double-slit experiment, interactive"
+                body="Feynman's &quot;only mystery&quot; — fire single photons through two slits, watch interference build up, watch it vanish when you peek. The foundation of quantum mechanics."
+              />
+              <SubPageCard
+                href="/glossary"
+                eyebrow="Reference"
+                title="Quantum glossary"
+                body="Every term, defined. Searchable. From qubit to qLDPC, with audience tiers and cross-links."
+              />
+              <SubPageCard
+                href="/papers"
+                eyebrow="Repository"
+                title="Landmark papers"
+                body="The 60+ most important quantum papers from Feynman 1982 to Willow 2024. Curated, summarized, source-linked."
+              />
+              <SubPageCard
                 href="/today"
                 eyebrow="Already real"
-                title="What\&apos;s deployed right now"
-                body="Apple, Cloudflare, HSBC, BMW, the Royal Navy — quantum already runs in production for paying customers. Every verified deployment."
+                title="What's deployed right now"
+                body="Apple, Cloudflare, HSBC, BMW, the Royal Navy — quantum already runs in production for paying customers."
               />
               <SubPageCard
                 href="/learn/timeline"

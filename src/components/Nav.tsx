@@ -39,9 +39,12 @@ const GROUPS: NavGroup[] = [
   },
   {
     label: 'Learn',
-    matchPrefixes: ['/learn', '/faq'],
+    matchPrefixes: ['/learn', '/faq', '/glossary', '/papers'],
     items: [
       { href: '/learn', label: 'Primer' },
+      { href: '/learn/double-slit', label: 'Double-slit experiment' },
+      { href: '/glossary', label: 'Glossary' },
+      { href: '/papers', label: 'Landmark papers' },
       { href: '/learn/timeline', label: '5/10/15 yr timeline' },
       { href: '/learn/applications', label: 'Applications' },
       { href: '/learn/risks', label: 'Risks' },
