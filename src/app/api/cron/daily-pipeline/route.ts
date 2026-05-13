@@ -112,18 +112,18 @@ export async function GET(request: Request) {
       }
     }
 
-    // 5) Pull stock prices — prefer Finnhub (works reliably from serverless) when
-    //    FINNHUB_API_KEY is set; fall back to yfinance otherwise.
+    // 5) Pull stock prices — Finnhub → Stooq → yfinance fallback chain. All errors are recorded.
     const finnhubKey = process.env.FINNHUB_API_KEY;
     const today = new Date().toISOString().slice(0, 10);
     for (const ticker of FINNHUB_TICKERS) {
-      try {
-        if (finnhubKey) {
+      let gotPrice = false;
+      // 5a) Finnhub
+      if (finnhubKey) {
+        try {
           const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(ticker)}&token=${finnhubKey}`;
           const res = await fetch(url);
           if (res.ok) {
             const q: any = await res.json();
-            // Finnhub: c=current, d=change, dp=change%, h=high, l=low, o=open, pc=prev close
             if (q && typeof q.c === 'number' && q.c > 0) {
               await supabase.from('stock_prices').upsert({
                 ticker,
@@ -135,25 +135,74 @@ export async function GET(request: Request) {
                 pct_change: typeof q.dp === 'number' ? q.dp / 100 : null,
               });
               pricesFetched++;
-              continue;
+              gotPrice = true;
+            } else {
+              errors.push(`finnhub:${ticker}: empty quote (response code ok but c=${q?.c})`);
             }
+          } else {
+            errors.push(`finnhub:${ticker}: HTTP ${res.status}`);
           }
+        } catch (err: any) {
+          errors.push(`finnhub:${ticker}: ${err.message ?? err}`);
         }
-        // Fallback: yfinance (flaky from Vercel but works locally)
-        const quote = await yahooFinance.quote(ticker);
-        await supabase.from('stock_prices').upsert({
-          ticker,
-          trade_date: today,
-          close: quote.regularMarketPrice,
-          volume: quote.regularMarketVolume ?? null,
-          pct_change:
-            quote.regularMarketChangePercent !== undefined
-              ? quote.regularMarketChangePercent / 100
-              : null,
-        });
-        pricesFetched++;
-      } catch {
-        // Silent — best-effort enhancement, not core to the daily pipeline
+      }
+      // 5b) Stooq fallback (no API key, very reliable from serverless)
+      if (!gotPrice) {
+        try {
+          const symbol = ticker.toLowerCase() + '.us';
+          const res = await fetch(`https://stooq.com/q/l/?s=${symbol}&f=sd2t2ohlcvn&h&e=csv`);
+          if (res.ok) {
+            const text = await res.text();
+            const lines = text.trim().split('\n');
+            if (lines.length >= 2) {
+              const fields = lines[1].split(',');
+              const open = parseFloat(fields[3]);
+              const high = parseFloat(fields[4]);
+              const low = parseFloat(fields[5]);
+              const close = parseFloat(fields[6]);
+              const volume = parseInt(fields[7], 10);
+              if (isFinite(open) && isFinite(close) && close > 0 && open > 0) {
+                await supabase.from('stock_prices').upsert({
+                  ticker,
+                  trade_date: today,
+                  open,
+                  high: isFinite(high) ? high : null,
+                  low: isFinite(low) ? low : null,
+                  close,
+                  volume: isFinite(volume) ? volume : null,
+                  pct_change: (close - open) / open,
+                });
+                pricesFetched++;
+                gotPrice = true;
+              } else {
+                errors.push(`stooq:${ticker}: invalid CSV (open=${open}, close=${close})`);
+              }
+            }
+          } else {
+            errors.push(`stooq:${ticker}: HTTP ${res.status}`);
+          }
+        } catch (err: any) {
+          errors.push(`stooq:${ticker}: ${err.message ?? err}`);
+        }
+      }
+      // 5c) yfinance — flaky from Vercel, last resort
+      if (!gotPrice) {
+        try {
+          const quote = await yahooFinance.quote(ticker);
+          await supabase.from('stock_prices').upsert({
+            ticker,
+            trade_date: today,
+            close: quote.regularMarketPrice,
+            volume: quote.regularMarketVolume ?? null,
+            pct_change:
+              quote.regularMarketChangePercent !== undefined
+                ? quote.regularMarketChangePercent / 100
+                : null,
+          });
+          pricesFetched++;
+        } catch (err: any) {
+          errors.push(`yfinance:${ticker}: ${err.message ?? err}`);
+        }
       }
     }
 

@@ -165,6 +165,62 @@ export default async function AdminPage() {
         <AdminControls />
       </header>
 
+      {/* Pipeline freshness banner — red if no successful run in 36h */}
+      {(() => {
+        const lastSuccess = runs.find((r: any) => r.status === 'success');
+        if (!lastSuccess) {
+          return (
+            <div className="mb-6 card p-4 border-l-4 border-accent-down bg-accent-down/5">
+              <p className="font-mono text-sm text-accent-down font-semibold">
+                ⚠ No successful pipeline run found
+              </p>
+              <p className="text-xs text-text-secondary mt-1">
+                Trigger the pipeline manually with the button below to backfill today&apos;s brief and prices.
+              </p>
+            </div>
+          );
+        }
+        const hoursAgo = (Date.now() - new Date(lastSuccess.started_at).getTime()) / 3_600_000;
+        if (hoursAgo > 36) {
+          return (
+            <div className="mb-6 card p-4 border-l-4 border-accent-down bg-accent-down/5">
+              <p className="font-mono text-sm text-accent-down font-semibold">
+                ⚠ Last successful pipeline run was {hoursAgo.toFixed(1)} hours ago
+              </p>
+              <p className="text-xs text-text-secondary mt-1">
+                Brief, leaders, laggards, and news may be stale. Trigger manually or check Vercel cron health.
+              </p>
+            </div>
+          );
+        }
+        if (hoursAgo > 24) {
+          return (
+            <div className="mb-6 card p-4 border-l-4 border-accent-warn bg-accent-warn/5">
+              <p className="font-mono text-sm text-accent-warn">
+                Last successful pipeline run was {hoursAgo.toFixed(1)} hours ago (weekend / scheduled)
+              </p>
+            </div>
+          );
+        }
+        return null;
+      })()}
+
+      {/* Most recent errors from the last run, if any */}
+      {(() => {
+        const errorLog = runs[0]?.error_log;
+        if (!errorLog || !errorLog.trim()) return null;
+        return (
+          <details className="mb-6 card p-4">
+            <summary className="cursor-pointer font-mono text-sm text-accent-warn">
+              ⚠ {runs[0].errors_count} error{runs[0].errors_count === 1 ? '' : 's'} in last run · click to expand
+            </summary>
+            <pre className="mt-3 text-xs text-text-secondary whitespace-pre-wrap font-mono overflow-x-auto">
+              {errorLog}
+            </pre>
+          </details>
+        );
+      })()}
+
       {/* Live presence — who is on the site right now */}
       <LivePresence />
 
