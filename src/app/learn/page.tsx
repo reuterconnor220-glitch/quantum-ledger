@@ -2,6 +2,10 @@ import Link from 'next/link';
 import { BlochSphere } from '@/components/learn/BlochSphere';
 import { Misconception } from '@/components/learn/Misconception';
 import { DepthToggle } from '@/components/learn/DepthToggle';
+import { InterferenceVisualizer } from '@/components/learn/InterferenceVisualizer';
+import { EntanglementExplorer } from '@/components/learn/EntanglementExplorer';
+import { CircuitBuilder } from '@/components/learn/CircuitBuilder';
+import { GroverTrace } from '@/components/learn/GroverTrace';
 
 export const metadata = {
   title: 'Learn · Quantum Computing for Newcomers and Physicists',
@@ -384,7 +388,7 @@ H|1⟩ = (|0⟩ − |1⟩) / √2 = |−⟩`}
             </DepthToggle>
           </section>
 
-          {/* Section 6 — Circuits (condensed) */}
+          {/* Section 6 — Circuits */}
           <section id="circuits">
             <h2>Quantum circuits</h2>
             <p>
@@ -394,6 +398,12 @@ H|1⟩ = (|0⟩ − |1⟩) / √2 = |−⟩`}
               in. The <em>width</em> is the number of qubits. Useful quantum algorithms typically need
               moderate width (hundreds of qubits) and surprisingly small depth.
             </p>
+            <p>
+              <strong>Try building one.</strong> Click a gate in the palette, then click a slot in the
+              circuit. Run shots to see the actual measurement outcomes. The faded purple bar is theory;
+              the teal overlay is your measured results.
+            </p>
+            <CircuitBuilder />
           </section>
 
           {/* Section 7 — Entanglement */}
@@ -412,6 +422,13 @@ H|1⟩ = (|0⟩ − |1⟩) / √2 = |−⟩`}
               for quantum computing — a kind of structural correlation that quantum algorithms can use
               as a resource for interference.
             </p>
+            <p>
+              <strong>Build a Bell state yourself.</strong> Apply H to Q1, then CNOT. Watch both Bloch
+              spheres &quot;shrink&quot; — neither qubit has a defined direction on its own. Measure
+              200 times and notice you only ever get 00 or 11 (never 01 or 10). That&apos;s entanglement
+              made visible.
+            </p>
+            <EntanglementExplorer />
           </section>
 
           {/* Section 8 — Interference */}
@@ -429,6 +446,13 @@ H|1⟩ = (|0⟩ − |1⟩) / √2 = |−⟩`}
               <em> right</em> answer reinforce. That&apos;s the actual mechanism. Not parallelism. Not
               &quot;many universes.&quot; Just structured interference.
             </p>
+            <p>
+              <strong>See it for yourself.</strong> Below, two paths each contribute an amplitude (a 2D
+              vector). The detector sees their sum. Drag the slider to change one path&apos;s phase and
+              watch the probability oscillate between 0% (destructive) and 100% (constructive). This
+              cancellation is impossible for classical probabilities — they can&apos;t be negative.
+            </p>
+            <InterferenceVisualizer />
           </section>
 
           {/* Section 9 — No-cloning (condensed) */}
@@ -456,6 +480,13 @@ H|1⟩ = (|0⟩ − |1⟩) / √2 = |−⟩`}
               find a needle in N items in √N steps. Modest but universal. Cuts effective AES key length
               in half, which is why we&apos;ll move to AES-256 long-term but don&apos;t panic.
             </p>
+            <p>
+              <strong>Watch Grover work.</strong> Pick how many items to search and how many Grover
+              iterations to run. Each iteration rotates the state vector by 2θ in a 2D subspace, pulling
+              amplitude from &quot;unmarked&quot; toward &quot;marked.&quot; The purple curve is quantum;
+              the gray dashed line is classical. They cross at the √N point.
+            </p>
+            <GroverTrace />
             <p>
               <strong>Shor&apos;s algorithm</strong> is the famous one: exponential-time factoring on a
               quantum computer. The reason &quot;quantum breaks RSA.&quot; But the requirement is sobering

@@ -2,6 +2,11 @@ import Link from 'next/link';
 import { BENCHMARKS } from '@/lib/data/benchmarks';
 import { getCompany } from '@/lib/data/companies';
 import { formatDate } from '@/lib/utils';
+import { RecordHolders } from '@/components/benchmarks/RecordHolders';
+import { BenchmarksGlossary } from '@/components/benchmarks/Glossary';
+import { ScatterMap } from '@/components/benchmarks/ScatterMap';
+import { ModalityLeaderboard } from '@/components/benchmarks/ModalityLeaderboard';
+import { FtqcTracker } from '@/components/benchmarks/FtqcTracker';
 
 export const metadata = {
   title: 'Benchmark Scorecard · Live Qubit Counts, Fidelities, Coherence Times',
@@ -73,8 +78,14 @@ export default function BenchmarksPage() {
         </p>
       </header>
 
+      {/* RECORD HOLDERS — top-of-page KPI bar */}
+      <section className="mb-10">
+        <p className="eyebrow mb-3">Field record holders · who currently leads on each metric</p>
+        <RecordHolders benchmarks={BENCHMARKS} />
+      </section>
+
       {/* Caveats */}
-      <details className="mb-10 border-l-2 border-accent-quantum/40 pl-5 py-1">
+      <details className="mb-6 border-l-2 border-accent-quantum/40 pl-5 py-1">
         <summary className="cursor-pointer text-xs uppercase tracking-wider text-accent-quantum font-mono font-medium">
           How to read this scorecard
         </summary>
@@ -99,6 +110,38 @@ export default function BenchmarksPage() {
           </p>
         </div>
       </details>
+
+      {/* GLOSSARY */}
+      <BenchmarksGlossary />
+
+      {/* SCATTER MAP — cross-modality visual */}
+      <section className="mb-12">
+        <div className="flex items-end justify-between mb-3 flex-wrap gap-2">
+          <div>
+            <p className="eyebrow mb-1">Visual map · all systems on one chart</p>
+            <h2 className="font-display text-2xl tracking-tight">Qubit count × gate fidelity</h2>
+          </div>
+        </div>
+        <ScatterMap benchmarks={BENCHMARKS} />
+      </section>
+
+      {/* DISTANCE TO FTQC */}
+      <section className="mb-12">
+        <p className="eyebrow mb-1">Progress tracker</p>
+        <h2 className="font-display text-2xl tracking-tight mb-4">How close to useful fault tolerance?</h2>
+        <FtqcTracker benchmarks={BENCHMARKS} />
+      </section>
+
+      {/* PER-MODALITY LEADERBOARD */}
+      <section className="mb-12">
+        <p className="eyebrow mb-1">Per-modality champions</p>
+        <h2 className="font-display text-2xl tracking-tight mb-4">Best system in each technology family</h2>
+        <ModalityLeaderboard benchmarks={BENCHMARKS} />
+      </section>
+
+      {/* Section divider */}
+      <div className="border-t border-border my-12" />
+      <h2 className="font-display text-3xl tracking-tight mb-6">Full data · by modality</h2>
 
       {modalityOrder.map((mod) => {
         const rows = byModality[mod];
