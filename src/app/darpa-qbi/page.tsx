@@ -236,16 +236,135 @@ export default function DarpaQbiPage() {
         </div>
       </section>
 
+      {/* Eliminations & acquisitions — the differential signal */}
+      <section className="mb-14">
+        <h2 className="font-display text-2xl tracking-tight mb-4">Stage A only · the differential signal</h2>
+        <p className="text-text-secondary leading-relaxed text-sm max-w-3xl mb-5">
+          The most decision-relevant section of the tracker. Six Stage A names did not appear on
+          the November 2025 Stage B roster. Two of those were absorbed into Stage B advancers in
+          the months around the announcement — the cleanest M&amp;A signal QBI has produced.
+          DARPA has stated the program is not a winnowing competition; companies may be added in
+          future rounds, but the Stage B cut still functions as the first real differential signal.
+        </p>
+
+        <h3 className="font-display text-lg tracking-tight mb-3">Eliminated · stand-alone</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+          <EliminationCard
+            name="Rigetti Computing"
+            ticker="RGTI"
+            modality="Superconducting"
+            note="Public pure-play, Stage A only. Cleanest negative differential signal in the program. No 8-K tying stock-price guidance to QBI non-advancement has been identified."
+          />
+          <EliminationCard
+            name="Alice & Bob"
+            modality="Cat qubit (bias-noise)"
+            note="Stage A only. Did not advance despite Nord Quantique (also bosonic) making the Stage B cut."
+          />
+          <EliminationCard
+            name="Hewlett Packard Enterprise"
+            ticker="HPE"
+            modality="Superconducting / hybrid HPC"
+            note="Stage A only. Immaterial to HPE's enterprise mix."
+          />
+        </div>
+
+        <h3 className="font-display text-lg tracking-tight mb-3">Acquired into a Stage B participant</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+          <EliminationCard
+            name="Atlantic Quantum"
+            modality="Fluxonium superconducting"
+            note="Acquired by Google Quantum AI (October 2025). Team folded into Google's QBI participation."
+          />
+          <EliminationCard
+            name="Oxford Ionics"
+            modality="Trapped ion"
+            note="Acquired by IonQ (~September 2025, ~$1.075B). Team folded into IonQ's QBI line."
+          />
+        </div>
+
+        <h3 className="font-display text-lg tracking-tight mb-3">Joined Stage A late · Stage B status unclear</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <EliminationCard
+            name="Google Quantum AI"
+            ticker="GOOGL"
+            modality="Superconducting"
+            note="Added to Stage A in September 2025 — too late for the November Stage B cut. Acquired Atlantic Quantum a month later. May be considered in a future Stage B round."
+          />
+        </div>
+      </section>
+
+      {/* 2026 program updates */}
+      <section className="mb-14">
+        <h2 className="font-display text-2xl tracking-tight mb-4">2026 program updates</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="card p-5">
+            <p className="eyebrow mb-2">Leadership transition</p>
+            <p className="text-sm text-text-secondary leading-relaxed">
+              <strong className="text-text-primary">Micah Stoutimore</strong> replaced founding program manager
+              Joe Altepeter in early 2026, driven by DARPA&apos;s mandatory PM tenure limits.
+              No change in stated technical criteria.
+            </p>
+          </div>
+          <div className="card p-5">
+            <p className="eyebrow mb-2">New QBIT Stage A solicitation</p>
+            <p className="text-sm text-text-secondary leading-relaxed">
+              <strong className="text-text-primary">DARPA-PA-26-02-02</strong>, opened March 9, 2026. Open
+              only to organizations that have not previously received QBI funding. Abstract deadline
+              July 31, 2026. Signals widening aperture rather than narrowing.
+            </p>
+          </div>
+          <div className="card p-5">
+            <p className="eyebrow mb-2">DARPA directional shift</p>
+            <p className="text-sm text-text-secondary leading-relaxed italic border-l-2 border-accent-quantum/40 pl-3">
+              &quot;It now seems likely that someone will build a utility-scale quantum computer
+              by 2033, but it remains unclear exactly which team or teams might get across that
+              finish line.&quot;
+            </p>
+            <p className="text-[10px] font-mono text-text-muted mt-2">— DARPA, March 2026</p>
+          </div>
+        </div>
+      </section>
+
       <section>
         <h2 className="font-display text-2xl tracking-tight mb-4">Timeline · Stage B → Stage C → 2033</h2>
         <ol className="relative border-l-2 border-border ml-3 space-y-5">
-          <Step date="Apr 2025" label="Stage A — Concept ($1M / team) — 18 performers" status="past" />
+          <Step date="Feb 2023" label="DARPA announces US2QC collaborations with Atom Computing, Microsoft, PsiQuantum" status="past" />
+          <Step date="Jul 2024" label="QBI program launched as successor / expansion to original Quantum Benchmarking program" status="past" />
+          <Step date="Feb 2025" label="Microsoft + PsiQuantum advance to US2QC Validation & Co-Design (Stage C equivalent)" status="past" />
+          <Step date="Apr 2025" label="Stage A announced (~18 performers, up to ~$1M each)" status="past" />
+          <Step date="Sep 2025" label="Google Quantum AI added to Stage A; IonQ acquires Oxford Ionics (~$1.075B)" status="past" />
+          <Step date="Oct 2025" label="Google acquires Atlantic Quantum team" status="past" />
           <Step date="Nov 6 2025" label="Stage B — 11 advance, up to $15M / team" status="past" />
+          <Step date="Early 2026" label="Stoutimore replaces Altepeter as QBI program manager" status="past" />
+          <Step date="Mar 2026" label="New QBIT Stage A solicitation (DARPA-PA-26-02-02) opens for organizations not previously funded" status="past" />
           <Step date="Q3 2026" label="Stage B mid-term reviews" status="next" />
           <Step date="Q4 2026" label="Stage C advancement decisions" status="upcoming" />
           <Step date="2027–2029" label="Stage C — Build, Verify, Validate (independent IV&V)" status="upcoming" />
           <Step date="2033" label="Utility-scale verification deadline" status="upcoming" />
         </ol>
+      </section>
+
+      <section className="mt-12">
+        <p className="eyebrow mb-3">Primary sources</p>
+        <ul className="space-y-1.5 text-sm">
+          <li>
+            <a href="https://www.darpa.mil/research/programs/quantum-benchmarking-initiative" target="_blank" rel="noreferrer" className="text-accent-quantum hover:underline">DARPA QBI program page ↗</a>
+          </li>
+          <li>
+            <a href="https://www.darpa.mil/research/programs/quantum-benchmarking-initiative/stage-b-selection" target="_blank" rel="noreferrer" className="text-accent-quantum hover:underline">DARPA Stage B selection (Nov 2025) ↗</a>
+          </li>
+          <li>
+            <a href="https://www.darpa.mil/news/2026/qbi-stage-a-qbit" target="_blank" rel="noreferrer" className="text-accent-quantum hover:underline">DARPA: QBI expands quest (Mar 2026) ↗</a>
+          </li>
+          <li>
+            <a href="https://www.darpa.mil/news/2025/quantum-computing-approaches" target="_blank" rel="noreferrer" className="text-accent-quantum hover:underline">DARPA: Two utility-scale approaches (Feb 2025) ↗</a>
+          </li>
+        </ul>
+        <p className="text-xs text-text-muted mt-5 max-w-3xl">
+          For full sector context, see <Link href="/companies" className="text-accent-quantum hover:underline">/companies</Link>,{' '}
+          <Link href="/qnt-ipo-watch" className="text-accent-quantum hover:underline">/qnt-ipo-watch</Link>, and{' '}
+          <Link href="/roadmaps" className="text-accent-quantum hover:underline">/roadmaps</Link>.
+        </p>
       </section>
     </div>
   );
@@ -295,6 +414,23 @@ function Field({ label, value, mono = false }: { label: string; value: string; m
         {value}
       </span>
     </div>
+  );
+}
+
+function EliminationCard({ name, ticker, modality, note }: { name: string; ticker?: string; modality: string; note: string }) {
+  return (
+    <article className="card p-4">
+      <div className="flex items-start justify-between gap-2 mb-1">
+        <h3 className="font-display text-base leading-tight text-text-primary">{name}</h3>
+        {ticker && (
+          <span className="font-mono text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">
+            {ticker}
+          </span>
+        )}
+      </div>
+      <p className="text-[10px] font-mono text-text-muted mb-2">{modality}</p>
+      <p className="text-xs text-text-secondary leading-relaxed">{note}</p>
+    </article>
   );
 }
 

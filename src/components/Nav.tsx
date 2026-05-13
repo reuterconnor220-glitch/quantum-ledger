@@ -43,6 +43,7 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: '/learn', label: 'Primer' },
       { href: '/learn/double-slit', label: 'Double-slit experiment' },
+      { href: '/learn/bell-test', label: 'Bell test / CHSH' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/papers', label: 'Landmark papers' },
       { href: '/learn/timeline', label: '5/10/15 yr timeline' },

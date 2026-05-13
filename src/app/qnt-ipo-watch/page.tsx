@@ -48,11 +48,61 @@ export default function QntPage() {
       {/* Key facts */}
       <section className="mb-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-md overflow-hidden">
-          <Stat label="Target valuation" value="$20B+" />
-          <Stat label="Target raise" value="$1.5B" />
+          <Stat label="Target valuation" value="$15–20B+" />
+          <Stat label="Target raise" value="Up to $1.5B" />
           <Stat label="2025 revenue" value="$30.9M" />
-          <Stat label="Implied P/S" value="~650×" emphasis />
+          <Stat label="Implied P/S" value="~485–650×" emphasis />
         </div>
+        <p className="mt-3 text-xs font-mono uppercase tracking-wider text-text-muted">
+          Bookrunners: J.P. Morgan · Morgan Stanley · Jefferies · Evercore ISI · Exchange: Nasdaq Global Select (proposed)
+        </p>
+      </section>
+
+      {/* Valuation history */}
+      <section className="mb-12">
+        <p className="eyebrow mb-4">Valuation history</p>
+        <div className="card overflow-x-auto">
+          <table className="ql-table w-full">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Round / event</th>
+                <th className="num">Size</th>
+                <th className="num">Valuation</th>
+                <th className="text-text-secondary text-xs">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="font-mono text-xs">Jan 2024</td>
+                <td>Equity raise</td>
+                <td className="num">$300M</td>
+                <td className="num">$5B pre</td>
+                <td className="text-text-secondary text-xs font-sans">JPMorgan-led</td>
+              </tr>
+              <tr>
+                <td className="font-mono text-xs">Sep 2025</td>
+                <td>Equity raise</td>
+                <td className="num">$600M</td>
+                <td className="num">$10B pre</td>
+                <td className="text-text-secondary text-xs font-sans">2× step-up in 20 months</td>
+              </tr>
+              <tr className="bg-accent-quantum/5">
+                <td className="font-mono text-xs text-accent-quantum">Jun 2026 (target)</td>
+                <td className="text-text-primary">IPO pricing (proposed)</td>
+                <td className="num">Up to $1.5B</td>
+                <td className="num text-accent-quantum">$15–20B</td>
+                <td className="text-text-secondary text-xs font-sans">~485–650× P/S</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-text-muted leading-relaxed max-w-3xl">
+          At the $20B high end, IPO valuation is roughly 2× the September 2025 private mark and ~485–650×
+          trailing revenue. Every dollar of IPO valuation above ~$5B is effectively a call option on
+          Apollo&apos;s 2029 fault-tolerant target — the single most consequential forward-looking
+          statement in the filing.
+        </p>
       </section>
 
       {/* Why this matters */}
@@ -164,6 +214,159 @@ export default function QntPage() {
         </div>
       </section>
 
+      {/* Risk factors */}
+      <section className="mb-12">
+        <p className="eyebrow mb-4">Key risk factors disclosed in S-1</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <RiskCard
+            title="Customer concentration"
+            severity="High"
+            body="RIKEN (Japan's national research institute) accounted for ~60% of 2025 revenue, driven by the System Model H2 delivery to RIKEN Wako (April 2026). Q1 2026 revenue dropped 73% YoY because the prior-year quarter included the RIKEN hardware sale recognition. Lumpy enterprise-system revenue, not subscription."
+          />
+          <RiskCard
+            title="National Security Agreement"
+            severity="Material"
+            body="Quantinuum operates under an NSA with the U.S. government restricting foreign-national hiring and requiring government approval for certain executive appointments. Constrains talent pool and M&A optionality."
+          />
+          <RiskCard
+            title="Isotope supply chain"
+            severity="Material"
+            body="Trapped-ion qubits depend on a specific isotope (likely ytterbium-171 or barium-137) sourced from the U.S. Department of Energy with no long-term commercial contract in place. Single-supplier risk on a foundational input."
+          />
+          <RiskCard
+            title="Tax Receivable Agreement (Up-C)"
+            severity="Material"
+            body="Standard Up-C structure: Quantinuum Inc. must pay Continuing Common Unitholders — primarily Honeywell and Cambridge Quantum legacy holders — 85% of cash tax savings realized from the IPO and subsequent unit exchanges. Pre-empts a portion of future cash flow."
+          />
+          <RiskCard
+            title="Honeywell overhang"
+            severity="High"
+            body="~54–55% Honeywell ownership pre-IPO; Honeywell will retain ~45–50% post-listing and has stated it will gradually reduce. Multi-year supply pressure as lock-ups expire. Up to two Honeywell-designated board seats while ≥40% holding."
+          />
+          <RiskCard
+            title="Apollo 2029 execution"
+            severity="High"
+            body="Net losses are widening with Helios ramp. Apollo (fault-tolerant) not slated until 2029–2030. Failure to deliver Apollo on time, or any negative IV&V signal from DARPA QBI, would compress the multiple meaningfully."
+          />
+        </div>
+      </section>
+
+      {/* Peer multiples */}
+      <section className="mb-12">
+        <p className="eyebrow mb-4">Peer multiples · public quantum cohort</p>
+        <div className="card overflow-x-auto">
+          <table className="ql-table w-full">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Ticker</th>
+                <th className="num">2025 revenue</th>
+                <th className="num">Market cap</th>
+                <th className="num">EV / revenue</th>
+                <th className="text-text-secondary text-xs">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>IonQ</td>
+                <td className="font-mono text-xs">IONQ</td>
+                <td className="num">$130.0M</td>
+                <td className="num">~$19.4B</td>
+                <td className="num">~150×</td>
+                <td className="text-text-secondary text-xs font-sans">+202% YoY; only pure-play &gt;$100M revenue</td>
+              </tr>
+              <tr>
+                <td>Rigetti</td>
+                <td className="font-mono text-xs">RGTI</td>
+                <td className="num">$7.1M</td>
+                <td className="num">~$6.3B</td>
+                <td className="num text-accent-down">~890×</td>
+                <td className="text-text-secondary text-xs font-sans">Revenue declined 34%; $590M cash</td>
+              </tr>
+              <tr>
+                <td>D-Wave</td>
+                <td className="font-mono text-xs">QBTS</td>
+                <td className="num">$24.6M</td>
+                <td className="num">~$8.0B</td>
+                <td className="num">~325×</td>
+                <td className="text-text-secondary text-xs font-sans">+179%; annealing not gate-model</td>
+              </tr>
+              <tr>
+                <td>Arqit Quantum</td>
+                <td className="font-mono text-xs">ARQQ</td>
+                <td className="num">$0.5M</td>
+                <td className="num">~$235M</td>
+                <td className="num">~440×</td>
+                <td className="text-text-secondary text-xs font-sans">Crypto, not compute</td>
+              </tr>
+              <tr className="bg-accent-quantum/5">
+                <td className="text-accent-quantum">Quantinuum (proposed)</td>
+                <td className="font-mono text-xs text-accent-quantum">QNT</td>
+                <td className="num">$30.9M</td>
+                <td className="num text-accent-quantum">$15–20B</td>
+                <td className="num text-accent-quantum">~485–650×</td>
+                <td className="text-text-secondary text-xs font-sans">Highest growth; 60% RIKEN concentration</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-text-muted leading-relaxed max-w-3xl">
+          Quantinuum is priced at a premium to the cohort despite revenue concentration. The bull case:
+          Helios is the highest-fidelity gate-model quantum computer publicly benchmarked, and the Apollo
+          2029 commitment is more credible than peers&apos;. The bear case: 60% RIKEN concentration plus
+          the Q1 2026 revenue collapse means the multiple is supported by narrative, not run rate. EV/Revenue
+          shown as Market Cap / FY2025 revenue without net-cash adjustment — directional, not precise.
+        </p>
+      </section>
+
+      {/* Product roadmap */}
+      <section className="mb-12">
+        <p className="eyebrow mb-4">Product roadmap (as disclosed)</p>
+        <div className="card overflow-x-auto">
+          <table className="ql-table w-full">
+            <thead>
+              <tr>
+                <th>System</th>
+                <th>Status / target</th>
+                <th className="num">Physical qubits</th>
+                <th className="num">Logical qubits</th>
+                <th className="text-text-secondary text-xs">Key spec</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="text-text-primary">Helios</td>
+                <td>Commercial launch Nov 2025</td>
+                <td className="num">98</td>
+                <td className="num">48</td>
+                <td className="text-text-secondary text-xs font-sans">99.921% 2Q fidelity</td>
+              </tr>
+              <tr>
+                <td className="text-text-primary">Sol (interim)</td>
+                <td>~2027 (est.)</td>
+                <td className="num">~200</td>
+                <td className="num">~50+</td>
+                <td className="text-text-secondary text-xs font-sans">Bridge system</td>
+              </tr>
+              <tr>
+                <td className="text-text-primary">Apollo</td>
+                <td>2029 target</td>
+                <td className="num">Thousands</td>
+                <td className="num">Hundreds</td>
+                <td className="text-text-secondary text-xs font-sans">Universal, fully fault-tolerant</td>
+              </tr>
+              <tr>
+                <td className="text-text-primary">Lumos</td>
+                <td>2030+</td>
+                <td className="num">&gt;1M physical</td>
+                <td className="num">—</td>
+                <td className="text-text-secondary text-xs font-sans">Utility-scale</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       {/* Coverage */}
       {news.length > 0 && (
         <section className="mb-12">
@@ -212,5 +415,20 @@ function Stat({ label, value, emphasis = false }: { label: string; value: string
       <p className="text-[10px] uppercase tracking-wider text-text-muted font-mono">{label}</p>
       <p className={`mt-1 font-mono text-xl ${emphasis ? 'text-accent-warn' : 'text-text-primary'}`}>{value}</p>
     </div>
+  );
+}
+
+function RiskCard({ title, severity, body }: { title: string; severity: 'High' | 'Material'; body: string }) {
+  const color = severity === 'High' ? 'text-accent-down border-accent-down/40 bg-accent-down/5' : 'text-accent-warn border-accent-warn/40 bg-accent-warn/5';
+  return (
+    <article className="card p-4">
+      <div className="flex items-center gap-2 mb-2">
+        <h3 className="font-display text-base leading-tight text-text-primary">{title}</h3>
+        <span className={`text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-xs border ${color}`}>
+          {severity}
+        </span>
+      </div>
+      <p className="text-xs text-text-secondary leading-relaxed">{body}</p>
+    </article>
   );
 }

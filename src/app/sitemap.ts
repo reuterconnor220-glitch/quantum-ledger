@@ -20,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/use-cases',
     '/learn',
     '/learn/double-slit',
+    '/learn/bell-test',
     '/learn/applications',
     '/learn/timeline',
     '/learn/risks',
