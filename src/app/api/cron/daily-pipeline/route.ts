@@ -112,7 +112,8 @@ export async function GET(request: Request) {
       }
     }
 
-    // 5) Pull stock prices
+    // 5) Pull stock prices (best-effort — yfinance can be flaky from serverless;
+    //    failures are non-fatal and don't pollute the error log)
     for (const ticker of FINNHUB_TICKERS) {
       try {
         const quote = await yahooFinance.quote(ticker);
@@ -127,8 +128,9 @@ export async function GET(request: Request) {
             : null,
         });
         pricesFetched++;
-      } catch (err) {
-        errors.push(`price fetch failed for ${ticker}`);
+      } catch {
+        // intentionally silent — stock prices are best-effort enhancement,
+        // not core to the daily pipeline
       }
     }
 
