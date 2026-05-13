@@ -20,6 +20,8 @@ interface NavGroup {
 
 const PRIMARY: NavLink[] = [
   { href: '/brief', label: 'Brief' },
+  { href: '/ledger-score', label: 'Score' },
+  { href: '/essays', label: 'Essays' },
   { href: '/news', label: 'News' },
   { href: '/today', label: 'Deployments' },
   { href: '/future', label: 'Future' },
@@ -28,9 +30,12 @@ const PRIMARY: NavLink[] = [
 const GROUPS: NavGroup[] = [
   {
     label: 'Sector',
-    matchPrefixes: ['/companies', '/benchmarks', '/revenue', '/roadmaps', '/use-cases'],
+    matchPrefixes: ['/companies', '/benchmarks', '/revenue', '/roadmaps', '/use-cases', '/ledger-score', '/earnings', '/pqc-migration'],
     items: [
+      { href: '/ledger-score', label: 'The Ledger Score' },
       { href: '/companies', label: 'Companies' },
+      { href: '/earnings', label: 'Earnings tracker' },
+      { href: '/pqc-migration', label: 'PQC migration tracker' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/roadmaps', label: 'Roadmaps' },
       { href: '/use-cases', label: 'Use cases' },

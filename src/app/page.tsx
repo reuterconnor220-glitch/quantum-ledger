@@ -42,6 +42,18 @@ export default async function Home() {
               Read today&apos;s brief
             </Link>
             <Link
+              href="/ledger-score"
+              className="border border-accent-quantum/50 bg-accent-quantum/10 text-accent-quantum px-5 py-2.5 text-sm font-medium rounded-sm hover:bg-accent-quantum/20"
+            >
+              See the Ledger Score →
+            </Link>
+            <Link
+              href="/essays/how-to-think-about-quantum"
+              className="border border-border bg-bg-surface text-text-primary px-5 py-2.5 text-sm font-medium rounded-sm hover:bg-bg-elevated"
+            >
+              Read the framework
+            </Link>
+            <Link
               href="/learn"
               className="border border-border bg-bg-surface text-text-primary px-5 py-2.5 text-sm font-medium rounded-sm hover:bg-bg-elevated"
             >
