@@ -318,6 +318,26 @@ export const LEDGER_SCORES: LedgerScoreEntry[] = [
 export const SCORE_PUBLISH_DATE = '2026-05-13';
 export const NEXT_REVIEW_DATE = '2026-06-13';
 
+/**
+ * Composite sector score — average of all current Ledger Score totals.
+ * Used by /brief and homepage to surface a single "state of the sector" number.
+ */
+export function sectorAverageScore(): number {
+  const all = LEDGER_SCORES.map((e) => e.scores.total);
+  return Math.round(all.reduce((s, n) => s + n, 0) / all.length);
+}
+
+/** Last-update delta proxy — for now a stub; real impl will diff against archived snapshot */
+export const SECTOR_SCORE_DELTA = 3; // points vs prior month publication
+
+export function sectorMood(score: number): string {
+  if (score >= 75) return 'Risk-on';
+  if (score >= 60) return 'Cautiously Constructive';
+  if (score >= 45) return 'Sober';
+  if (score >= 30) return 'Defensive';
+  return 'Capitulation';
+}
+
 export function scoreColor(score: number): string {
   if (score >= 80) return 'text-accent-data';
   if (score >= 60) return 'text-accent-quantum';

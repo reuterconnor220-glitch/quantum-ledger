@@ -26,6 +26,7 @@
 import Link from 'next/link';
 import { fetchLatestBrief, fetchRecentNews } from '@/lib/data/live';
 import { fetchQuantumQuotes, pickLeadersAndLaggards } from '@/lib/pipeline/quotes';
+import { sectorAverageScore, SECTOR_SCORE_DELTA, sectorMood } from '@/lib/data/ledger-score';
 import { formatDate, formatPct, formatUsd } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
 import { ArticleLd } from '@/components/JsonLd';
@@ -67,6 +68,10 @@ export default async function BriefPage() {
   const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
   const dateLong = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   const issueNo = computeIssueNumber(b.briefDate);
+
+  // Live sector score derived from LEDGER_SCORES — replaces the hardcoded placeholder.
+  const sectorScore = sectorAverageScore();
+  const sectorMoodLabel = sectorMood(sectorScore);
 
   return (
     <div className="max-w-7xl mx-auto px-5 sm:px-8 pb-24">
@@ -246,16 +251,17 @@ export default async function BriefPage() {
             </div>
             <div className="grid grid-cols-[auto_1fr] items-end gap-4 mb-1">
               <div className="font-display text-[96px] leading-[0.86] tracking-[-0.045em] tabular-nums">
-                {/* If your data shape exposes a score, swap in b.score here. */}
-                62
+                {sectorScore}
               </div>
               <div className="text-right pb-1.5 font-mono">
-                <div className="text-accent-data font-semibold text-xs tracking-[0.02em]">▲ +3 vs T-1</div>
+                <div className={SECTOR_SCORE_DELTA >= 0 ? "text-accent-data font-semibold text-xs tracking-[0.02em]" : "text-accent-down font-semibold text-xs tracking-[0.02em]"}>
+                  {SECTOR_SCORE_DELTA >= 0 ? '▲' : '▼'} {SECTOR_SCORE_DELTA >= 0 ? '+' : ''}{SECTOR_SCORE_DELTA} vs T-1
+                </div>
                 <div className="text-[10px] text-text-muted">/ 0 to 100</div>
               </div>
             </div>
-            <div className="font-display italic text-lg text-text-secondary mb-3">"Cautiously Constructive"</div>
-            <ScoreDensity />
+            <div className="font-display italic text-lg text-text-secondary mb-3">&ldquo;{sectorMoodLabel}&rdquo;</div>
+            <ScoreDensity value={sectorScore} />
           </div>
 
           <div className="card p-5">
@@ -432,11 +438,9 @@ function Wavefunction({ sentiment = 0, n = 5 }: { sentiment?: number; n?: number
 
 /* ────────────────────────────── Score density curve ────────────────────────────── */
 
-function ScoreDensity() {
-  // Static placeholder until a real score history is wired
+function ScoreDensity({ value = 62 }: { value?: number }) {
   const W = 280;
   const H = 64;
-  const value = 62;
   const sigma = 8;
   const peakY = H - 8;
   const baseY = H - 6;
