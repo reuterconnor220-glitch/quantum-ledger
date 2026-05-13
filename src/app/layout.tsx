@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
+import { SectionNav } from '@/components/SectionNav';
 import { OrganizationLd, WebsiteLd } from '@/components/JsonLd';
 import { PageViewBeacon } from '@/components/PageViewBeacon';
 import './globals.css';
@@ -77,7 +79,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WebsiteLd />
       </head>
       <body>
+        <ScrollProgress />
         <Nav />
+        <SectionNav />
         <main className="min-h-screen">{children}</main>
         <Footer />
         <PageViewBeacon />

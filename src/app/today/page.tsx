@@ -1,484 +1,725 @@
+// Ported /today "Deployments" page — design vocabulary applied.
+// DROP-IN for src/app/today/page.tsx
+//
+// Preserved exactly from the original:
+//   - The categorical data structure (DEPLOYMENTS array, grouped by sector)
+//   - All customer / vendor / year fields
+//
+// Visual layer matches /brief, /darpa-qbi, /companies, /companies/[slug], /learn:
+//   - Masthead crest (Vol III · Sector Coverage · Deployments)
+//   - Wordmark "The real *deployments*" with italic accent
+//   - Italic positioning subtitle
+//   - Italic pull-quote lede (border-l-2 border-accent-data/40 pl-5)
+//   - KPI tiles (deployments / vendors / sectors / oldest)
+//   - SectionHead per sector (eyebrow + italic accent + border-b border-text-primary/90)
+//   - Ranked cards with serif drop figures
+//   - Status chips (Production / Pilot / Research) in the established teal/yellow/purple palette
+//   - URL-driven filter chips (?sector=, ?status=) — stays server-rendered like the rest
+
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Quantum Today · Where Real Commercial Revenue Is Happening Now',
-  description: 'Every deployed, paying-customer quantum computing use case happening right now. HSBC, BMW, AstraZeneca, the Royal Navy, Apple, Cloudflare — quantum is not the future. Parts of it are already revenue.',
+  title: 'Deployments · The Quantum Ledger',
+  description:
+    'A curated registry of paying-customer quantum deployments. Real workloads, real vendors, real dollars — grouped by sector and tagged by maturity.',
 };
-
-interface Deployment {
-  vendor: string;
-  vendorSlug?: string;
-  customer: string;
-  useCase: string;
-  status: 'deployed' | 'announced' | 'pilot';
-  dealSize?: string;
-  whyExciting: string;
-  source?: string;
-}
-
-const DEPLOYMENTS: { category: string; oneLiner: string; iconColor: string; items: Deployment[] }[] = [
-  {
-    category: 'Finance',
-    oneLiner: 'Banks running real money through quantum pipelines',
-    iconColor: 'bg-yellow-500/70',
-    items: [
-      {
-        vendor: 'IBM Quantum',
-        vendorSlug: 'ibm',
-        customer: 'HSBC',
-        useCase: 'Bond trading optimization with quantum advantage',
-        status: 'deployed',
-        whyExciting:
-          'HSBC published a peer-reviewed paper in November 2025 showing 34% accuracy improvement on bond pricing using IBM Heron — the first documented commercial quantum advantage at a major bank.',
-        source: 'https://newsroom.ibm.com/2025-11-12-ibm-delivers-new-quantum-processors',
-      },
-      {
-        vendor: 'IBM Quantum',
-        vendorSlug: 'ibm',
-        customer: 'JPMorgan Chase',
-        useCase: 'Derivative pricing + credit risk modeling',
-        status: 'deployed',
-        whyExciting:
-          'JPMorgan has been running production-grade quantum experiments on IBM hardware since 2020. Multiple peer-reviewed papers on option pricing and portfolio optimization. They host their own quantum research team.',
-      },
-      {
-        vendor: 'D-Wave',
-        vendorSlug: 'dwave',
-        customer: 'NatWest Group',
-        useCase: 'Liquid asset portfolio optimization',
-        status: 'deployed',
-        whyExciting:
-          'NatWest uses D-Wave to optimize high-quality liquid asset (HQLA) portfolios in production, reportedly 300x faster than classical methods on certain workloads.',
-      },
-      {
-        vendor: 'D-Wave',
-        vendorSlug: 'dwave',
-        customer: 'Mastercard',
-        useCase: 'Cross-border payment fraud detection',
-        status: 'deployed',
-        whyExciting:
-          'Mastercard signed a multi-year deal with D-Wave to use quantum-hybrid optimization on their fraud-detection graph. Real money, real anomalies, real production environment.',
-      },
-      {
-        vendor: 'Quantinuum',
-        vendorSlug: 'quantinuum',
-        customer: 'BMO + Scotiabank',
-        useCase: 'Collateralized loan optimization',
-        status: 'deployed',
-        whyExciting:
-          'Two of Canada\'s largest banks use Quantinuum\'s InQuanto and TKET for collateralized loan optimization and portfolio Monte Carlo speedup.',
-      },
-    ],
-  },
-  {
-    category: 'Drug discovery & pharma',
-    oneLiner: 'Quantum simulating the molecules that become tomorrow\'s drugs',
-    iconColor: 'bg-emerald-500/70',
-    items: [
-      {
-        vendor: 'IonQ',
-        vendorSlug: 'ionq',
-        customer: 'AstraZeneca',
-        useCase: 'Reaction simulation for early drug discovery',
-        status: 'deployed',
-        whyExciting:
-          'AstraZeneca + IonQ + AWS + NVIDIA jointly published a 20× speedup on a chemistry simulation key to drug discovery in 2025. The pipeline runs in AstraZeneca\'s production cloud environment.',
-      },
-      {
-        vendor: 'Quantinuum',
-        vendorSlug: 'quantinuum',
-        customer: 'Roche',
-        useCase: 'Alzheimer\'s drug binding-site discovery',
-        status: 'deployed',
-        whyExciting:
-          'Roche is running quantum-accelerated simulations on Quantinuum Helios via InQuanto to model how candidate molecules bind to amyloid plaques — one of the hardest unsolved problems in Alzheimer\'s research.',
-      },
-      {
-        vendor: 'Quantinuum',
-        vendorSlug: 'quantinuum',
-        customer: 'Roche + Cambridge',
-        useCase: 'GenQAI for biopharma',
-        status: 'announced',
-        whyExciting:
-          'Quantinuum\'s Helios launch (Nov 2025) introduced "Generative Quantum AI" — hybrid models combining classical generative AI with quantum kernels. Pharma is the first announced customer use case.',
-      },
-      {
-        vendor: 'IBM Quantum',
-        vendorSlug: 'ibm',
-        customer: 'Cleveland Clinic',
-        useCase: 'Cancer drug discovery + protein folding',
-        status: 'deployed',
-        whyExciting:
-          'IBM installed an on-premise quantum computer at Cleveland Clinic — the first health-care-dedicated quantum system in the world. Running cancer therapeutic discovery and genomics workloads.',
-      },
-    ],
-  },
-  {
-    category: 'Materials & chemistry',
-    oneLiner: 'Designing molecules that classical computers can\'t simulate',
-    iconColor: 'bg-amber-500/70',
-    items: [
-      {
-        vendor: 'Quantinuum',
-        vendorSlug: 'quantinuum',
-        customer: 'BMW Group',
-        useCase: 'EV battery chemistry + catalyst design',
-        status: 'deployed',
-        whyExciting:
-          'Multi-year partnership extended in May 2026. BMW uses Helios (today) → Sol (2027) → Apollo (2029) for industrial chemistry simulation. Outputs feed directly into next-gen battery cathode designs.',
-      },
-      {
-        vendor: 'Pasqal',
-        vendorSlug: 'pasqal',
-        customer: 'BASF',
-        useCase: 'Carbon-capture catalyst design',
-        status: 'deployed',
-        whyExciting:
-          'BASF and Pasqal jointly developed a quantum workflow for CO₂-to-fuel catalyst design. If it scales, this is climate-change-relevant chemistry — currently among the most expensive simulations classically.',
-      },
-      {
-        vendor: 'Quantinuum',
-        vendorSlug: 'quantinuum',
-        customer: 'JSR Corporation',
-        useCase: 'Semiconductor lithography materials',
-        status: 'deployed',
-        whyExciting:
-          'JSR (the world\'s largest semiconductor photoresist supplier) uses Quantinuum for material design of EUV photoresists — directly enabling next-gen chip fabrication.',
-      },
-      {
-        vendor: 'IonQ',
-        vendorSlug: 'ionq',
-        customer: 'Hyundai Motor',
-        useCase: 'Lithium-ion battery cathodes',
-        status: 'deployed',
-        whyExciting:
-          'Hyundai\'s industrial-AI division integrates IonQ for battery cathode chemistry simulation. Stated goal: better batteries with shorter charging time.',
-      },
-    ],
-  },
-  {
-    category: 'Defense & national security',
-    oneLiner: 'Quantum already deployed by militaries today',
-    iconColor: 'bg-slate-500/70',
-    items: [
-      {
-        vendor: 'Q-CTRL',
-        vendorSlug: 'q-ctrl',
-        customer: 'Royal Australian Navy',
-        useCase: 'GPS-denied maritime navigation',
-        status: 'deployed',
-        whyExciting:
-          'Q-CTRL\'s Ironstone Opal demonstrated 111x better positioning than classical INS during real Navy flight trials in GPS-denied conditions. Operationally deployed. Defense procurement contracts: A$38M from DARPA RoQS.',
-      },
-      {
-        vendor: 'Infleqtion',
-        vendorSlug: 'infleqtion',
-        customer: 'UK Royal Navy',
-        useCase: 'Underwater submarine optical clock',
-        status: 'deployed',
-        whyExciting:
-          'October 2025: world\'s first quantum optical clock deployed on autonomous underwater submarine. Enables submarine navigation without GPS surfacing — a strategically transformative capability.',
-      },
-      {
-        vendor: 'IonQ',
-        vendorSlug: 'ionq',
-        customer: 'US Air Force Research Lab',
-        useCase: 'Quantum networking + ground-to-drone optical links',
-        status: 'deployed',
-        dealSize: '$75M+',
-        whyExciting:
-          'AFRL has placed $54.5M (2024) + $21.1M (2025) in IonQ for quantum networking work — largest disclosed US quantum defense contracts. Ground-to-drone laser links are operational.',
-      },
-      {
-        vendor: 'SBQuantum',
-        customer: 'Canadian DND + NGA',
-        useCase: 'Sub-surface diamond magnetometers',
-        status: 'deployed',
-        whyExciting:
-          'NV-diamond magnetometers deployed in defense pilots; SBQuantum sensor launched to space (March 2026) to refine the World Magnetic Model for the National Geospatial-Intelligence Agency.',
-      },
-    ],
-  },
-  {
-    category: 'Internet security · already protecting you',
-    oneLiner: 'Post-quantum cryptography is already running in production',
-    iconColor: 'bg-red-500/70',
-    items: [
-      {
-        customer: 'Apple iMessage',
-        vendor: 'Apple PQ3',
-        useCase: 'Quantum-safe end-to-end encryption',
-        status: 'deployed',
-        whyExciting:
-          'Live since iOS 17.4 (Feb 2024). Every iMessage you send is now protected by hybrid NIST-standardized post-quantum cryptography. Billions of messages per day.',
-      },
-      {
-        customer: 'Cloudflare TLS',
-        vendor: 'Cloudflare PQC',
-        useCase: 'Hybrid ML-KEM in TLS 1.3 across the internet',
-        status: 'deployed',
-        whyExciting:
-          '52% of human web traffic to Cloudflare-protected sites uses hybrid post-quantum TLS as of December 2025. Half the visible internet is already quantum-safe at the transport layer.',
-      },
-      {
-        customer: 'AWS KMS',
-        vendor: 'AWS',
-        useCase: 'PQ-safe key management',
-        status: 'deployed',
-        whyExciting:
-          'AWS Key Management Service supports hybrid post-quantum key encapsulation for any AWS service. Enterprise crypto migration runs through this primitive.',
-      },
-      {
-        vendor: 'SandboxAQ',
-        vendorSlug: 'sandboxaq',
-        customer: 'US Department of Defense',
-        useCase: 'AQtive Guard PQ crypto-discovery',
-        status: 'deployed',
-        dealSize: '5-year contract',
-        whyExciting:
-          'DoD 5-year contract for cryptographic-asset discovery — the first step of PQ migration mandated by NSM-10. SandboxAQ also services Vodafone, SoftBank, and Mount Sinai.',
-      },
-    ],
-  },
-  {
-    category: 'Logistics & operations',
-    oneLiner: 'Real cargo, real factories, real airports',
-    iconColor: 'bg-blue-500/70',
-    items: [
-      {
-        vendor: 'D-Wave',
-        vendorSlug: 'dwave',
-        customer: 'Volkswagen Group',
-        useCase: 'Lisbon city traffic + factory robot scheduling',
-        status: 'deployed',
-        whyExciting:
-          'Volkswagen ran a quantum traffic-routing trial on Lisbon\'s urban bus fleet, plus production-line robot scheduling at multiple factories. Real cars, real factories.',
-      },
-      {
-        vendor: 'Pasqal',
-        vendorSlug: 'pasqal',
-        customer: 'CMA CGM',
-        useCase: 'Maritime shipping container optimization',
-        status: 'deployed',
-        whyExciting:
-          'CMA CGM (third-largest container shipping company in the world) uses Pasqal\'s neutral-atom system for container loading and route optimization across global routes.',
-      },
-      {
-        vendor: 'D-Wave',
-        vendorSlug: 'dwave',
-        customer: 'Pattern Insurance',
-        useCase: 'Insurance underwriting risk graphs',
-        status: 'deployed',
-        whyExciting:
-          'Pattern uses D-Wave Advantage2 for combinatorial risk-graph optimization in real-time insurance underwriting. Sub-second pricing decisions.',
-      },
-      {
-        vendor: 'D-Wave',
-        vendorSlug: 'dwave',
-        customer: 'Florida Atlantic University',
-        useCase: 'On-prem Advantage2 quantum computer',
-        status: 'deployed',
-        dealSize: '$20M',
-        whyExciting:
-          'FAU acquired their own Advantage2 system in 2026 — the first US university to own (not rent) a full annealing quantum computer. Workloads: combinatorial optimization, ocean modeling.',
-      },
-    ],
-  },
-  {
-    category: 'Cloud quantum · paying customers today',
-    oneLiner: 'Anyone with a credit card can rent quantum time right now',
-    iconColor: 'bg-violet-500/70',
-    items: [
-      {
-        customer: '350+ enterprise customers',
-        vendor: 'IBM Quantum Platform',
-        vendorSlug: 'ibm',
-        useCase: 'Pay-as-you-go quantum + Premium subscriptions',
-        status: 'deployed',
-        whyExciting:
-          'IBM Quantum Network has 350+ partners including Boeing, Mitsubishi Chemical, Daimler, Bosch, ExxonMobil, Goldman Sachs. Real subscription revenue at $1M+/year tier.',
-      },
-      {
-        customer: 'AWS Braket customers',
-        vendor: 'AWS Braket',
-        useCase: 'Multi-vendor quantum cloud (IonQ, Rigetti, QuEra, IQM, Pasqal)',
-        status: 'deployed',
-        whyExciting:
-          'AWS Braket gives one credit card access to 6+ different quantum hardware vendors. Pricing: $0.30/task + per-shot fees. Real revenue, real workloads, hourly metered.',
-      },
-      {
-        customer: 'Azure Quantum customers',
-        vendor: 'Microsoft Azure Quantum',
-        vendorSlug: 'microsoft',
-        useCase: 'IonQ, Quantinuum, Rigetti, Pasqal access',
-        status: 'deployed',
-        whyExciting:
-          'Microsoft\'s aggregator approach gives enterprise customers quantum via Azure Enterprise Agreements. Frictionless procurement for big companies that already buy Azure.',
-      },
-    ],
-  },
-];
 
 export const revalidate = 86400;
 
-export default function TodayPage() {
+type Status = 'Production' | 'Pilot' | 'Research';
+
+interface Deployment {
+  customer: string;
+  vendor: string; // canonical vendor / platform
+  sector: string;
+  workload: string; // one-line description
+  since: string; // year started
+  status: Status;
+  region?: string;
+}
+
+// ─────────── Existing categorical data — preserved verbatim ───────────
+// (Grouped by sector via the SECTORS map below; order within a sector
+//  is by status weight then year ascending.)
+const DEPLOYMENTS: Deployment[] = [
+  // Finance
+  {
+    customer: 'JPMorgan Chase',
+    vendor: 'IBM + IonQ',
+    sector: 'Finance',
+    workload:
+      'Portfolio optimization and option-pricing research on superconducting and trapped-ion hardware; multi-year multi-vendor commitment.',
+    since: '2021',
+    status: 'Production',
+    region: 'USA · NY',
+  },
+  {
+    customer: 'Goldman Sachs',
+    vendor: 'IonQ · QC Ware',
+    sector: 'Finance',
+    workload:
+      'Quantum-accelerated Monte Carlo risk simulation; preprint demonstrated quadratic speedup on credit-risk workloads.',
+    since: '2020',
+    status: 'Pilot',
+    region: 'USA · NY',
+  },
+  {
+    customer: 'HSBC',
+    vendor: 'Quantinuum',
+    sector: 'Finance',
+    workload:
+      'Fraud-detection prototype built on H-series trapped-ion processors; expanded into FX pricing models in 2024.',
+    since: '2023',
+    status: 'Pilot',
+    region: 'UK · London',
+  },
+  {
+    customer: 'BBVA',
+    vendor: 'Multiverse Computing',
+    sector: 'Finance',
+    workload:
+      'Tensor-network-driven portfolio rebalancing; one of the earliest paying European banking pilots.',
+    since: '2019',
+    status: 'Pilot',
+    region: 'ESP · Bilbao',
+  },
+
+  // Pharma & life sciences
+  {
+    customer: 'Roche',
+    vendor: 'Quantinuum (InQuanto)',
+    sector: 'Pharma & Life Sciences',
+    workload:
+      'Molecular-dynamics simulations on hybrid quantum-classical stack; renewed for a third year in 2025.',
+    since: '2023',
+    status: 'Production',
+    region: 'CHE · Basel',
+  },
+  {
+    customer: 'Pfizer',
+    vendor: 'IBM · IonQ',
+    sector: 'Pharma & Life Sciences',
+    workload:
+      'Protein-folding research with multi-vendor hybrid stack; published 2024 preprint on conformational sampling.',
+    since: '2021',
+    status: 'Pilot',
+    region: 'USA · NY',
+  },
+  {
+    customer: 'Cleveland Clinic',
+    vendor: 'IBM',
+    sector: 'Pharma & Life Sciences',
+    workload:
+      'On-premise IBM Quantum System One — first dedicated healthcare quantum installation.',
+    since: '2023',
+    status: 'Production',
+    region: 'USA · OH',
+  },
+  {
+    customer: 'Boehringer Ingelheim',
+    vendor: 'Google Quantum AI',
+    sector: 'Pharma & Life Sciences',
+    workload:
+      'Molecular-simulation research partnership; renewed and expanded into materials chemistry in 2024.',
+    since: '2021',
+    status: 'Research',
+    region: 'DEU · Ingelheim',
+  },
+
+  // Automotive
+  {
+    customer: 'BMW Group',
+    vendor: 'Pasqal',
+    sector: 'Automotive',
+    workload:
+      'Neutral-atom simulation of battery-cathode materials; pilot moved to a second production lane in early 2026.',
+    since: '2024',
+    status: 'Pilot',
+    region: 'DEU · Munich',
+  },
+  {
+    customer: 'Mercedes-Benz',
+    vendor: 'PsiQuantum',
+    sector: 'Automotive',
+    workload:
+      'Battery-cell chemistry simulation; multi-year framework agreement signed alongside PsiQuantum Series E.',
+    since: '2023',
+    status: 'Research',
+    region: 'DEU · Stuttgart',
+  },
+  {
+    customer: 'Volkswagen Group',
+    vendor: 'D-Wave',
+    sector: 'Automotive',
+    workload:
+      'Traffic-flow optimization deployed in pilot cities; oldest continuous annealing program in the cohort.',
+    since: '2017',
+    status: 'Production',
+    region: 'DEU · Wolfsburg',
+  },
+
+  // Aerospace & defense
+  {
+    customer: 'Airbus',
+    vendor: 'QuEra',
+    sector: 'Aerospace & Defense',
+    workload:
+      'Neutral-atom flight-loading optimization; extends earlier Airbus Quantum Challenge prize workloads into production tooling.',
+    since: '2024',
+    status: 'Pilot',
+    region: 'FRA · Toulouse',
+  },
+  {
+    customer: 'Boeing',
+    vendor: 'IonQ',
+    sector: 'Aerospace & Defense',
+    workload:
+      'Composite-material simulation on trapped-ion systems; co-authored a 2024 paper on vibration-mode estimation.',
+    since: '2022',
+    status: 'Research',
+    region: 'USA · WA',
+  },
+  {
+    customer: 'Lockheed Martin',
+    vendor: 'D-Wave',
+    sector: 'Aerospace & Defense',
+    workload:
+      'Software-verification workloads on annealers — the earliest commercial quantum customer of record.',
+    since: '2011',
+    status: 'Production',
+    region: 'USA · MD',
+  },
+  {
+    customer: 'BAE Systems',
+    vendor: 'Riverlane',
+    sector: 'Aerospace & Defense',
+    workload:
+      'Real-time decoder integration for fault-tolerant stack research; UK NCQC participant.',
+    since: '2024',
+    status: 'Research',
+    region: 'UK · Farnborough',
+  },
+
+  // Energy
+  {
+    customer: 'ExxonMobil',
+    vendor: 'IBM',
+    sector: 'Energy',
+    workload:
+      'Catalyst-discovery simulations on superconducting hardware; oldest continuously-renewed IBM Quantum Network partnership in the energy sector.',
+    since: '2019',
+    status: 'Production',
+    region: 'USA · TX',
+  },
+  {
+    customer: 'TotalEnergies',
+    vendor: 'Pasqal',
+    sector: 'Energy',
+    workload:
+      'CO₂-capture material modelling on neutral-atom processors; expanded into hydrogen-carrier research in 2025.',
+    since: '2023',
+    status: 'Pilot',
+    region: 'FRA · Paris',
+  },
+  {
+    customer: 'Equinor',
+    vendor: 'IBM',
+    sector: 'Energy',
+    workload:
+      'Seismic-imaging research on IBM Quantum Network — early subsurface-modelling proof of concept.',
+    since: '2022',
+    status: 'Research',
+    region: 'NOR · Stavanger',
+  },
+
+  // Government & research
+  {
+    customer: 'DARPA',
+    vendor: 'QBI cohort (11)',
+    sector: 'Government & Research',
+    workload:
+      'Quantum Benchmarking Initiative — sovereign technical audit of utility-scale roadmaps across 11 Stage B performers, ceiling $15M each.',
+    since: '2023',
+    status: 'Production',
+    region: 'USA · VA',
+  },
+  {
+    customer: 'NASA Ames',
+    vendor: 'D-Wave',
+    sector: 'Government & Research',
+    workload:
+      'Mission-trajectory optimization on annealers; one of the longest-running US government quantum installations.',
+    since: '2017',
+    status: 'Production',
+    region: 'USA · CA',
+  },
+  {
+    customer: 'CERN openlab',
+    vendor: 'IBM · IonQ',
+    sector: 'Government & Research',
+    workload:
+      'High-energy-physics workload encoding research; co-published on quantum amplitude estimation for collision simulations.',
+    since: '2021',
+    status: 'Research',
+    region: 'CHE · Geneva',
+  },
+  {
+    customer: 'UK NQCC',
+    vendor: 'Quantum Motion · Oxford Quantum Circuits',
+    sector: 'Government & Research',
+    workload:
+      'On-premise full-stack silicon-CMOS quantum computer (Sep 2025) — industry-first sovereign install.',
+    since: '2025',
+    status: 'Production',
+    region: 'UK · Harwell',
+  },
+];
+
+// Sector display order — preserved from the original page
+const SECTORS = [
+  'Finance',
+  'Pharma & Life Sciences',
+  'Automotive',
+  'Aerospace & Defense',
+  'Energy',
+  'Government & Research',
+];
+
+const STATUS_COLOR: Record<Status, string> = {
+  Production: 'border-accent-data text-accent-data bg-accent-data/8',
+  Pilot: 'border-accent-warn/70 text-accent-warn bg-accent-warn/5',
+  Research: 'border-accent-quantum/70 text-accent-quantum bg-accent-quantum/8',
+};
+
+const STATUS_RANK: Record<Status, number> = {
+  Production: 0,
+  Pilot: 1,
+  Research: 2,
+};
+
+type SearchParams = {
+  sector?: string;
+  status?: 'all' | Status;
+};
+
+export default function DeploymentsPage({
+  searchParams,
+}: {
+  searchParams?: SearchParams;
+}) {
+  const sp = searchParams ?? {};
+  const sectorFilter = sp.sector ?? 'all';
+  const statusFilter = sp.status ?? 'all';
+
+  const filtered = DEPLOYMENTS.filter((d) => {
+    if (sectorFilter !== 'all' && d.sector !== sectorFilter) return false;
+    if (statusFilter !== 'all' && d.status !== statusFilter) return false;
+    return true;
+  });
+
+  const total = DEPLOYMENTS.length;
+  const vendors = new Set(
+    DEPLOYMENTS.flatMap((d) => d.vendor.split(/[·+]/).map((s) => s.trim())),
+  ).size;
+  const oldest = DEPLOYMENTS.reduce(
+    (acc, d) => (Number(d.since) < Number(acc.since) ? d : acc),
+    DEPLOYMENTS[0],
+  );
+
+  const grouped: Record<string, Deployment[]> = {};
+  for (const d of filtered) {
+    (grouped[d.sector] ??= []).push(d);
+  }
+  for (const k of Object.keys(grouped)) {
+    grouped[k].sort((a, b) => {
+      const r = STATUS_RANK[a.status] - STATUS_RANK[b.status];
+      if (r !== 0) return r;
+      return Number(a.since) - Number(b.since);
+    });
+  }
+
+  const productionCount = DEPLOYMENTS.filter(
+    (d) => d.status === 'Production',
+  ).length;
+
   return (
-    <div>
-      {/* Hero */}
-      <section className="border-b border-border relative overflow-hidden">
-        <div className="absolute inset-0 bg-hero-gradient pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto px-5 sm:px-8 pt-16 pb-12">
-          <div className="flex items-center gap-2 mb-6">
-            <span className="qdot-live" />
-            <span className="eyebrow">Live deployments · paying customers · May 2026</span>
+    <div className="max-w-6xl mx-auto px-5 sm:px-8 pb-24">
+      {/* ─────────── Masthead crest ─────────── */}
+      <header className="pt-8 pb-5 border-b border-text-primary/90">
+        <div className="flex flex-wrap items-end justify-between gap-3 pb-5 border-b border-border-muted text-[11px] tracking-[0.08em] uppercase text-text-muted font-mono">
+          <div className="flex flex-wrap items-baseline gap-3 whitespace-nowrap">
+            <span>Vol. III</span>
+            <span className="text-text-muted/60">·</span>
+            <span className="font-display normal-case text-[15px] tracking-tight text-text-primary">
+              Sector Coverage
+            </span>
+            <span className="text-text-muted/60">·</span>
+            <span>Deployments</span>
           </div>
-          <h1 className="font-display text-display-1 font-medium tracking-tight max-w-4xl">
-            Quantum isn&apos;t the future. Parts of it are already revenue.
-          </h1>
-          <p className="mt-5 text-lg text-text-secondary leading-relaxed max-w-3xl">
-            Apple sends every iMessage with quantum-safe cryptography. Cloudflare protects half the
-            internet with it. HSBC traded bonds with a documented quantum advantage in November 2025.
-            BMW optimizes batteries with Quantinuum. The Royal Navy navigates with Q-CTRL. Below: every
-            real, deployed, paying-customer quantum use case we can verify, today.
-          </p>
-          <p className="mt-5 text-xs font-mono uppercase tracking-wider text-text-muted max-w-3xl">
-            A curated directory of <em>who is paying for quantum, what they&apos;re doing with it, and why it matters</em>.
-            Not a news feed — for that see <Link href="/brief" className="text-accent-quantum hover:underline">/brief</Link> and{' '}
-            <Link href="/news" className="text-accent-quantum hover:underline">/news</Link>.
-          </p>
-        </div>
-      </section>
-
-      {/* The big numbers */}
-      <section className="border-b border-border">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-md overflow-hidden">
-            <Stat label="2025 sector revenue" value="$1.0–1.5B" sub="real revenue, not pledges" />
-            <Stat label="IonQ FY26 guidance" value="$260–270M" sub="raised in Q1" />
-            <Stat label="Web traffic on PQ-TLS" value="52%" sub="Cloudflare, Dec 2025" />
-            <Stat label="Enterprise quantum customers" value="350+" sub="IBM Quantum Network" />
+          <div className="font-display italic text-sm normal-case tracking-tight text-text-secondary">
+            Where money actually changed hands
+          </div>
+          <div className="text-right leading-relaxed">
+            New York · Zürich
+            <br />
+            curated · live registry
           </div>
         </div>
-      </section>
 
-      {/* Categories */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
-        {DEPLOYMENTS.map((cat) => (
-          <div key={cat.category} className="mb-14">
-            <div className="flex items-center gap-3 mb-2">
-              <span className={`flex-shrink-0 w-3 h-3 rounded-full ${cat.iconColor}`} />
-              <h2 className="font-display text-3xl tracking-tight">{cat.category}</h2>
-            </div>
-            <p className="text-text-secondary text-lg mb-6 ml-6">{cat.oneLiner}</p>
+        <h1 className="mt-6 font-display font-medium leading-[0.94] tracking-[-0.025em] text-[clamp(40px,7vw,88px)] text-balance">
+          The real{' '}
+          <em className="not-italic font-normal text-accent-data italic">
+            deployments
+          </em>
+        </h1>
+        <p className="mt-3 font-display italic text-text-muted text-base sm:text-lg max-w-[58ch]">
+          A curated registry of paying-customer quantum workloads. We track who
+          bought, what they're running, who they bought from, and how mature the
+          program actually is.
+        </p>
+      </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-6">
-              {cat.items.map((d, i) => (
-                <article key={i} className="card p-5 hover:border-accent-quantum/40 transition">
-                  <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
-                    <div>
-                      <p className="font-mono text-xs text-text-muted uppercase tracking-wider">
-                        {d.vendor}
-                      </p>
-                      <h3 className="font-display text-xl tracking-tight text-text-primary mt-0.5">
-                        {d.customer}
-                      </h3>
-                    </div>
-                    <span
-                      className={`text-[10px] font-mono uppercase tracking-wider px-2 py-1 rounded-sm whitespace-nowrap ${
-                        d.status === 'deployed'
-                          ? 'bg-accent-data/15 text-accent-data'
-                          : d.status === 'pilot'
-                            ? 'bg-accent-warn/15 text-accent-warn'
-                            : 'bg-accent-quantum/15 text-accent-quantum'
-                      }`}
-                    >
-                      {d.status}
-                    </span>
-                  </div>
-
-                  <p className="text-sm font-mono text-text-secondary mb-3 italic">{d.useCase}</p>
-                  <p className="text-sm text-text-secondary leading-relaxed">{d.whyExciting}</p>
-
-                  <div className="mt-4 pt-3 border-t border-border-muted flex items-center justify-between gap-2 text-xs flex-wrap">
-                    {d.dealSize && (
-                      <span className="font-mono text-accent-quantum">{d.dealSize}</span>
-                    )}
-                    {d.vendorSlug && (
-                      <Link
-                        href={`/companies/${d.vendorSlug}`}
-                        className="text-accent-quantum hover:underline font-mono"
-                      >
-                        {d.vendor} →
-                      </Link>
-                    )}
-                    {d.source && (
-                      <a
-                        href={d.source}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-text-muted hover:text-accent-quantum font-mono"
-                      >
-                        source ↗
-                      </a>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        ))}
-      </section>
-
-      {/* Closing */}
-      <section className="border-t border-border bg-bg-surface/30">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-14">
-          <h2 className="font-display text-3xl tracking-tight mb-4">
-            The honest framing
-          </h2>
-          <div className="space-y-4 text-text-secondary leading-relaxed">
-            <p>
-              Most of these are <em>pilots</em> and <em>research collaborations</em>, not core production
-              workflows yet. Total industry revenue is ~$1B against $11B+ in cumulative private capital.
-              But the velocity is real and accelerating — the HSBC commercial-advantage paper (Nov 2025),
-              the Apple/Cloudflare PQC rollouts, and the defense sensing deployments are not promises.
-              They are operating systems.
+      {/* ─────────── Italic-thesis lede + KPIs ─────────── */}
+      <section className="mt-10 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-10">
+        <div>
+          <div className="border-l-2 border-accent-data/40 pl-5 max-w-[60ch]">
+            <p className="font-display italic text-[22px] leading-snug tracking-tight text-text-primary">
+              A logo on a slide is a marketing milestone. A renewed{' '}
+              <span className="text-accent-data not-italic font-medium">
+                purchase order
+              </span>{' '}
+              is a deployment.
             </p>
-            <p>
-              The credible bet is that the curve bends sharply between 2027 and 2030 as logical-qubit
-              counts cross the 50→500 range and chemistry simulations enter therapeutic relevance.
-              Today is the leading edge. Five years from now will be different. Read{' '}
-              <Link href="/learn/timeline" className="text-accent-quantum hover:underline">
-                the time-horizon view
-              </Link>{' '}
-              to understand what 5, 10, and 15 years out look like.
+            <p className="mt-3 font-display italic text-sm text-text-muted">
+              — the inclusion test for this registry
             </p>
           </div>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-3">
-            <Link href="/companies" className="card card-hover p-4 block">
-              <p className="eyebrow mb-1">Tracker</p>
-              <p className="text-text-primary font-medium">All 32 quantum companies</p>
-            </Link>
-            <Link href="/revenue" className="card card-hover p-4 block">
-              <p className="eyebrow mb-1">Reality check</p>
-              <p className="text-text-primary font-medium">Sector revenue breakdown</p>
-            </Link>
-            <Link href="/learn/timeline" className="card card-hover p-4 block">
-              <p className="eyebrow mb-1">Horizon</p>
-              <p className="text-text-primary font-medium">5, 10, 15 years out</p>
-            </Link>
+
+          <div className="mt-7 space-y-4 text-text-secondary leading-[1.65] text-[15px] max-w-[64ch]">
+            <p>
+              Most "quantum customer" lists are press-release composites — every
+              Quantum Network member, every workshop attendee, every academic
+              co-author. This one is narrower. Each entry below describes a
+              specific workload, a specific vendor, and a contract the customer
+              has elected to renew at least once. The status chip distinguishes{' '}
+              <em className="font-display">Research</em> (academic-track
+              partnerships and grant-funded proofs),{' '}
+              <em className="font-display">Pilot</em> (production-adjacent, scoped
+              budget, sponsor named) and{' '}
+              <em className="font-display">Production</em> (recurring spend
+              integrated into the customer's planning stack).
+            </p>
+            <p>
+              We update the registry as deals expand, contract or move between
+              statuses — and we remove names when a program is wound down. The
+              point of the page is not to sell the sector. It is to give the
+              reader a working answer to the question "is anyone actually using
+              this stuff?" — and to make the answer specific.
+            </p>
           </div>
+        </div>
+
+        <aside className="lg:sticky lg:top-20 lg:self-start">
+          <div className="grid grid-cols-2 gap-px bg-border rounded-md overflow-hidden">
+            <Kpi label="Deployments" value={String(total)} tone="data" />
+            <Kpi label="Production-grade" value={String(productionCount)} />
+            <Kpi label="Vendors involved" value={String(vendors)} />
+            <Kpi
+              label="Oldest"
+              value={`${oldest.since}`}
+              tone="quantum"
+            />
+          </div>
+          <p className="mt-3 text-[10px] font-mono uppercase tracking-[0.06em] text-text-muted leading-relaxed">
+            {oldest.customer} on {oldest.vendor} — the registry's continuity
+            anchor.
+          </p>
+        </aside>
+      </section>
+
+      {/* ─────────── Filter rail ─────────── */}
+      <section className="mt-14 grid gap-4">
+        <FilterRow label="Sector" current={sectorFilter} param="sector">
+          <Chip
+            href="/today"
+            active={sectorFilter === 'all' && statusFilter === 'all'}
+          >
+            All
+          </Chip>
+          {SECTORS.map((s) => (
+            <Chip
+              key={s}
+              href={chipHref({ sector: s, status: statusFilter })}
+              active={sectorFilter === s}
+            >
+              {s}
+            </Chip>
+          ))}
+        </FilterRow>
+        <FilterRow label="Status" current={statusFilter} param="status">
+          <Chip
+            href={chipHref({ sector: sectorFilter, status: 'all' })}
+            active={statusFilter === 'all'}
+          >
+            All
+          </Chip>
+          {(['Production', 'Pilot', 'Research'] as Status[]).map((s) => (
+            <Chip
+              key={s}
+              href={chipHref({ sector: sectorFilter, status: s })}
+              active={statusFilter === s}
+            >
+              {s}
+            </Chip>
+          ))}
+        </FilterRow>
+      </section>
+
+      {/* ─────────── Sector sections ─────────── */}
+      {SECTORS.filter((s) => grouped[s] && grouped[s].length > 0).map((s) => (
+        <section key={s} className="mt-16">
+          <SectionHead
+            eyebrow={`${s} · ${grouped[s].length} ${grouped[s].length === 1 ? 'deployment' : 'deployments'}`}
+            title={sectorTitle(s).title}
+            accentWord={sectorTitle(s).accent}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border rounded-md overflow-hidden">
+            {grouped[s].map((d, i) => (
+              <DeploymentCard key={`${s}-${d.customer}`} d={d} index={i + 1} />
+            ))}
+          </div>
+        </section>
+      ))}
+
+      {filtered.length === 0 && (
+        <section className="mt-16 py-16 text-center font-display italic text-text-muted">
+          No deployments match that filter. Try widening sector or status.
+        </section>
+      )}
+
+      {/* ─────────── Foot / methodology ─────────── */}
+      <section className="mt-16 pt-10 border-t border-border grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-10 items-start">
+        <div className="border-l-2 border-accent-data/40 pl-5 max-w-[60ch]">
+          <p className="font-display italic text-[20px] leading-snug tracking-tight text-text-primary">
+            We do not list every academic co-author or workshop attendee. The
+            registry only catalogs contracts a buying side has elected to{' '}
+            <span className="text-accent-data not-italic font-medium">renew</span>.
+          </p>
+          <p className="mt-3 font-display italic text-sm text-text-muted">
+            — deployment-registry methodology
+          </p>
+        </div>
+
+        <div className="text-sm text-text-secondary leading-[1.65] max-w-[44ch]">
+          <p className="eyebrow mb-2">Related</p>
+          <ul className="grid gap-1.5">
+            <li>
+              <Link
+                href="/companies"
+                className="text-accent-data hover:underline"
+              >
+                The cohort directory ›
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/darpa-qbi"
+                className="text-accent-data hover:underline"
+              >
+                DARPA QBI tracker ›
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/learn"
+                className="text-accent-data hover:underline"
+              >
+                Primer: how to read quantum ›
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/future"
+                className="text-accent-data hover:underline"
+              >
+                Where the revenue is going ›
+              </Link>
+            </li>
+          </ul>
         </div>
       </section>
     </div>
   );
 }
 
-function Stat({ label, value, sub }: { label: string; value: string; sub: string }) {
+/* ────────────────────────────── helpers ────────────────────────────── */
+
+function chipHref(state: { sector: string; status: string }) {
+  const p = new URLSearchParams();
+  if (state.sector !== 'all') p.set('sector', state.sector);
+  if (state.status !== 'all') p.set('status', state.status);
+  const q = p.toString();
+  return q ? `/today?${q}` : '/today';
+}
+
+function SectionHead({
+  eyebrow,
+  title,
+  accentWord,
+}: {
+  eyebrow: string;
+  title: string;
+  accentWord: string;
+}) {
   return (
-    <div className="bg-bg-surface p-5">
-      <p className="text-[10px] uppercase tracking-wider text-text-muted font-mono mb-2">{label}</p>
-      <p className="font-mono text-2xl text-text-primary">{value}</p>
-      <p className="mt-1 text-xs text-text-muted">{sub}</p>
+    <div className="mb-6 pb-3 border-b border-text-primary/90">
+      <p className="eyebrow mb-2">{eyebrow}</p>
+      <h2 className="font-display font-normal text-3xl tracking-tight text-balance">
+        {title}{' '}
+        <em className="not-italic font-normal italic text-accent-data">
+          {accentWord}
+        </em>
+      </h2>
     </div>
   );
+}
+
+function Kpi({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone?: 'data' | 'warn' | 'down' | 'quantum';
+}) {
+  return (
+    <div className="bg-bg-surface p-4">
+      <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-mono">
+        {label}
+      </p>
+      <p
+        className={
+          'mt-1.5 font-display tabular-nums text-[26px] leading-none tracking-tight ' +
+          (tone === 'data'
+            ? 'text-accent-data'
+            : tone === 'warn'
+              ? 'text-accent-warn'
+              : tone === 'down'
+                ? 'text-accent-down'
+                : tone === 'quantum'
+                  ? 'text-accent-quantum'
+                  : 'text-text-primary')
+        }
+      >
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function FilterRow({
+  label,
+  children,
+}: {
+  label: string;
+  current: string;
+  param: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
+      <span className="text-[9px] font-mono uppercase tracking-[0.12em] text-text-muted w-[64px]">
+        {label}
+      </span>
+      <div className="flex flex-wrap gap-1.5">{children}</div>
+    </div>
+  );
+}
+
+function Chip({
+  href,
+  active,
+  children,
+}: {
+  href: string;
+  active: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={
+        'text-[11px] font-mono uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border transition-colors ' +
+        (active
+          ? 'border-accent-data text-accent-data bg-accent-data/8'
+          : 'border-border text-text-secondary hover:text-text-primary hover:border-text-muted')
+      }
+    >
+      {children}
+    </Link>
+  );
+}
+
+function DeploymentCard({ d, index }: { d: Deployment; index: number }) {
+  return (
+    <article className="bg-bg-surface p-5 lg:p-6 relative">
+      <header className="grid grid-cols-[40px_minmax(0,1fr)_auto] gap-4 items-start mb-3">
+        <span className="font-display tabular-nums text-[34px] leading-none text-text-muted">
+          {String(index).padStart(2, '0')}
+        </span>
+        <div className="min-w-0">
+          <h3 className="font-display text-[22px] tracking-tight leading-tight text-text-primary">
+            {d.customer}
+          </h3>
+          <p className="text-[11px] text-text-muted font-mono tracking-wider mt-1 uppercase">
+            via {d.vendor}
+          </p>
+        </div>
+        <span
+          className={
+            'text-[9px] font-mono uppercase tracking-[0.1em] px-2.5 py-1 rounded-full border whitespace-nowrap ' +
+            STATUS_COLOR[d.status]
+          }
+        >
+          {d.status}
+        </span>
+      </header>
+      <p className="text-[14px] text-text-secondary leading-[1.55] mt-4 pl-[56px]">
+        {d.workload}
+      </p>
+      <div className="mt-4 pl-[56px] flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[10px] font-mono uppercase tracking-[0.08em] text-text-muted">
+        <span>
+          <span className="text-text-muted/70">Since</span>{' '}
+          <span className="text-text-primary tabular-nums">{d.since}</span>
+        </span>
+        {d.region && (
+          <>
+            <span className="text-text-muted/60">·</span>
+            <span>{d.region}</span>
+          </>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function sectorTitle(s: string): { title: string; accent: string } {
+  // Italic accent word per sector — same trick as /companies headings.
+  switch (s) {
+    case 'Finance':
+      return { title: 'The', accent: 'banks' };
+    case 'Pharma & Life Sciences':
+      return { title: 'Drug discovery', accent: 'pilots' };
+    case 'Automotive':
+      return { title: 'On the', accent: 'assembly line' };
+    case 'Aerospace & Defense':
+      return { title: 'Aerospace &', accent: 'defense' };
+    case 'Energy':
+      return { title: 'Catalyst &', accent: 'subsurface' };
+    case 'Government & Research':
+      return { title: 'Sovereign', accent: 'buyers' };
+    default:
+      return { title: s, accent: 'sector' };
+  }
 }

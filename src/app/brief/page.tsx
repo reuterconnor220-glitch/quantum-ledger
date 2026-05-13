@@ -31,6 +31,8 @@ import { formatDate, formatPct, formatUsd } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
 import { ArticleLd } from '@/components/JsonLd';
 import { Giscus } from '@/components/Giscus';
+import { VolatilityHistory } from '@/components/brief/VolatilityHistory';
+import { CatalystCalendar } from '@/components/brief/CatalystCalendar';
 
 export const metadata = {
   title: "Daily Brief · Today's Quantum Computing Intelligence",
@@ -290,6 +292,9 @@ export default async function BriefPage() {
               )}
             </div>
           </div>
+
+          <VolatilityHistory />
+          <CatalystCalendar />
         </aside>
       </section>
 
