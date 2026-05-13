@@ -158,7 +158,6 @@ export async function GET(request: Request) {
     }
 
     // 6) Generate a deterministic daily brief
-    const today = new Date().toISOString().slice(0, 10);
     const { data: topStories } = await supabase
       .from('news_articles')
       .select('id, title, summary, source, source_url, published_at, sentiment_score, relevance_score, valuation_impact, materiality, company_tags, topic_tags')
