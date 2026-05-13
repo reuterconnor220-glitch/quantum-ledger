@@ -441,3 +441,41 @@ export function getAllCompanies(): CompanyListing[] {
     };
   });
 }
+
+/**
+ * Returns a single company augmented with display-friendly fields used by the
+ * /companies/[slug] profile page (modality label, combined hq, founded year alias, exchange).
+ * Falls back to undefined if the slug is not in the dataset.
+ */
+export type CompanyProfile = Company & {
+  modality: string;
+  hq: string;
+  founded?: number;
+  exchange?: string;
+  listed: boolean;
+  sym?: string;
+  stage?: string;
+  positioning?: string;
+  focus?: string;
+  profileUpdatedAt?: string;
+};
+
+export function getCompanyProfile(slug: string): CompanyProfile | undefined {
+  const c = getCompany(slug);
+  if (!c) return undefined;
+  const hq = c.hqCity && c.hqCountry ? `${c.hqCity}, ${c.hqCountry}` : (c.hqCity ?? c.hqCountry ?? '—');
+  const modality = TECH_LABEL[c.technologyApproach as string] ?? (c.technologyApproach as string);
+  return {
+    ...c,
+    modality,
+    hq,
+    founded: c.foundedYear,
+    exchange: c.listingExchange,
+    listed: !!c.isPublic,
+    sym: c.ticker,
+    stage: !c.isPublic ? 'Private' : undefined,
+    positioning: undefined,
+    focus: c.oneLineThesis,
+    profileUpdatedAt: c.asOfDate,
+  };
+}
