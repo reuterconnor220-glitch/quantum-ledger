@@ -330,7 +330,7 @@ export default function TodayPage() {
         <div className="relative max-w-7xl mx-auto px-5 sm:px-8 pt-16 pb-12">
           <div className="flex items-center gap-2 mb-6">
             <span className="qdot-live" />
-            <span className="eyebrow">Live commercial revenue · May 2026</span>
+            <span className="eyebrow">Live deployments · paying customers · May 2026</span>
           </div>
           <h1 className="font-display text-display-1 font-medium tracking-tight max-w-4xl">
             Quantum isn&apos;t the future. Parts of it are already revenue.
@@ -340,6 +340,11 @@ export default function TodayPage() {
             internet with it. HSBC traded bonds with a documented quantum advantage in November 2025.
             BMW optimizes batteries with Quantinuum. The Royal Navy navigates with Q-CTRL. Below: every
             real, deployed, paying-customer quantum use case we can verify, today.
+          </p>
+          <p className="mt-5 text-xs font-mono uppercase tracking-wider text-text-muted max-w-3xl">
+            A curated directory of <em>who is paying for quantum, what they&apos;re doing with it, and why it matters</em>.
+            Not a news feed — for that see <Link href="/brief" className="text-accent-quantum hover:underline">/brief</Link> and{' '}
+            <Link href="/news" className="text-accent-quantum hover:underline">/news</Link>.
           </p>
         </div>
       </section>

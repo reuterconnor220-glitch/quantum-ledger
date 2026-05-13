@@ -84,6 +84,21 @@ export function DoubleSlit() {
 
   const opts = { slits, measureWhich, wavelength, slitWidth, slitSep, L: 360 };
 
+  // First-render seed: fire a few photons so the widget visibly demonstrates itself.
+  const seededRef = useRef(false);
+  useEffect(() => {
+    if (seededRef.current) return;
+    seededRef.current = true;
+    const seedOpts = { slits: 2 as 1 | 2, measureWhich: false, wavelength: 70, slitWidth: 20, slitSep: 70, L: 360 };
+    setHits(() => {
+      const seed: Hit[] = [];
+      for (let i = 0; i < 40; i++) {
+        seed.push({ x: DETECTOR_X + (Math.random() - 0.5) * 3, y: sampleY(seedOpts), t: tCounter.current++ });
+      }
+      return seed;
+    });
+  }, []);
+
   // Auto-fire mode — adds particles continuously
   useEffect(() => {
     if (!autoFire) return;
@@ -136,7 +151,7 @@ export function DoubleSlit() {
   const slit2Y = CENTER_Y + slitSep / 2;
 
   return (
-    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6">
+    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6 text-text-primary">
       <div className="overflow-x-auto">
         <svg viewBox={`0 0 ${SCREEN_W} ${SCREEN_H}`} className="w-full h-auto" style={{ minWidth: '600px' }}>
           {/* Source area */}
@@ -258,20 +273,22 @@ export function DoubleSlit() {
         </div>
 
         <div>
-          <p className="eyebrow mb-2">Fire photons</p>
+          <p className="text-[10px] uppercase tracking-[0.18em] text-accent-quantum font-mono mb-2">Fire photons</p>
           <div className="flex flex-wrap gap-2 mb-3">
-            <button onClick={() => fire(1)} className="px-3 py-1.5 text-xs font-mono bg-bg-surface border border-border hover:bg-bg rounded-sm">+1</button>
-            <button onClick={() => fire(10)} className="px-3 py-1.5 text-xs font-mono bg-bg-surface border border-border hover:bg-bg rounded-sm">+10</button>
-            <button onClick={() => fire(100)} className="px-3 py-1.5 text-xs font-mono bg-bg-surface border border-border hover:bg-bg rounded-sm">+100</button>
             <button
               onClick={() => setAutoFire((v) => !v)}
-              className={`px-3 py-1.5 text-xs font-mono rounded-sm ${
-                autoFire ? 'bg-accent-data text-white border border-accent-data' : 'bg-bg-surface border border-border hover:bg-bg'
+              className={`px-4 py-2 text-sm font-mono font-semibold rounded-sm transition ${
+                autoFire
+                  ? 'bg-accent-data text-white border border-accent-data shadow-[0_0_12px_rgba(0,217,192,0.4)]'
+                  : 'bg-accent-quantum text-white border border-accent-quantum hover:bg-accent-quantum/85'
               }`}
             >
-              {autoFire ? '■ Stop' : '▶ Stream'}
+              {autoFire ? '■ Stop stream' : '▶ Start stream'}
             </button>
-            <button onClick={reset} className="px-3 py-1.5 text-xs font-mono bg-bg-surface border border-border hover:bg-bg rounded-sm text-text-muted">
+            <button onClick={() => fire(1)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-quantum hover:text-accent-quantum rounded-sm">+1</button>
+            <button onClick={() => fire(10)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-quantum hover:text-accent-quantum rounded-sm">+10</button>
+            <button onClick={() => fire(100)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-quantum hover:text-accent-quantum rounded-sm">+100</button>
+            <button onClick={reset} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-muted border border-border hover:text-text-primary rounded-sm">
               Reset
             </button>
           </div>

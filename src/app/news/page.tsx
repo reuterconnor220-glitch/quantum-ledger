@@ -20,12 +20,16 @@ export default async function NewsPage() {
   return (
     <div className="max-w-6xl mx-auto px-5 sm:px-8 py-12">
       <div className="mb-10 max-w-3xl">
-        <p className="eyebrow mb-2">Newsdesk</p>
+        <p className="eyebrow mb-2">Newsdesk · raw feed</p>
         <h1 className="font-display text-display-2 font-medium tracking-tight">Daily quantum signal</h1>
         <p className="mt-4 text-text-secondary leading-relaxed">
           Every quantum-relevant story from <span className="font-mono text-accent-quantum">{SOURCES.length}</span> sources,
           scored on relevance (0–1), sentiment (-1 to +1), valuation impact, and materiality (1–5).
           Pipeline runs daily at 06:00 MT. We discard anything below 0.4 relevance.
+        </p>
+        <p className="mt-4 text-xs font-mono uppercase tracking-wider text-text-muted">
+          Full firehose, sortable and filterable. For the day&apos;s synthesized narrative,{' '}
+          <Link href="/brief" className="text-accent-quantum hover:underline">read the Brief →</Link>
         </p>
       </div>
 

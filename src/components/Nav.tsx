@@ -21,7 +21,7 @@ interface NavGroup {
 const PRIMARY: NavLink[] = [
   { href: '/brief', label: 'Brief' },
   { href: '/news', label: 'News' },
-  { href: '/today', label: 'Today' },
+  { href: '/today', label: 'Deployments' },
   { href: '/future', label: 'Future' },
 ];
 

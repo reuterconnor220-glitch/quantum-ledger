@@ -55,7 +55,7 @@ export function InterferenceVisualizer() {
   };
 
   return (
-    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6">
+    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6 text-text-primary">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         {/* Visualization: complex plane */}
         <div>

@@ -138,7 +138,7 @@ export function BlochSphere() {
   const p1 = bRe ** 2 + bIm ** 2;
 
   return (
-    <div className="bg-bg-elevated border border-border rounded-md p-5 not-prose">
+    <div className="bg-bg-elevated border border-border rounded-md p-5 not-prose text-text-primary">
       <div className="flex flex-col md:flex-row gap-6 items-start">
         {/* Sphere */}
         <div className="flex-shrink-0 mx-auto">

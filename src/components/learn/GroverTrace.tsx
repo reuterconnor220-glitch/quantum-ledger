@@ -59,7 +59,7 @@ export function GroverTrace() {
   const maxBarHeight = 80;
 
   return (
-    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6">
+    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6 text-text-primary">
       <div className="flex flex-wrap gap-4 items-center mb-4">
         <div className="flex-1 min-w-[180px]">
           <label className="block">

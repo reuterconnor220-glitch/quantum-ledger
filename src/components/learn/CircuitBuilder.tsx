@@ -123,7 +123,7 @@ export function CircuitBuilder() {
   const probs = state.map((c) => c.re * c.re + c.im * c.im);
 
   return (
-    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6">
+    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6 text-text-primary">
       {/* Gate palette */}
       <div className="mb-4">
         <p className="eyebrow mb-2">Gate palette · click then click a circuit cell</p>

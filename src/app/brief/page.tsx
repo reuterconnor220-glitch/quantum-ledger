@@ -38,6 +38,10 @@ export default async function BriefPage() {
         <p className="mt-5 text-lg text-text-secondary leading-relaxed border-l-2 border-accent-quantum pl-5">
           {b.oneLineSummary}
         </p>
+        <p className="mt-4 text-xs font-mono uppercase tracking-wider text-text-muted">
+          One synthesized narrative per day. The single page to read if you only read one.{' '}
+          <Link href="/news" className="text-accent-quantum hover:underline">See the full news feed →</Link>
+        </p>
       </header>
 
       {/* Market summary */}

@@ -51,7 +51,7 @@ export function EntanglementExplorer() {
   const stateStr = fmtState(state, N);
 
   return (
-    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6">
+    <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6 text-text-primary">
       <div className="flex flex-col md:flex-row gap-6 items-start">
         {/* Two Bloch spheres */}
         <div className="flex gap-3 mx-auto md:mx-0">
