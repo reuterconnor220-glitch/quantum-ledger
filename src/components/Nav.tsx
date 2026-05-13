@@ -44,6 +44,7 @@ const GROUPS: NavGroup[] = [
       { href: '/learn', label: 'Primer' },
       { href: '/learn/double-slit', label: 'Double-slit experiment' },
       { href: '/learn/bell-test', label: 'Bell test / CHSH' },
+      { href: '/learn/bb84', label: 'BB84 quantum key distribution' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/papers', label: 'Landmark papers' },
       { href: '/learn/timeline', label: '5/10/15 yr timeline' },

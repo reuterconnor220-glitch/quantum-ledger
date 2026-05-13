@@ -21,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/learn',
     '/learn/double-slit',
     '/learn/bell-test',
+    '/learn/bb84',
     '/learn/applications',
     '/learn/timeline',
     '/learn/risks',
