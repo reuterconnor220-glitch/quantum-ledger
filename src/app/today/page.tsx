@@ -360,7 +360,7 @@ export default function DeploymentsPage({
             Where money actually changed hands
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             curated · live registry
           </div>

@@ -122,7 +122,7 @@ export default async function NewsPage({
             {recent.length} stories tracked · last 72 hours
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             refreshes every 5 min
           </div>

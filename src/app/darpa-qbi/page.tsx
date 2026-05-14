@@ -239,7 +239,7 @@ export default function DarpaQbiPage() {
             Stage B advancers · Stage C decisions Q4 2026
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             10 min read
           </div>

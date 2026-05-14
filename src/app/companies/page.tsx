@@ -120,7 +120,7 @@ export default async function CompaniesPage({ searchParams }: { searchParams?: S
             {universe} names · listed &amp; material private
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             updated continuously
           </div>

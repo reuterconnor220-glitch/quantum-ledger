@@ -105,7 +105,7 @@ export default async function HomePage() {
             {dateLong}
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             signal over hype, since Issue 001
           </div>

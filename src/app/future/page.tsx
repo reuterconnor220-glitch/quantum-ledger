@@ -116,7 +116,7 @@ export default function FuturePage() {
             One · three · five · ten-year horizons
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             revised quarterly
           </div>

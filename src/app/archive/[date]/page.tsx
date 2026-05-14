@@ -21,10 +21,10 @@ export async function generateMetadata({ params }: { params: { date: string } })
 }
 
 function issueNumber(date: string) {
-  const launch = new Date('2024-01-01').getTime();
+  const launch = new Date('2026-05-13').getTime();
   const d = new Date(date).getTime();
-  const days = Math.max(1, Math.floor((d - launch) / (1000 * 60 * 60 * 24)));
-  return Math.floor(days * (5 / 7));
+  const days = Math.max(0, Math.floor((d - launch) / (1000 * 60 * 60 * 24)));
+  return days + 1;
 }
 
 export default async function ArchivedBriefPage({ params }: { params: { date: string } }) {

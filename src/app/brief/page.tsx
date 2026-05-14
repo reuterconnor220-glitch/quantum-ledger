@@ -100,7 +100,7 @@ export default async function BriefPage() {
             {dayName}, {dateLong}
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             6 min read
           </div>
@@ -368,12 +368,12 @@ function EditorialBody({ markdown }: { markdown: string }) {
 }
 
 function computeIssueNumber(briefDate: string) {
-  const launch = new Date('2024-01-01').getTime();
+  const launch = new Date('2026-05-13').getTime();
   const d = new Date(briefDate).getTime();
   // Roughly count market days since launch — for display only.
-  const days = Math.max(1, Math.floor((d - launch) / (1000 * 60 * 60 * 24)));
-  const weekdays = Math.floor(days * (5 / 7));
-  return weekdays;
+  const days = Math.max(0, Math.floor((d - launch) / (1000 * 60 * 60 * 24)));
+  
+  return days + 1;
 }
 
 /* ────────────────────────────── Wavefunction signature ────────────────────────────── */

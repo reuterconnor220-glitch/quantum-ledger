@@ -80,7 +80,7 @@ export default function GlossaryPage() {
             {ENTRIES.length} terms · curated for sector readers
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             revised as we add to the lexicon
           </div>

@@ -33,7 +33,7 @@ export default function UseCasesPage() {
             Seven lines · sourced, dated, labeled honestly
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             updated 2026-05-14
           </div>

@@ -153,7 +153,7 @@ export default async function CompanyProfilePage({
           </div>
 
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             Analyst note · {c.modality ?? '—'}
           </div>

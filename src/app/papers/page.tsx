@@ -218,7 +218,7 @@ export default function PapersPage({
             A working bibliography · curated, not exhaustive
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             updated weekly
           </div>

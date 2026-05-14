@@ -64,7 +64,7 @@ export default function LearnPage() {
             Five chapters · five interactive widgets
           </div>
           <div className="text-right leading-relaxed">
-            New York · Zürich
+            Boulder · Colorado
             <br />
             22 min read
           </div>
