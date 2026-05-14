@@ -406,8 +406,9 @@ const TECH_LABEL: Record<string, string> = {
   bosonic: 'Bosonic',
   annealing: 'Annealing',
   software: 'Software / QEC',
-  diamond_nv: 'Diamond NV',
-  hybrid: 'Hybrid',
+  nv_center: 'NV-diamond sensing',
+  diversified: 'Diversified',
+  encryption: 'Encryption',
 };
 
 /**
