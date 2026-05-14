@@ -69,16 +69,32 @@ export default function BenchmarksPage() {
         url={(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantum-ledger-vert.vercel.app') + '/benchmarks'}
         keywords={['quantum benchmarks', 'qubit count', 'gate fidelity', 'IBM Heron', 'Google Willow', 'Quantinuum Helios', 'logical qubits', 'quantum error correction']}
       />
-      <header className="mb-10 max-w-3xl">
-        <p className="eyebrow mb-2">Benchmarks</p>
-        <h1 className="font-display text-display-2 font-medium tracking-tight">Live hardware scorecard</h1>
-        <p className="mt-4 text-text-secondary leading-relaxed">
-          The first <em>continuously-updated</em> public quantum benchmark scorecard. Every meaningful system,
-          every dimension that matters — physical qubits, logical qubits, two-qubit gate fidelity, coherence,
-          gate speed, connectivity. Numbers sourced directly from peer-reviewed papers, vendor spec sheets,
-          and primary press releases.
+      <header className="pt-2 pb-5 border-b border-text-primary/90 mb-10">
+        <div className="flex flex-wrap items-end justify-between gap-3 pb-5 border-b border-border-muted text-[11px] tracking-[0.08em] uppercase text-text-muted font-mono">
+          <div className="flex flex-wrap items-baseline gap-3 whitespace-nowrap">
+            <span>Vol. III</span>
+            <span className="text-text-muted/60">·</span>
+            <span className="font-display normal-case text-[15px] tracking-tight text-text-primary">
+              Hardware Scorecard
+            </span>
+            <span className="text-text-muted/60">·</span>
+            <span>Benchmarks</span>
+          </div>
+          <div className="font-display italic text-sm normal-case tracking-tight text-text-secondary">
+            Every meaningful system · live record
+          </div>
+          <div className="text-right leading-relaxed">
+            sourced from peer-reviewed papers
+          </div>
+        </div>
+        <h1 className="mt-6 font-display font-medium leading-[0.94] tracking-[-0.025em] text-[clamp(40px,7vw,88px)] text-balance">
+          The live <em className="not-italic font-normal text-accent-data italic">scorecard</em>.
+        </h1>
+        <p className="mt-3 font-display italic text-text-muted text-base sm:text-lg max-w-[58ch]">
+          Continuously updated hardware benchmark across every meaningful quantum system —
+          qubit counts, fidelity, coherence, connectivity.
         </p>
-        <p className="mt-4 text-text-secondary leading-relaxed text-sm">
+        <p className="mt-5 text-text-secondary leading-relaxed text-sm max-w-3xl">
           <span className="inline-flex items-center gap-1.5 mr-3"><span className="qdot bg-accent-data" /> Verified</span>
           <span className="inline-flex items-center gap-1.5 mr-3"><span className="qdot bg-accent-warn" /> Provisional</span>
           <span className="inline-flex items-center gap-1.5"><span className="qdot bg-accent-down" /> Disputed</span>

@@ -81,7 +81,7 @@ export function CatalystCalendar({
       <div className="flex items-baseline justify-between mb-1">
         <p className="eyebrow">{title}</p>
         <Link
-          href="/calendar"
+          href="/future"
           className="text-[10px] font-mono text-text-muted hover:text-accent-data tracking-wider"
         >
           full calendar ›
