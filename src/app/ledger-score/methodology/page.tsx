@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { SCORE_WEIGHTS } from '@/lib/data/ledger-score';
 
 export const metadata = {
-  title: 'Ledger Score Methodology · How the Score Is Calculated · Quantum Ledger',
+  title: 'Ledger Score Methodology · How the Score Is Calculated',
   description:
     'Full published methodology for the Ledger Score. Four dimensions, transparent inputs, sources for every figure, change log. The defense for every score.',
 };

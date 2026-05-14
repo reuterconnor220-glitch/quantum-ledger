@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { EARNINGS_CALLS, UPCOMING_EARNINGS } from '@/lib/data/earnings';
 
 export const metadata = {
-  title: 'Quantum Earnings Tracker · Distilled Quarterly Calls · Quantum Ledger',
+  title: 'Quantum Earnings Tracker · Distilled Quarterly Calls',
   description:
     'Every public quantum-exposed earnings call distilled within 48 hours. Headline metrics, key quotes, what changed, and the read-through for the rest of the sector.',
 };

@@ -93,7 +93,7 @@ function NavGroupDropdown({ group, pathname }: { group: NavGroup; pathname: stri
         className={cn(
           'flex items-center gap-1 px-3 py-1.5 text-sm rounded-sm transition-colors',
           active
-            ? 'text-accent-quantum bg-accent-quantum/10'
+            ? 'text-accent-data bg-accent-data/10'
             : 'text-text-secondary hover:text-text-primary hover:bg-bg-surface'
         )}
       >
@@ -114,7 +114,7 @@ function NavGroupDropdown({ group, pathname }: { group: NavGroup; pathname: stri
                 className={cn(
                   'block px-3 py-2 text-sm transition-colors',
                   isActive
-                    ? 'text-accent-quantum bg-accent-quantum/10'
+                    ? 'text-accent-data bg-accent-data/10'
                     : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated'
                 )}
               >
@@ -144,7 +144,7 @@ export function Nav() {
                 className={cn(
                   'px-3 py-1.5 text-sm rounded-sm transition-colors',
                   active
-                    ? 'text-accent-quantum bg-accent-quantum/10'
+                    ? 'text-accent-data bg-accent-data/10'
                     : 'text-text-secondary hover:text-text-primary hover:bg-bg-surface'
                 )}
               >

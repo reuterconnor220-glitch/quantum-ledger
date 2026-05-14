@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: "Reading Quantinuum's S-1 · What It Says and What It Doesn't · Quantum Ledger",
+  title: "Reading Quantinuum's S-1 · What It Says and What It Doesn't",
   description:
     "A close reading of the Quantinuum S-1 filing. The six numbers that matter, the four that don't, and where we think QNT actually prices.",
   openGraph: {

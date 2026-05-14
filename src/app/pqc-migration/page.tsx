@@ -9,7 +9,7 @@ import {
 } from '@/lib/data/pqc-migration';
 
 export const metadata = {
-  title: 'PQC Migration Tracker · Who Has Actually Shipped · Quantum Ledger',
+  title: 'PQC Migration Tracker · Who Has Actually Shipped',
   description:
     "The definitive tracker of post-quantum cryptography migration status across consumer messaging, browsers, cloud, government, and finance. Who has shipped, who has committed, who is silent.",
 };

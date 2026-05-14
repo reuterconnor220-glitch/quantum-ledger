@@ -3,7 +3,7 @@ import { DoubleSlit } from '@/components/learn/DoubleSlit';
 import { VideoRecommendations } from '@/components/learn/VideoRecommendations';
 
 export const metadata = {
-  title: 'The Double-Slit Experiment · Interactive · Quantum Ledger',
+  title: 'The Double-Slit Experiment · Interactive',
   description: 'The single most famous experiment in physics — explained as an interactive widget. Watch single photons build up an interference pattern, then watch it collapse the moment you observe which slit they pass through.',
 };
 

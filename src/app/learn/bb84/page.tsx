@@ -3,7 +3,7 @@ import { BB84 } from '@/components/learn/BB84';
 import { VideoRecommendations } from '@/components/learn/VideoRecommendations';
 
 export const metadata = {
-  title: 'BB84 · How Quantum Key Distribution Actually Works · Quantum Ledger',
+  title: 'BB84 · How Quantum Key Distribution Actually Works',
   description:
     'Interactive BB84 demonstration: Alice → Bob photon polarization key exchange with intercept-resend eavesdropper detection. The 1984 protocol behind every commercial QKD deployment.',
 };

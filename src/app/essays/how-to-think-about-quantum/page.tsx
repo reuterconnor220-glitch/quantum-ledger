@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'How to Think About Quantum Computing as an Investor · Quantum Ledger',
+  title: 'How to Think About Quantum Computing as an Investor',
   description:
     "A framework for evaluating quantum companies — separating physics from financials, distinguishing utility from supremacy, and understanding what DARPA QBI actually tells you. By Connor Reuter, Quantum Ledger.",
   openGraph: {

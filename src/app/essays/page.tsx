@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ESSAYS, ESSAY_CATEGORY_LABEL } from '@/lib/data/essays';
 
 export const metadata = {
-  title: 'Essays · Quantum Ledger',
+  title: 'Essays',
   description:
     'Long-form analysis and frameworks for thinking about the quantum sector. Opinionated, sourced, signed.',
 };

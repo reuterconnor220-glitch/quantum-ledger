@@ -333,10 +333,10 @@ export default async function HomePage() {
             sub="By ownership status"
           />
           <BigKpi
-            label="Combined cap"
+            label="Listed parent-company cap"
             value={formatUsd(combinedCap * 1e6)}
             tone="data"
-            sub="Public + post-money proxies"
+            sub="IBM, MSFT, GOOGL, HON, IONQ et al."
           />
           <BigKpi
             label="Ledger Score"
@@ -346,8 +346,10 @@ export default async function HomePage() {
           />
         </div>
         <p className="mt-4 text-[10px] font-mono uppercase tracking-[0.06em] text-text-muted leading-relaxed">
-          Combined cap weighted by market cap for public names, last-round
-          post-money for private. The Ledger Score above is the sector average.
+          Parent-company cap is the headline market cap of listed names in the cohort — for IBM,
+          Microsoft, Google, and Honeywell, quantum is a small fraction of that figure. Pure-play
+          public market cap is closer to $40–60B. Private names use last-round post-money as a
+          cap proxy. The Ledger Score above is the sector average across the rated firms.
         </p>
       </section>
 
@@ -443,7 +445,7 @@ export default async function HomePage() {
 const ROOMS: { href: string; tag: string; head: string; accent: string; note: string }[] = [
   { href: '/brief', tag: 'Daily · 06:00 ET', head: 'Today\u2019s', accent: 'brief', note: 'The ten stories we read, ranked. The headline you should have heard about by noon.' },
   { href: '/news', tag: 'Live wire', head: 'The', accent: 'firehose', note: 'Every story in the last 72 hours. Filter by topic and sentiment.' },
-  { href: '/companies', tag: 'Cohort · 34 names', head: 'The', accent: 'directory', note: 'A screener for the listed and material private quantum economy, ranked by Ledger Score.' },
+  { href: '/companies', tag: 'Cohort · 41 names', head: 'The', accent: 'directory', note: 'A screener for the listed and material private quantum economy, ranked by Ledger Score.' },
   { href: '/learn', tag: 'Primer · 5 chapters', head: 'How to', accent: 'read quantum', note: 'Five interactive widgets, five working frames. The shortest path to fluency.' },
   { href: '/darpa-qbi', tag: 'Tracker · Q4 2026', head: 'DARPA', accent: 'QBI', note: 'The most credible independent benchmark in the field. Live tracker for Stage B and Stage C.' },
   { href: '/qnt-ipo-watch', tag: 'Capital', head: 'Quantinuum', accent: 'IPO watch', note: 'The most consequential listing the sector has seen. Filing, pricing, lockup, comps.' },

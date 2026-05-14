@@ -24,20 +24,26 @@ export function Footer() {
           <p className="eyebrow mb-3">Sections</p>
           <ul className="space-y-2 text-sm">
             <li><Link href="/brief" className="text-text-secondary hover:text-text-primary">Daily Brief</Link></li>
+            <li><Link href="/ledger-score" className="text-text-secondary hover:text-text-primary">The Ledger Score</Link></li>
             <li><Link href="/news" className="text-text-secondary hover:text-text-primary">News</Link></li>
             <li><Link href="/companies" className="text-text-secondary hover:text-text-primary">Companies</Link></li>
-            <li><Link href="/revenue" className="text-text-secondary hover:text-text-primary">Revenue Landscape</Link></li>
+            <li><Link href="/today" className="text-text-secondary hover:text-text-primary">Deployments</Link></li>
+            <li><Link href="/use-cases" className="text-text-secondary hover:text-text-primary">Use Cases</Link></li>
             <li><Link href="/learn" className="text-text-secondary hover:text-text-primary">Learn Quantum</Link></li>
           </ul>
         </div>
         <div>
-          <p className="eyebrow mb-3">Resource</p>
+          <p className="eyebrow mb-3">Trackers</p>
           <ul className="space-y-2 text-sm">
-            <li><Link href="/today" className="text-text-secondary hover:text-text-primary">Today (deployed)</Link></li>
+            <li><Link href="/earnings" className="text-text-secondary hover:text-text-primary">Earnings tracker</Link></li>
             <li><Link href="/qnt-ipo-watch" className="text-text-secondary hover:text-text-primary">QNT IPO Watch</Link></li>
-            <li><Link href="/faq" className="text-text-secondary hover:text-text-primary">FAQ</Link></li>
+            <li><Link href="/darpa-qbi" className="text-text-secondary hover:text-text-primary">DARPA QBI tracker</Link></li>
+            <li><Link href="/pqc-migration" className="text-text-secondary hover:text-text-primary">PQC migration</Link></li>
+            <li><Link href="/future" className="text-text-secondary hover:text-text-primary">Catalyst calendar</Link></li>
+            <li><Link href="/archive" className="text-text-secondary hover:text-text-primary">Brief archive</Link></li>
+            <li className="pt-2"><Link href="/about" className="text-text-secondary hover:text-text-primary">About</Link></li>
             <li><Link href="/methodology" className="text-text-secondary hover:text-text-primary">Methodology</Link></li>
-            <li><Link href="/about" className="text-text-secondary hover:text-text-primary">About</Link></li>
+            <li><Link href="/faq" className="text-text-secondary hover:text-text-primary">FAQ</Link></li>
             <li><a href="/rss.xml" className="text-text-secondary hover:text-text-primary">RSS Feed</a></li>
             <li className="pt-2"><DiscordCTA variant="footer" /></li>
             <li><Link href="/community" className="text-text-secondary hover:text-text-primary">Community</Link></li>

@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { date: string } }) {
   const b = await fetchBriefByDate(params.date);
-  if (!b) return { title: 'Archive · Quantum Ledger' };
+  if (!b) return { title: 'Archive' };
   return {
     title: `${b.headline} · Archive · Quantum Ledger`,
     description: b.oneLineSummary,

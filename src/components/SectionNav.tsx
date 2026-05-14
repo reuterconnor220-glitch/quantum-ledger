@@ -46,7 +46,7 @@ export function SectionNav({ sticky = true }: { sticky?: boolean }) {
       aria-label="Section navigation"
       className={
         'border-y border-text-primary/90 bg-bg/95 backdrop-blur-sm ' +
-        (sticky ? 'sticky top-0 z-30' : '')
+        (sticky ? 'sticky top-14 z-30' : '')
       }
     >
       <div className="max-w-6xl mx-auto px-5 sm:px-8">
