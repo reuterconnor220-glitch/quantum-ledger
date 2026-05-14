@@ -38,6 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/faq',
     '/community',
     '/methodology',
+    '/archive',
     '/about',
   ].map((p) => ({
     url: `${base}${p}`,

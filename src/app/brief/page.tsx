@@ -304,6 +304,10 @@ export default async function BriefPage() {
         <Link href="/methodology" className="text-accent-data hover:underline">
           Methodology
         </Link>
+        . Past editions live in{' '}
+        <Link href="/archive" className="text-accent-data hover:underline">
+          the archive
+        </Link>
         .
       </p>
 

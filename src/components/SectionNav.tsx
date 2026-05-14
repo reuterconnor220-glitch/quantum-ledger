@@ -35,7 +35,7 @@ const NAV: NavItem[] = [
   { href: '/companies', label: 'Companies', glyph: 'companies' },
   { href: '/today', label: 'Deployments', glyph: 'usecases' },
   { href: '/pqc-migration', label: 'Policy', glyph: 'policy' },
-  { href: '/essays', label: 'Essays', glyph: 'archive' },
+  { href: '/archive', label: 'Archive', glyph: 'archive' },
 ];
 
 export function SectionNav({ sticky = true }: { sticky?: boolean }) {

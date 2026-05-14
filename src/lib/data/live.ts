@@ -59,6 +59,40 @@ export async function fetchRecentNews(limit = 50): Promise<NewsArticle[]> {
   }
 }
 
+/** Returns the most recent N briefs (most recent first) for the archive page. */
+export async function fetchBriefArchive(limit = 60): Promise<DailyBrief[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [TODAYS_BRIEF];
+  try {
+    const sb = await createClient();
+    const { data, error } = await sb
+      .from('daily_briefs')
+      .select('*')
+      .order('brief_date', { ascending: false })
+      .limit(limit);
+    if (error || !data) return [TODAYS_BRIEF];
+    return data.map(rowToBrief);
+  } catch {
+    return [TODAYS_BRIEF];
+  }
+}
+
+/** Returns a single brief by date (YYYY-MM-DD), or null if not found. */
+export async function fetchBriefByDate(date: string): Promise<DailyBrief | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return null;
+  try {
+    const sb = await createClient();
+    const { data, error } = await sb
+      .from('daily_briefs')
+      .select('*')
+      .eq('brief_date', date)
+      .single();
+    if (error || !data) return null;
+    return rowToBrief(data);
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchLatestBrief(): Promise<DailyBrief> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return TODAYS_BRIEF;
   try {
