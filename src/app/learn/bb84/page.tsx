@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BB84 } from '@/components/learn/BB84';
+import { VideoRecommendations } from '@/components/learn/VideoRecommendations';
 
 export const metadata = {
   title: 'BB84 · How Quantum Key Distribution Actually Works · Quantum Ledger',
@@ -84,6 +85,8 @@ export default function BB84Page() {
           </p>
 
           <BB84 />
+
+          <VideoRecommendations topic="bb84" />
 
           <h2>The intercept-resend attack and why it always fails</h2>
           <p>

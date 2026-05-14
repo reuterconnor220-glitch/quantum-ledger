@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { DoubleSlit } from '@/components/learn/DoubleSlit';
+import { VideoRecommendations } from '@/components/learn/VideoRecommendations';
 
 export const metadata = {
   title: 'The Double-Slit Experiment · Interactive · Quantum Ledger',
@@ -40,6 +41,8 @@ export default function DoubleSlitPage() {
           </p>
 
           <DoubleSlit />
+
+          <VideoRecommendations topic="double-slit" />
 
           <h2>What you should notice</h2>
           <p>

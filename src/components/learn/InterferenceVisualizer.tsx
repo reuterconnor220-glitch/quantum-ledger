@@ -10,7 +10,10 @@ import { useState } from 'react';
  * Path A is fixed (phase 0). Path B phase is user-controlled.
  */
 
-const INV_ROOT2 = 1 / Math.sqrt(2);
+// Each path contributes amplitude 1/2 (not 1/√2). The two amplitudes sum at the
+// detector; squaring gives a properly normalized probability in [0, 1]. With
+// 1/√2 per path the constructive peak |sum|² = 2, which overshoots 100%.
+const INV_ROOT2 = 0.5;
 
 function amplitude(phase: number) {
   return { re: INV_ROOT2 * Math.cos(phase), im: INV_ROOT2 * Math.sin(phase) };

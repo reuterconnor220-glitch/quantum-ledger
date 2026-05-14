@@ -158,7 +158,7 @@ export function GroverTrace() {
       <div>
         <p className="eyebrow mb-2">Probability vs iterations</p>
         <div className="bg-bg p-3 rounded-sm border border-border">
-          <ProbabilityCurve curve={curve} k={k} optK={optK} />
+          <ProbabilityCurve curve={curve} k={k} optK={optK} N={N} />
           <div className="mt-2 flex gap-4 text-xs font-mono">
             <span className="flex items-center gap-1">
               <span className="inline-block w-4 h-0.5 bg-accent-quantum" /> quantum (Grover)
@@ -215,10 +215,12 @@ function ProbabilityCurve({
   curve,
   k,
   optK,
+  N,
 }: {
   curve: { k: number; pq: number; pc: number }[];
   k: number;
   optK: number;
+  N: number;
 }) {
   const W = 480;
   const H = 100;
@@ -243,7 +245,7 @@ function ProbabilityCurve({
       <polyline points={pq} fill="none" stroke="#7C5CFF" strokeWidth="2" />
       {/* current k marker */}
       <line x1={curX} y1={pad - 4} x2={curX} y2={H - pad} stroke="#00D9C0" strokeWidth="1" />
-      <circle cx={curX} cy={H - pad - groverProb(curve.length > 0 ? Math.round((curve.length - 1) / 1) : 1, curK) * (H - 2 * pad)} r="3" fill="#00D9C0" />
+      <circle cx={curX} cy={H - pad - groverProb(N, curK) * (H - 2 * pad)} r="3" fill="#00D9C0" />
       {/* optimal marker */}
       <line x1={pad + optK * stepX} y1={pad} x2={pad + optK * stepX} y2={H - pad} stroke="#FFB547" strokeWidth="1" strokeDasharray="2,2" />
     </svg>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BellTest } from '@/components/learn/BellTest';
+import { VideoRecommendations } from '@/components/learn/VideoRecommendations';
 
 export const metadata = {
   title: 'Bell Test · The Experiment That Proved Quantum Is Nonlocal',
@@ -81,6 +82,8 @@ export default function BellTestPage() {
           </p>
 
           <BellTest />
+
+          <VideoRecommendations topic="bell-test" />
 
           <h2>Why this is the most consequential experiment in modern physics</h2>
           <p>

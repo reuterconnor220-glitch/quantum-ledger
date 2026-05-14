@@ -27,6 +27,7 @@ import { EntanglementExplorer } from '@/components/learn/EntanglementExplorer';
 import { CircuitBuilder } from '@/components/learn/CircuitBuilder';
 import { GroverTrace } from '@/components/learn/GroverTrace';
 import { InterferenceVisualizer } from '@/components/learn/InterferenceVisualizer';
+import { VideoRecommendations } from '@/components/learn/VideoRecommendations';
 
 export const metadata = {
   title: 'Learn · The Quantum Ledger primer',
@@ -189,9 +190,10 @@ export default function LearnPage() {
           of which pole is set by where the arrow was pointing first.
         </p>
 
-        <Figure caption="Bloch sphere. The north pole is |0⟩, the south pole is |1⟩; every other point is a superposition. Drag the controls to rotate.">
+        <Figure caption="Bloch sphere. The north pole is |0⟩, the south pole is |1⟩; every other point is a superposition. Click the gates to rotate.">
           <BlochSphere />
         </Figure>
+        <VideoRecommendations topic="qubit" />
 
         <LedgerView>
           When IBM, Quantinuum, or IonQ report a "2Q fidelity," they are reporting how
@@ -234,6 +236,7 @@ export default function LearnPage() {
         <Figure caption="Two qubits in a Bell state. The marginal outcome on each qubit looks random; the joint distribution is fully predictable.">
           <EntanglementExplorer />
         </Figure>
+        <VideoRecommendations topic="entanglement" />
 
         <LedgerView>
           A "logical qubit" — the unit IBM, QuEra, and Quantinuum quote in their
@@ -274,9 +277,10 @@ export default function LearnPage() {
           (H ➞ CX is a Bell pair); then break them and see what falls apart.
         </p>
 
-        <Figure caption="A simple circuit builder. Drop gates on each qubit's wire and watch the joint state evolve to the right.">
+        <Figure caption="A simple circuit builder. Click a gate, then click a cell on each qubit's wire and watch the joint state evolve to the right.">
           <CircuitBuilder />
         </Figure>
+        <VideoRecommendations topic="circuits" />
 
         <LedgerView>
           "Circuit depth" — how many sequential gates a machine can run before
@@ -322,6 +326,7 @@ export default function LearnPage() {
         <Figure caption="Amplitude trace through Grover iterations. The marked state's amplitude grows toward 1, peaks, and then decays — the optimum is roughly π/4 × √N steps.">
           <GroverTrace />
         </Figure>
+        <VideoRecommendations topic="grover" />
 
         <LedgerView>
           When a vendor claims a "1000✕ speedup on Grover," ask: 1000✕ over what
@@ -367,6 +372,7 @@ export default function LearnPage() {
         <Figure caption="Two amplitudes superposed. Rotate the relative phase to see total cancellation, total reinforcement, and everything in between.">
           <InterferenceVisualizer />
         </Figure>
+        <VideoRecommendations topic="interference" />
 
         <LedgerView>
           The phrase "quantum advantage" only means anything when interference is
