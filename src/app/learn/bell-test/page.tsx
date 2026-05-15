@@ -12,7 +12,7 @@ export default function BellTestPage() {
     <div className="editorial min-h-screen">
       <div className="max-w-3xl mx-auto px-5 sm:px-8 py-12">
         <header className="mb-10">
-          <p className="text-xs uppercase tracking-[0.2em] text-accent-quantum font-mono mb-3">
+          <p className="text-xs uppercase tracking-[0.2em] text-accent-data font-mono mb-3">
             The second great quantum experiment
           </p>
           <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight leading-tight">

@@ -43,7 +43,7 @@ export default async function ArchivedBriefPage({ params }: { params: { date: st
       <ArticleLd
         headline={b.headline}
         description={b.oneLineSummary}
-        url={(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantum-ledger-vert.vercel.app') + '/archive/' + b.briefDate}
+        url={(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report') + '/archive/' + b.briefDate}
         datePublished={b.briefDate}
       />
 

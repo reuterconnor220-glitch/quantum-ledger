@@ -127,26 +127,63 @@
     @apply text-xs uppercase tracking-[0.2em] text-text-muted font-mono;
   }
 
-  /* Editorial prose for /learn */
+  /* Editorial prose for /learn — chained :not() form for Safari < 16.4 support.
+     Widgets carry .not-prose on their root, so all descendants are exempted. */
   .prose-editorial {
     @apply max-w-[68ch] mx-auto;
   }
-  .prose-editorial p {
+  .prose-editorial p:not(.not-prose):not(.not-prose *) {
     @apply text-[17px] leading-[1.7] mb-5 text-editorial-ink/90;
   }
-  .prose-editorial h2 {
-    @apply font-display text-3xl md:text-4xl font-medium mt-16 mb-5 tracking-tight;
+  .prose-editorial h2:not(.not-prose):not(.not-prose *) {
+    @apply font-display text-3xl md:text-4xl font-medium mt-16 mb-5 tracking-tight text-editorial-ink;
   }
-  .prose-editorial h3 {
-    @apply font-display text-xl md:text-2xl font-medium mt-10 mb-3;
+  .prose-editorial h3:not(.not-prose):not(.not-prose *) {
+    @apply font-display text-xl md:text-2xl font-medium mt-10 mb-3 text-editorial-ink;
   }
-  .prose-editorial details {
-    @apply my-6 border-l-2 border-accent-quantum/40 pl-5 py-1;
+  .prose-editorial ul:not(.not-prose):not(.not-prose *) {
+    @apply list-disc pl-6 my-5 space-y-2 text-[17px] leading-[1.65] text-editorial-ink/90 marker:text-editorial-ink/40;
   }
-  .prose-editorial details > summary {
-    @apply cursor-pointer font-sans text-sm uppercase tracking-wider text-accent-quantum font-medium;
+  .prose-editorial ol:not(.not-prose):not(.not-prose *) {
+    @apply list-decimal pl-6 my-5 space-y-2 text-[17px] leading-[1.65] text-editorial-ink/90 marker:text-editorial-ink/40;
   }
-  .prose-editorial details[open] > summary {
+  .prose-editorial li:not(.not-prose):not(.not-prose *) {
+    @apply pl-1;
+  }
+  .prose-editorial a:not(.not-prose):not(.not-prose *) {
+    color: #00897a;
+    @apply underline decoration-1 underline-offset-2 transition-colors;
+  }
+  .prose-editorial a:not(.not-prose):not(.not-prose *):hover {
+    color: #006e62;
+  }
+  .prose-editorial strong:not(.not-prose):not(.not-prose *) {
+    @apply font-semibold text-editorial-ink;
+  }
+  .prose-editorial em:not(.not-prose):not(.not-prose *) {
+    @apply italic;
+  }
+  .prose-editorial hr:not(.not-prose):not(.not-prose *) {
+    @apply my-10 border-t border-editorial-ink/15;
+  }
+  .prose-editorial blockquote:not(.not-prose):not(.not-prose *) {
+    @apply my-6 border-l-2 border-editorial-ink/30 pl-5 italic text-editorial-ink/80;
+  }
+  .prose-editorial details:not(.not-prose):not(.not-prose *) {
+    @apply my-6 border-l-2 border-accent-data/40 pl-5 py-1;
+  }
+  .prose-editorial details:not(.not-prose):not(.not-prose *) > summary {
+    @apply cursor-pointer font-sans text-sm uppercase tracking-wider text-accent-data font-medium;
+  }
+  .prose-editorial details[open]:not(.not-prose):not(.not-prose *) > summary {
     @apply mb-3;
+  }
+
+  /* When a widget lives inside .editorial / .prose-editorial, reset text color
+     so its own dark-theme tokens (text-text-primary, etc.) take effect.
+     Literal hex (not theme()) so it can't fail to resolve. */
+  .editorial .not-prose,
+  .prose-editorial .not-prose {
+    color: #E8EAED;
   }
 }

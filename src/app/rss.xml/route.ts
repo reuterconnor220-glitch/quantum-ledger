@@ -3,7 +3,7 @@ import { getRecentNews } from '@/lib/data/news';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.com';
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report';
   const items = getRecentNews(30);
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

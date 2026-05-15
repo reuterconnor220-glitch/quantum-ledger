@@ -43,6 +43,27 @@ function rowToBrief(r: any): DailyBrief {
   };
 }
 
+/** Fetch articles by explicit IDs, regardless of recency window. Order matches the input IDs. */
+export async function fetchNewsByIds(ids: string[]): Promise<NewsArticle[]> {
+  if (ids.length === 0) return [];
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    return SEED_NEWS.filter((n) => ids.includes(n.id));
+  }
+  try {
+    const sb = await createClient();
+    const { data, error } = await sb
+      .from('news_articles')
+      .select('*')
+      .in('id', ids);
+    if (error || !data) return [];
+    const byId = new Map<string, NewsArticle>();
+    for (const r of data) byId.set(r.id, rowToArticle(r));
+    return ids.map((id) => byId.get(id)).filter((n): n is NewsArticle => Boolean(n));
+  } catch {
+    return [];
+  }
+}
+
 export async function fetchRecentNews(limit = 50): Promise<NewsArticle[]> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return SEED_NEWS.slice(0, limit);
   try {

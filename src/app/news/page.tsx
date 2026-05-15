@@ -29,7 +29,7 @@ export const metadata = {
 export const revalidate = 300;
 export const dynamic = 'force-dynamic';
 
-type Sentiment = 'positive' | 'neutral' | 'negative';
+type Sentiment = 'bullish' | 'neutral' | 'bearish' | 'mixed';
 type SearchParams = {
   topic?: string;
   sentiment?: Sentiment | 'all';
@@ -47,13 +47,15 @@ const TOPICS: { key: string; label: string; match: (s: string) => boolean }[] = 
 
 function impactToSentiment(impact?: number | string | null): Sentiment {
   if (typeof impact === 'string') {
-    if (/^pos/i.test(impact)) return 'positive';
-    if (/^neg/i.test(impact)) return 'negative';
+    const v = impact.toLowerCase();
+    if (v === 'bullish' || v === 'bull' || v === 'positive' || v.startsWith('pos')) return 'bullish';
+    if (v === 'bearish' || v === 'bear' || v === 'negative' || v.startsWith('neg')) return 'bearish';
+    if (v === 'mixed') return 'mixed';
     return 'neutral';
   }
   if (typeof impact === 'number') {
-    if (impact > 0.15) return 'positive';
-    if (impact < -0.15) return 'negative';
+    if (impact > 0.15) return 'bullish';
+    if (impact < -0.15) return 'bearish';
   }
   return 'neutral';
 }
@@ -84,13 +86,11 @@ export default async function NewsPage({
     recent.length === 0
       ? 0
       : recent
-          .map((n: any) =>
-            impactToSentiment(n.valuationImpact) === 'positive'
-              ? 1
-              : impactToSentiment(n.valuationImpact) === 'negative'
-                ? -1
-                : 0,
-          )
+          .map((n: any) => {
+            if (typeof n.sentimentScore === 'number') return n.sentimentScore;
+            const s = impactToSentiment(n.valuationImpact);
+            return s === 'bullish' ? 1 : s === 'bearish' ? -1 : 0;
+          })
           .reduce((s: number, v: number) => s + v, 0) / recent.length;
   const topicsCovered = new Set(recent.map((n: any) => (n.source ?? '').toString())).size;
 
@@ -193,7 +193,7 @@ export default async function NewsPage({
           ))}
         </FilterRow>
         <FilterRow label="Sentiment">
-          {(['all', 'positive', 'neutral', 'negative'] as const).map((s) => (
+          {(['all', 'bullish', 'neutral', 'bearish', 'mixed'] as const).map((s) => (
             <Chip
               key={s}
               href={url({ sentiment: s })}

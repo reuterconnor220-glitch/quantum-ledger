@@ -66,7 +66,7 @@ export default function BenchmarksPage() {
       <DatasetLd
         name="Quantum Computing Hardware Benchmark Scorecard"
         description="Live scorecard of every major quantum computing system — qubit counts, gate fidelities, coherence times, gate speeds, connectivity, with confidence flags. Updated as vendors publish."
-        url={(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantum-ledger-vert.vercel.app') + '/benchmarks'}
+        url={(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report') + '/benchmarks'}
         keywords={['quantum benchmarks', 'qubit count', 'gate fidelity', 'IBM Heron', 'Google Willow', 'Quantinuum Helios', 'logical qubits', 'quantum error correction']}
       />
       <header className="pt-2 pb-5 border-b border-text-primary/90 mb-10">

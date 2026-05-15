@@ -6,6 +6,7 @@ import { ScrollProgress } from '@/components/ScrollProgress';
 import { SectionNav } from '@/components/SectionNav';
 import { OrganizationLd, WebsiteLd } from '@/components/JsonLd';
 import { PageViewBeacon } from '@/components/PageViewBeacon';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 const inter = Inter({
@@ -33,11 +34,11 @@ export const metadata: Metadata = {
   },
   description:
     'Independent daily intelligence on the quantum computing sector. Company financials, valuations, news with sentiment, revenue landscape, and a layered-depth primer for both newcomers and physicists.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report'),
   openGraph: {
     title: 'Quantum Ledger',
     description: 'Investor-grade quantum computing intelligence.',
-    url: 'https://quantumledger.com',
+    url: 'https://quantumledger.report',
     siteName: 'Quantum Ledger',
     type: 'website',
   },
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="min-h-screen">{children}</main>
         <Footer />
         <PageViewBeacon />
+        <Analytics />
       </body>
     </html>
   );

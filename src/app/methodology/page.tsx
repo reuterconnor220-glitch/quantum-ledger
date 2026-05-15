@@ -98,7 +98,7 @@ export default function MethodologyPage() {
 
           <h2>Errata</h2>
           <p>
-            Found a wrong number? Email <a href="mailto:errata@quantumledger.com">errata@quantumledger.com</a>{' '}
+            Found a wrong number? Email <a href="mailto:errata@quantumledger.report">errata@quantumledger.report</a>{' '}
             with a primary source. We log corrections publicly.
           </p>
         </div>

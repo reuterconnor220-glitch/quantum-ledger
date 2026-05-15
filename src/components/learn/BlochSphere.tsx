@@ -233,8 +233,8 @@ export function BlochSphere() {
         </div>
       </div>
       <p className="mt-5 text-xs text-text-muted leading-relaxed border-t border-border pt-3">
-        Drag the gate buttons to rotate the qubit. Hadamard (H) puts the state into superposition;
-        Z adds a phase; X is the quantum NOT. Probabilities are |amplitude|².
+        Click a gate to apply it. Hadamard (H) puts the state into superposition; Z adds a phase;
+        X is the quantum NOT. Probabilities are |amplitude|².
       </p>
     </div>
   );

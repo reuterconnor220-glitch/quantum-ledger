@@ -13,7 +13,8 @@ export default async function OG() {
           height: '100%',
           width: '100%',
           background: '#0B0D10',
-          backgroundImage: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(124,92,255,0.25), transparent 70%)',
+          backgroundImage:
+            'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,217,192,0.20), transparent 70%)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -21,24 +22,27 @@ export default async function OG() {
           color: '#E8EAED',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        {/* Wordmark */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <div
             style={{
               width: 24,
               height: 24,
               borderRadius: 12,
-              background: '#7C5CFF',
-              boxShadow: '0 0 24px rgba(124, 92, 255, 0.7)',
+              background: '#00D9C0',
+              boxShadow: '0 0 28px rgba(0,217,192,0.7)',
             }}
           />
-          <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.01em' }}>
+          <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.01em', display: 'flex' }}>
             Quantum Ledger
           </div>
         </div>
 
-        <div>
+        {/* Heading + sub */}
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div
             style={{
+              display: 'flex',
               fontSize: 72,
               fontWeight: 500,
               lineHeight: 1.05,
@@ -50,10 +54,11 @@ export default async function OG() {
           </div>
           <div
             style={{
+              display: 'flex',
               marginTop: 32,
               fontSize: 28,
               color: '#9CA3AF',
-              maxWidth: 900,
+              maxWidth: 980,
               lineHeight: 1.4,
             }}
           >
@@ -61,6 +66,7 @@ export default async function OG() {
           </div>
         </div>
 
+        {/* Foot */}
         <div
           style={{
             display: 'flex',
@@ -71,11 +77,11 @@ export default async function OG() {
             fontFamily: 'monospace',
           }}
         >
-          <span>quantumledger.com</span>
-          <span>16 companies tracked · daily brief · 6am MT</span>
+          <div style={{ display: 'flex' }}>quantumledger</div>
+          <div style={{ display: 'flex' }}>16 companies · daily brief · 6am MT</div>
         </div>
       </div>
     ),
-    { ...size }
+    { ...size },
   );
 }

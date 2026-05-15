@@ -254,17 +254,17 @@ export function BB84() {
       <div className="mt-4 flex flex-wrap gap-2">
         <button
           onClick={() => setAutoFire((v) => !v)}
-          className={`px-4 py-2 text-sm font-mono font-semibold rounded-sm transition ${
+          className={`px-4 py-2 text-sm font-mono font-semibold rounded-sm transition border ${
             autoFire
-              ? 'bg-accent-data text-white border border-accent-data shadow-[0_0_12px_rgba(0,217,192,0.4)]'
-              : 'bg-accent-quantum text-white border border-accent-quantum hover:bg-accent-quantum/85'
+              ? 'bg-accent-data text-bg border-accent-data shadow-[0_0_12px_rgba(0,217,192,0.4)]'
+              : 'bg-bg-surface text-text-primary border-border hover:border-accent-data hover:text-accent-data'
           }`}
         >
           {autoFire ? '■ Stop stream' : '▶ Start stream'}
         </button>
-        <button onClick={() => fire(10)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-quantum hover:text-accent-quantum rounded-sm">+10 photons</button>
-        <button onClick={() => fire(100)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-quantum hover:text-accent-quantum rounded-sm">+100</button>
-        <button onClick={() => fire(1000)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-quantum hover:text-accent-quantum rounded-sm">+1000</button>
+        <button onClick={() => fire(10)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-data hover:text-accent-data rounded-sm">+10 photons</button>
+        <button onClick={() => fire(100)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-data hover:text-accent-data rounded-sm">+100</button>
+        <button onClick={() => fire(1000)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-data hover:text-accent-data rounded-sm">+1000</button>
         <button onClick={reset} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-muted border border-border hover:text-text-primary rounded-sm">
           Reset
         </button>

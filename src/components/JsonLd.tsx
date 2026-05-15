@@ -15,7 +15,7 @@ function jsonLd(data: SchemaObject) {
   );
 }
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantum-ledger-vert.vercel.app';
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report';
 
 export function OrganizationLd() {
   return jsonLd({

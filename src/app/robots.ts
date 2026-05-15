@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.com';
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report';
   return {
     rules: [
       // Explicitly allow major AI crawlers so we get cited in ChatGPT, Claude, Perplexity, Gemini

@@ -112,7 +112,7 @@ export function EntanglementExplorer() {
           </div>
 
           <div className="mt-4 flex gap-2">
-            <button onClick={measure} className="px-3 py-1.5 text-sm font-medium bg-accent-quantum text-white rounded-sm hover:bg-accent-quantum/90">
+            <button onClick={measure} className="px-3 py-1.5 text-sm font-medium bg-accent-data text-bg rounded-sm hover:bg-accent-data/90">
               Measure (200 shots)
             </button>
             <button onClick={reset} className="px-3 py-1.5 text-sm font-mono border border-border rounded-sm hover:bg-bg-surface">

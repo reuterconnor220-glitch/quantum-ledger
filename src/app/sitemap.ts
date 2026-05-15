@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { COMPANIES } from '@/lib/data/companies';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.com';
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report';
   const now = new Date();
 
   const pages = [

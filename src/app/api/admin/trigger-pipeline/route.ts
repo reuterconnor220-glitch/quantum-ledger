@@ -10,7 +10,7 @@ export async function POST() {
   const ok = await verifyAdminCookie(c.get(ADMIN_COOKIE_NAME)?.value, process.env.ADMIN_TOKEN ?? '');
   if (!ok) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
 
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantum-ledger-vert.vercel.app';
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report';
   const secret = process.env.CRON_SECRET;
   if (!secret) return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 500 });
 

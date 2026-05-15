@@ -24,7 +24,7 @@
 //   4. Commit + push
 
 import Link from 'next/link';
-import { fetchLatestBrief, fetchRecentNews } from '@/lib/data/live';
+import { fetchLatestBrief, fetchRecentNews, fetchNewsByIds } from '@/lib/data/live';
 import { fetchQuantumQuotes, pickLeadersAndLaggards } from '@/lib/pipeline/quotes';
 import { sectorAverageScore, SECTOR_SCORE_DELTA, sectorMood } from '@/lib/data/ledger-score';
 import { formatDate, formatPct, formatUsd } from '@/lib/utils';
@@ -50,9 +50,9 @@ export default async function BriefPage() {
     fetchQuantumQuotes(),
   ]);
 
-  const topStories = b.topStoryIds
-    .map((id) => recentNews.find((n) => n.id === id))
-    .filter(Boolean);
+  // Fetch the brief's curated top stories directly by ID — they're often
+  // outside the recentNews(30) window, which previously dropped them silently.
+  const topStories = await fetchNewsByIds(b.topStoryIds);
 
   const live = pickLeadersAndLaggards(liveQuotes);
   const leaders = live.leaders.length > 0
@@ -81,7 +81,7 @@ export default async function BriefPage() {
         headline={b.headline}
         description={b.oneLineSummary}
         url={
-          (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantum-ledger-vert.vercel.app') + '/brief'
+          (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report') + '/brief'
         }
         datePublished={b.briefDate}
       />

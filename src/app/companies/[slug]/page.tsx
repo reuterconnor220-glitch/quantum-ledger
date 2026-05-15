@@ -99,7 +99,7 @@ export default async function CompanyProfilePage({
         description={c.oneLineThesis ?? `${c.name} on The Quantum Ledger`}
         url={
           (process.env.NEXT_PUBLIC_SITE_URL ??
-            'https://quantum-ledger-vert.vercel.app') +
+            'https://quantumledger.report') +
           '/companies/' +
           params.slug
         }

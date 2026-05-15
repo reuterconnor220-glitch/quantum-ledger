@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { EARNINGS_CALLS, UPCOMING_EARNINGS } from '@/lib/data/earnings';
+import { FORECAST } from '@/lib/data/commercial';
+import { RevenueLandscape, type ForecastEntry } from '@/components/future/RevenueLandscape';
 
 export const metadata = {
   title: 'Quantum Earnings Tracker · Distilled Quarterly Calls',
@@ -121,6 +123,31 @@ export default function EarningsPage() {
           earnings with predictions. The distillation is descriptive after the fact. The opinion is
           in the read-through column, and you can disagree productively.
         </FooterNote>
+      </section>
+
+      {/* ────────── Revenue landscape — quarterly numbers in their decade context ────────── */}
+      <section className="mt-16">
+        <div className="mb-6 pb-3 border-b border-text-primary/90">
+          <p className="eyebrow mb-2">2024 → 2036 · sector revenue landscape</p>
+          <h2 className="font-display font-normal text-3xl tracking-tight text-balance">
+            From the quarter to the{' '}
+            <em className="not-italic font-normal italic text-accent-data">decade</em>
+          </h2>
+        </div>
+        <p className="font-display italic text-[18px] leading-snug text-text-secondary mb-6 max-w-[68ch]">
+          The calls above tell you what each company billed last quarter. The chart below extends the
+          same series out to 2036 with three regime breaks that re-rate the whole curve.
+        </p>
+        <RevenueLandscape forecast={FORECAST as ForecastEntry[]} showSectionHead={false} />
+        <div className="mt-6 flex flex-wrap items-baseline gap-4 text-[13px] text-text-secondary leading-snug">
+          <Link href="/future" className="text-accent-data hover:underline font-mono uppercase tracking-[0.08em] text-[11px]">
+            Full forecast methodology ›
+          </Link>
+          <span className="text-text-muted/60">·</span>
+          <span className="font-mono uppercase tracking-[0.08em] text-[11px] text-text-muted">
+            Central estimate; bands span ±35% to 10-yr horizon
+          </span>
+        </div>
       </section>
     </div>
   );

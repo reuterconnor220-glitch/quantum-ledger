@@ -18,6 +18,7 @@
 import Link from 'next/link';
 import { FORECAST } from '@/lib/data/commercial';
 import { formatUsd } from '@/lib/utils';
+import { RevenueLandscape, type ForecastEntry } from '@/components/future/RevenueLandscape';
 
 export const metadata = {
   title: 'Future · The Ledger outlook',
@@ -27,11 +28,6 @@ export const metadata = {
 
 export const revalidate = 86400;
 
-interface ForecastEntry {
-  y: number;
-  v: number; // sector revenue in $B
-  expand?: { label: string; reason: string };
-}
 
 const HORIZONS: {
   key: string;
@@ -183,32 +179,42 @@ export default function FuturePage() {
         </aside>
       </section>
 
-      {/* Forecast chart */}
-      <section className="mt-16">
-        <SectionHead
-          eyebrow="2024 → 2034 · central estimate with bands"
-          title="Where the revenue is"
-          accentWord="going"
-        />
+      {/* Earnings tracker bridge — flow from "what reported this quarter" to "where the curve goes" */}
+      <section className="mt-16 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-6 items-stretch">
+        <Link
+          href="/earnings"
+          className="group bg-bg-surface border border-border rounded-md p-6 hover:border-accent-data transition-colors"
+        >
+          <p className="text-[10px] uppercase tracking-[0.15em] text-accent-data font-mono mb-2">
+            Quarterly · The Earnings Desk
+          </p>
+          <p className="font-display text-[22px] leading-tight tracking-tight text-text-primary mb-2 group-hover:text-accent-data transition-colors">
+            What the public cohort actually reported this quarter ›
+          </p>
+          <p className="text-[13px] text-text-secondary leading-snug">
+            Every quantum-exposed public earnings call distilled in 48 hours — headline metrics,
+            what changed, and the read-through. The numbers underneath the forecast below.
+          </p>
+        </Link>
         <div className="bg-bg-surface border border-border rounded-md p-6">
-          <ForecastBands forecast={forecast} />
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-px bg-border rounded-md overflow-hidden">
-            {forecast
-              .filter((f) => f.expand)
-              .map((f) => (
-                <div key={f.y} className="bg-bg-surface p-4">
-                  <p className="eyebrow mb-1.5">{f.y} · regime break</p>
-                  <p className="font-display text-[16px] leading-snug text-text-primary tracking-tight">
-                    {f.expand!.label}
-                  </p>
-                  <p className="mt-1.5 text-[12px] text-text-secondary leading-[1.55]">
-                    {f.expand!.reason}
-                  </p>
-                </div>
-              ))}
-          </div>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-accent-data font-mono mb-2">
+            The bridge
+          </p>
+          <p className="font-display italic text-[18px] leading-snug text-text-primary mb-2">
+            Quarterly prints anchor the near term; the forecast below extends the same series
+            out to <em className="text-accent-data not-italic font-semibold">2036</em> with three
+            regime breaks that re-rate the entire curve.
+          </p>
+          <p className="text-[12px] text-text-secondary leading-snug">
+            Read the calls. Then read the chart.
+          </p>
         </div>
       </section>
+
+      {/* Forecast chart — refactored for legibility */}
+      <div className="mt-12">
+        <RevenueLandscape forecast={forecast} />
+      </div>
 
       {/* Horizons */}
       {HORIZONS.map((h) => (
@@ -265,143 +271,6 @@ export default function FuturePage() {
         </div>
       </section>
     </div>
-  );
-}
-
-/* ─────────────── ForecastBands SVG ─────────────── */
-
-function ForecastBands({ forecast }: { forecast: ForecastEntry[] }) {
-  if (forecast.length === 0) {
-    return (
-      <p className="font-display italic text-text-muted py-12 text-center">
-        Forecast data not available.
-      </p>
-    );
-  }
-  const W = 920;
-  const H = 320;
-  const pad = { l: 50, r: 24, t: 24, b: 36 };
-  const innerW = W - pad.l - pad.r;
-  const innerH = H - pad.t - pad.b;
-  const minY = forecast[0].y;
-  const maxY = forecast[forecast.length - 1].y;
-  const maxV = Math.max(...forecast.map((f) => f.v)) * 1.05;
-
-  const x = (yr: number) => pad.l + ((yr - minY) / (maxY - minY)) * innerW;
-  const y = (v: number) => pad.t + innerH - (v / maxV) * innerH;
-
-  const mid = forecast.map((f) => [x(f.y), y(f.v)] as [number, number]);
-  const upper = forecast.map(
-    (f, i) => [x(f.y), y(f.v * (1 + 0.35 * (i / (forecast.length - 1))))] as [number, number],
-  );
-  const lower = forecast.map(
-    (f, i) => [x(f.y), y(f.v * (1 - 0.35 * (i / (forecast.length - 1))))] as [number, number],
-  );
-
-  const linePath = 'M ' + mid.map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' L ');
-  const bandPath =
-    'M ' +
-    upper.map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' L ') +
-    ' L ' +
-    lower
-      .slice()
-      .reverse()
-      .map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`)
-      .join(' L ') +
-    ' Z';
-
-  const ticks = [0, 20, 40, 60, 80];
-
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full text-accent-data" preserveAspectRatio="none">
-      {/* y gridlines + labels */}
-      {ticks.map((t) => (
-        <g key={t}>
-          <line
-            x1={pad.l}
-            y1={pad.t + innerH - (t / maxV) * innerH}
-            x2={W - pad.r}
-            y2={pad.t + innerH - (t / maxV) * innerH}
-            stroke="currentColor"
-            strokeWidth="0.4"
-            opacity="0.15"
-          />
-          <text
-            x={pad.l - 8}
-            y={pad.t + innerH - (t / maxV) * innerH + 3}
-            textAnchor="end"
-            className="fill-current text-text-muted font-mono"
-            style={{ fontSize: 10, opacity: 0.6 }}
-          >
-            ${t}B
-          </text>
-        </g>
-      ))}
-
-      {/* x ticks */}
-      {forecast.map((f) => (
-        <g key={f.y}>
-          <line
-            x1={x(f.y)}
-            y1={pad.t + innerH}
-            x2={x(f.y)}
-            y2={pad.t + innerH + 4}
-            stroke="currentColor"
-            strokeWidth="0.5"
-            opacity="0.3"
-          />
-          <text
-            x={x(f.y)}
-            y={pad.t + innerH + 18}
-            textAnchor="middle"
-            className="fill-current text-text-muted font-mono"
-            style={{ fontSize: 10, opacity: 0.7 }}
-          >
-            {f.y}
-          </text>
-        </g>
-      ))}
-
-      {/* band */}
-      <path d={bandPath} fill="currentColor" opacity="0.12" />
-
-      {/* central line */}
-      <path
-        d={linePath}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        style={{ filter: 'drop-shadow(0 0 4px currentColor)' }}
-      />
-
-      {/* regime-break markers */}
-      {forecast
-        .filter((f) => f.expand)
-        .map((f) => (
-          <g key={f.y}>
-            <line
-              x1={x(f.y)}
-              y1={pad.t}
-              x2={x(f.y)}
-              y2={pad.t + innerH}
-              stroke="currentColor"
-              strokeWidth="0.7"
-              strokeDasharray="3 4"
-              opacity="0.45"
-              className="text-accent-quantum"
-            />
-            <circle cx={x(f.y)} cy={y(f.v)} r="4" fill="currentColor" className="text-accent-quantum" />
-            <text
-              x={x(f.y) + 6}
-              y={y(f.v) - 8}
-              className="fill-current text-text-primary font-mono"
-              style={{ fontSize: 10 }}
-            >
-              {f.y} · {f.expand!.label}
-            </text>
-          </g>
-        ))}
-    </svg>
   );
 }
 

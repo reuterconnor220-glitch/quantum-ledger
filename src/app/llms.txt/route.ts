@@ -8,7 +8,7 @@
 
 export const dynamic = 'force-static';
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantum-ledger-vert.vercel.app';
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report';
 
 const CONTENT = `# Quantum Ledger
 

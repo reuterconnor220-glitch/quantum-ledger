@@ -272,7 +272,7 @@ export default function LearnPage() {
           right answer rings out at the end while the wrong answers cancel.
         </p>
         <p>
-          Drag gates onto the wires below. The state vector updates as you build;
+          Click a gate, then click a slot to place it. The state vector updates as you build;
           measurement happens at the right edge. Try the canonical recipes first
           (H ➞ CX is a Bell pair); then break them and see what falls apart.
         </p>
@@ -466,10 +466,8 @@ function Chapter({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] gap-10 items-start">
-        <div className="space-y-5 text-text-primary text-[17px] leading-[1.65] max-w-[58ch]">
-          {children}
-        </div>
+      <div className="space-y-5 text-text-primary text-[17px] leading-[1.65] max-w-[68ch]">
+        {children}
       </div>
     </section>
   );
@@ -483,11 +481,9 @@ function Figure({
   children: React.ReactNode;
 }) {
   return (
-    <figure className="mt-7 -mx-4 sm:mx-0">
-      <div className="bg-bg-surface border border-border rounded-md p-4 sm:p-6">
-        {children}
-      </div>
-      <figcaption className="mt-3 px-4 sm:px-0 font-display italic text-[14px] leading-snug text-text-muted max-w-[60ch]">
+    <figure className="mt-7">
+      {children}
+      <figcaption className="mt-3 font-display italic text-[14px] leading-snug text-text-muted max-w-[68ch]">
         {caption}
       </figcaption>
     </figure>
