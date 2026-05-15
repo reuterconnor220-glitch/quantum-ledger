@@ -115,11 +115,11 @@ export const LEDGER_SCORES: LedgerScoreEntry[] = [
     'IONQ',
     true,
     { tech: 80, capital: 88, commercial: 86, government: 70 },
-    'Cleanest Q1 2026 print in the cohort — $32.5M (+135% YoY), guidance raised; Oxford Ionics integration accretive.',
+    'Cleanest Q1 2026 print in the cohort — $64.7M (+755% YoY), guidance raised to $260-270M; Oxford Ionics integration accretive.',
     {
       tech: '99.99% 2Q fidelity claim (subject to verification scope); AQ 64 hit Sept 2025 ahead of plan; Tempo target ~96 AQ. Acquired Oxford Ionics for $1.075B.',
       capital: '~$546M cash; FY25 revenue $130M (+202% YoY); FY26 guidance raised to $235–250M from $225–245M after Q1 beat. Best balance-sheet position among public pure-plays.',
-      commercial: 'Q1 2026 revenue $32.5M (+135% YoY), beat consensus by ~$3M. Diverse customer base (DoE, AFRL, Hyundai, Airbus, AstraZeneca pilots) — least concentrated revenue in the public cohort.',
+      commercial: 'Q1 2026 revenue $64.7M (+755% YoY), beat consensus and raised FY26 guidance to $260-270M. RPOs of $470M (+554% YoY) signal multi-year visibility. Diverse customer base (DoE, AFRL, Hyundai, Airbus, AstraZeneca pilots) — least concentrated revenue in the public cohort.',
       government: 'DARPA QBI Stage B; Air Force Research Lab + DoE Quantum Networks contracts; Oak Ridge installation. Lower than Quantinuum on US2QC.',
     },
     'up',
