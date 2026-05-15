@@ -3,6 +3,7 @@ import { fetchBriefArchive } from '@/lib/data/live';
 import { formatDate } from '@/lib/utils';
 
 export const metadata = {
+  alternates: { canonical: '/archive' },
   title: 'The Archive · Every past brief',
   description:
     'Every past edition of the Quantum Ledger daily brief. Searchable record of sector intelligence since Issue 001.',

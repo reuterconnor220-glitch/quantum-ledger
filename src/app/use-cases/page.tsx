@@ -7,6 +7,7 @@ import {
 } from '@/lib/data/use-cases';
 
 export const metadata = {
+  alternates: { canonical: '/use-cases' },
   title: 'Use Cases · How quantum could change your daily life',
   description:
     'A reader\'s guide to where quantum technologies stop being physics and start showing up in your hospital, your bank statement, your car nav system, and the power lines outside your window.',

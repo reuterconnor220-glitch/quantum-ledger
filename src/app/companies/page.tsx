@@ -26,6 +26,7 @@ import { fetchQuantumQuotes } from '@/lib/pipeline/quotes';
 import { formatUsd, formatPct } from '@/lib/utils';
 
 export const metadata = {
+  alternates: { canonical: '/companies' },
   title: 'Companies · The Quantum Ledger',
   description:
     'The sector directory. Every public ticker and material private actor in the quantum economy, ranked by the Ledger Score and filterable by modality, ownership, and region.',

@@ -21,6 +21,7 @@ import { formatUsd } from '@/lib/utils';
 import { RevenueLandscape, type ForecastEntry } from '@/components/future/RevenueLandscape';
 
 export const metadata = {
+  alternates: { canonical: '/future' },
   title: 'Future · The Ledger outlook',
   description:
     'How the Ledger reads the next decade — 1, 3, 5, and 10-year horizons with revenue bands, regime breaks, and the catalysts that move them.',

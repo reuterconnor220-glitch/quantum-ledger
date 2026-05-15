@@ -45,9 +45,10 @@ export async function generateMetadata({
   params: { slug: string };
 }) {
   const c = getCompanyProfile(params.slug);
-  if (!c) return { title: 'Company · The Quantum Ledger' };
+  if (!c) return { title: 'Company' };
   return {
-    title: `${c.name} · ${c.modality ?? 'Quantum'} · The Quantum Ledger`,
+    title: `${c.name} · ${c.modality ?? 'Quantum'}`,
+    alternates: { canonical: `/companies/${c.slug}` },
     description:
       c.oneLineThesis ??
       `Analyst profile for ${c.name} — ledger score, bull/bear, KPIs, recent news.`,
@@ -89,6 +90,9 @@ export default async function CompanyProfilePage({
   const news = (await getNewsForCompany(params.slug)) ?? [];
 
   const accentWord = pickAccentWord(c.modality ?? '');
+  // Tail after the accent word (e.g. "Trapped ion" → "ion") so the H1 reads
+  // as the full modality with only the first word italicized, not truncated.
+  const accentTail = (c.modality ?? '').replace(/^[A-Za-z][A-Za-z-]+\s*/, '').trim();
   const isPublic = !!c.isPublic || !!c.listed;
   const ticker = c.ticker ?? c.sym ?? null;
 
@@ -164,6 +168,7 @@ export default async function CompanyProfilePage({
           <em className="not-italic font-normal text-accent-data italic">
             {accentWord}
           </em>
+          {accentTail ? <span className="font-normal">{' '}{accentTail}</span> : null}
         </h1>
         {c.positioning ?? c.focus ? (
           <p className="mt-3 font-display italic text-text-muted text-base sm:text-lg max-w-[58ch]">
@@ -250,14 +255,20 @@ export default async function CompanyProfilePage({
             eyebrow={`Ledger Score · ${c.name}`}
             title="The Ledger reads"
             accentWord={
-              ledger.label?.toLowerCase() ??
-              (ledger.score >= 70
-                ? 'constructive'
-                : ledger.score >= 55
-                  ? 'cautious'
-                  : 'sceptical')
+              ledger.score >= 80
+                ? 'high conviction'
+                : ledger.score >= 70
+                  ? 'constructive'
+                  : ledger.score >= 55
+                    ? 'cautious'
+                    : 'sceptical'
             }
           />
+          {ledger.label && (
+            <p className="font-display italic text-text-secondary text-[19px] leading-snug max-w-[68ch] -mt-3 mb-6">
+              {ledger.label}
+            </p>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)] gap-10 items-start">
             <div>
               <div className="font-display tabular-nums text-[120px] leading-[0.86] tracking-[-0.045em] text-text-primary">

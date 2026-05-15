@@ -7,6 +7,7 @@ import { SectionNav } from '@/components/SectionNav';
 import { OrganizationLd, WebsiteLd } from '@/components/JsonLd';
 import { PageViewBeacon } from '@/components/PageViewBeacon';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 
 const inter = Inter({
@@ -52,7 +53,9 @@ export const metadata: Metadata = {
     google: process.env.GOOGLE_SITE_VERIFICATION ?? undefined,
   },
   alternates: {
-    canonical: '/',
+    // No layout-level canonical — each page sets its own via generateMetadata.
+    // A global canonical would force every route to declare the homepage as
+    // canonical, killing per-page SEO.
     types: { 'application/rss+xml': '/rss.xml' },
   },
   keywords: [
@@ -87,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <PageViewBeacon />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

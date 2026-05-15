@@ -20,6 +20,7 @@ import { ESSAYS } from '@/lib/data/essays';
 import { formatUsd, formatPct, formatDate } from '@/lib/utils';
 
 export const metadata = {
+  alternates: { canonical: '/' },
   title: 'The Quantum Ledger — A daily reading of the quantum economy',
   description:
     'A daily brief, sector directory, working primer, and policy tracker for the quantum economy. Signal over hype, since Issue 001.',

@@ -30,6 +30,7 @@ import { InterferenceVisualizer } from '@/components/learn/InterferenceVisualize
 import { VideoRecommendations } from '@/components/learn/VideoRecommendations';
 
 export const metadata = {
+  alternates: { canonical: '/learn' },
   title: 'Learn · The Quantum Ledger primer',
   description:
     'A working primer for reading quantum computing as an industry — qubits, entanglement, circuits, Grover, and interference, with interactive widgets you can manipulate.',

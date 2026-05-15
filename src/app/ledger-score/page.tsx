@@ -12,6 +12,7 @@ import {
 } from '@/lib/data/ledger-score';
 
 export const metadata = {
+  alternates: { canonical: '/ledger-score' },
   title: 'The Ledger Score · Quantum Sector Scoring Framework',
   description:
     "Quantum Ledger's signature scoring framework. Every meaningful quantum company scored across tech, capital, commercial traction, and government validation. Published methodology, updated monthly.",

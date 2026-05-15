@@ -35,6 +35,7 @@ import { VolatilityHistory } from '@/components/brief/VolatilityHistory';
 import { CatalystCalendar } from '@/components/brief/CatalystCalendar';
 
 export const metadata = {
+  alternates: { canonical: '/brief' },
   title: "Daily Brief · Today's Quantum Computing Intelligence",
   description:
     "Today's daily brief — the most important quantum computing stories, market summary, sector sentiment, and editorial analysis. Updated every weekday at 6am MT.",

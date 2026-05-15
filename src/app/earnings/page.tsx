@@ -4,6 +4,7 @@ import { FORECAST } from '@/lib/data/commercial';
 import { RevenueLandscape, type ForecastEntry } from '@/components/future/RevenueLandscape';
 
 export const metadata = {
+  alternates: { canonical: '/earnings' },
   title: 'Quantum Earnings Tracker · Distilled Quarterly Calls',
   description:
     'Every public quantum-exposed earnings call distilled within 48 hours. Headline metrics, key quotes, what changed, and the read-through for the rest of the sector.',

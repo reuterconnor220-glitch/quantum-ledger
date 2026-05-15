@@ -21,6 +21,7 @@ import { formatDate } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
 
 export const metadata = {
+  alternates: { canonical: '/news' },
   title: 'News · The Quantum Ledger firehose',
   description:
     'Every story we tracked in the last 72 hours, ranked by signal. Filter by topic and sentiment; click through to source.',
