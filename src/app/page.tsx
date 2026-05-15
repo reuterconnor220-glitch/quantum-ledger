@@ -112,11 +112,11 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <h1 className="mt-8 font-display font-medium leading-[0.84] tracking-[-0.035em] text-[clamp(64px,13vw,200px)] text-balance">
+        <h1 className="mt-8 pb-2 font-display font-medium leading-[0.88] tracking-[-0.035em] text-[clamp(64px,13vw,200px)] text-balance">
           The Quantum{' '}
           <em className="not-italic font-normal text-accent-data italic">Ledger</em>
         </h1>
-        <p className="mt-4 font-display italic text-text-muted text-lg sm:text-xl max-w-[60ch]">
+        <p className="mt-8 md:mt-10 font-display italic text-text-muted text-lg sm:text-xl max-w-[60ch]">
           A daily brief, a working primer, a curated cohort directory, and the
           policy and capital trackers the sector reads before coffee.
         </p>
