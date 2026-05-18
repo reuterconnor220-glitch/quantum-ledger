@@ -29,7 +29,7 @@ import { fetchQuantumQuotes, pickLeadersAndLaggards } from '@/lib/pipeline/quote
 import { sectorAverageScore, SECTOR_SCORE_DELTA, sectorMood } from '@/lib/data/ledger-score';
 import { formatDate, formatPct, formatUsd } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
-import { ArticleLd } from '@/components/JsonLd';
+import { ArticleLd, BreadcrumbLd } from '@/components/JsonLd';
 import { Giscus } from '@/components/Giscus';
 import { VolatilityHistory } from '@/components/brief/VolatilityHistory';
 import { CatalystCalendar } from '@/components/brief/CatalystCalendar';
@@ -85,6 +85,14 @@ export default async function BriefPage() {
           (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report') + '/brief'
         }
         datePublished={b.briefDate}
+        authorName="Connor Reuter"
+        articleType="NewsArticle"
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Quantum Ledger', url: 'https://quantumledger.report' },
+          { name: 'Daily Brief', url: 'https://quantumledger.report/brief' },
+        ]}
       />
 
       {/* ────────── Masthead ────────── */}

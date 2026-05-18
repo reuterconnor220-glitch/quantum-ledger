@@ -31,7 +31,7 @@ import { LEDGER_SCORES } from '@/lib/data/ledger-score';
 import { getNewsForCompany } from '@/lib/data/news';
 import { formatUsd, formatPct, formatDate } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
-import { ArticleLd } from '@/components/JsonLd';
+import { ArticleLd, BreadcrumbLd } from '@/components/JsonLd';
 
 export const revalidate = 3600;
 
@@ -108,6 +108,14 @@ export default async function CompanyProfilePage({
           params.slug
         }
         datePublished={c.profileUpdatedAt ?? new Date().toISOString()}
+        authorName="Connor Reuter"
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Quantum Ledger', url: 'https://quantumledger.report' },
+          { name: 'Companies', url: 'https://quantumledger.report/companies' },
+          { name: c.name, url: `https://quantumledger.report/companies/${params.slug}` },
+        ]}
       />
 
       {/* ─────────── Masthead crest ─────────── */}

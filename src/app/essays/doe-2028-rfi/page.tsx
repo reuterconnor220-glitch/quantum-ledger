@@ -1,19 +1,41 @@
 import Link from 'next/link';
+import { ArticleLd, BreadcrumbLd } from '@/components/JsonLd';
+
+const URL_PATH = '/essays/doe-2028-rfi';
+const PUBLISHED = '2026-05-15';
 
 export const metadata = {
-  alternates: { canonical: '/essays/doe-2028-rfi' },
-  title: 'The DOE 2028 RFI is the most important quantum document of 2026',
+  alternates: { canonical: URL_PATH },
+  title: 'The DOE 2028 RFI: Two Vendors, One Procurement Spec',
   description:
     "The Department of Energy's May 15 RFI for a fault-tolerant quantum computer at a national laboratory by 2028 effectively credentials a two-vendor field. The roadmaps that don't make the cut lose the federal-procurement narrative that has been supporting their valuations. By Connor Reuter, Quantum Ledger.",
   openGraph: {
     title: 'The DOE 2028 RFI is the most important quantum document of 2026',
     description: 'A procurement spec disguised as an open inquiry.',
+    type: 'article',
+    publishedTime: PUBLISHED,
+    authors: ['Connor Reuter'],
   },
 };
 
 export default function EssayPage() {
   return (
     <div className="editorial min-h-screen">
+      <ArticleLd
+        headline="The DOE 2028 RFI is the most important quantum document of 2026"
+        description="The May 15 DOE Request for Information for a fault-tolerant quantum computer at a national lab by 2028 reads as a two-vendor procurement spec credentialing IBM Starling and Quantinuum Apollo, with PsiQuantum the only credible third."
+        url={`https://quantumledger.report${URL_PATH}`}
+        datePublished={PUBLISHED}
+        authorName="Connor Reuter"
+        articleType="BlogPosting"
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Quantum Ledger', url: 'https://quantumledger.report' },
+          { name: 'Essays', url: 'https://quantumledger.report/essays' },
+          { name: 'The DOE 2028 RFI', url: `https://quantumledger.report${URL_PATH}` },
+        ]}
+      />
       <div className="max-w-3xl mx-auto px-5 sm:px-8 py-12">
         <header className="mb-10">
           <p className="text-xs uppercase tracking-[0.2em] text-accent-data font-mono mb-3">

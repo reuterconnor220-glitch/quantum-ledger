@@ -1,16 +1,27 @@
 import Link from 'next/link';
 import { ESSAYS, ESSAY_CATEGORY_LABEL } from '@/lib/data/essays';
+import { CollectionPageLd } from '@/components/JsonLd';
 
 export const metadata = {
+  alternates: { canonical: '/essays' },
   title: 'Essays',
   description:
-    'Long-form analysis and frameworks for thinking about the quantum sector. Opinionated, sourced, signed.',
+    'Long-form analysis and frameworks for thinking about the quantum sector. Opinionated, sourced, signed by Connor Reuter.',
 };
 
 export default function EssaysPage() {
   const sorted = [...ESSAYS].sort((a, b) => b.publishDate.localeCompare(a.publishDate));
   return (
     <div>
+      <CollectionPageLd
+        name="Quantum Ledger Essays"
+        description="Long-form opinion and frameworks for the quantum sector — signed, sourced, and held accountable over time."
+        url="https://quantumledger.report/essays"
+        items={sorted.map((e) => ({
+          name: e.title,
+          url: `https://quantumledger.report/essays/${e.slug}`,
+        }))}
+      />
       <section className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0 bg-hero-gradient pointer-events-none" />
         <div className="relative max-w-5xl mx-auto px-5 sm:px-8 pt-14 pb-10">

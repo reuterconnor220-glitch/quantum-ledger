@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { fetchBriefByDate, fetchBriefArchive, fetchRecentNews } from '@/lib/data/live';
 import { formatDate, formatPct, formatUsd } from '@/lib/utils';
-import { ArticleLd } from '@/components/JsonLd';
+import { ArticleLd, BreadcrumbLd } from '@/components/JsonLd';
 
 export const revalidate = 86400;
 
@@ -45,6 +45,15 @@ export default async function ArchivedBriefPage({ params }: { params: { date: st
         description={b.oneLineSummary}
         url={(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report') + '/archive/' + b.briefDate}
         datePublished={b.briefDate}
+        authorName="Connor Reuter"
+        articleType="NewsArticle"
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Quantum Ledger', url: 'https://quantumledger.report' },
+          { name: 'Archive', url: 'https://quantumledger.report/archive' },
+          { name: b.briefDate, url: `https://quantumledger.report/archive/${b.briefDate}` },
+        ]}
       />
 
       {/* Masthead */}

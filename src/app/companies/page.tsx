@@ -24,6 +24,7 @@ import Link from 'next/link';
 import { getAllCompanies, type CompanyListing as Company } from '@/lib/data/companies';
 import { fetchQuantumQuotes } from '@/lib/pipeline/quotes';
 import { formatUsd, formatPct } from '@/lib/utils';
+import { ItemListLd } from '@/components/JsonLd';
 
 export const metadata = {
   alternates: { canonical: '/companies' },
@@ -105,6 +106,16 @@ export default async function CompaniesPage({ searchParams }: { searchParams?: S
 
   return (
     <div className="max-w-6xl mx-auto px-5 sm:px-8 pb-24">
+      <ItemListLd
+        name="Quantum Computing Companies — Ledger Directory"
+        description="The Quantum Ledger's curated directory of public and private quantum-computing companies, ordered by the Ledger Score composite."
+        url="https://quantumledger.report/companies"
+        items={rows.map((c) => ({
+          name: c.name,
+          url: `https://quantumledger.report/companies/${c.slug}`,
+          description: c.modality ?? undefined,
+        }))}
+      />
       {/* ─────────── Masthead crest ─────────── */}
       <header className="pt-8 pb-5 border-b border-text-primary/90">
         <div className="flex flex-wrap items-end justify-between gap-3 pb-5 border-b border-border-muted text-[11px] tracking-[0.08em] uppercase text-text-muted font-mono">

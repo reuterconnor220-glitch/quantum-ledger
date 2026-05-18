@@ -1,18 +1,41 @@
 import Link from 'next/link';
+import { ArticleLd, BreadcrumbLd } from '@/components/JsonLd';
+
+const URL_PATH = '/essays/quantinuum-s1-reading';
+const PUBLISHED = '2026-05-13';
 
 export const metadata = {
-  title: "Reading Quantinuum's S-1 · What It Says and What It Doesn't",
+  alternates: { canonical: URL_PATH },
+  title: "Reading Quantinuum's S-1",
   description:
     "A close reading of the Quantinuum S-1 filing. The six numbers that matter, the four that don't, and where we think QNT actually prices.",
   openGraph: {
     title: "Reading Quantinuum's S-1",
     description: "What the filing says, what it doesn't, and where QNT actually prices.",
+    type: 'article',
+    publishedTime: PUBLISHED,
+    authors: ['Connor Reuter'],
   },
 };
 
 export default function EssayPage() {
   return (
     <div className="editorial min-h-screen">
+      <ArticleLd
+        headline="Reading Quantinuum's S-1"
+        description="A close reading of the Quantinuum S-1 filing. The six numbers that matter, the four that don't, and where we think QNT actually prices."
+        url={`https://quantumledger.report${URL_PATH}`}
+        datePublished={PUBLISHED}
+        authorName="Connor Reuter"
+        articleType="BlogPosting"
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Quantum Ledger', url: 'https://quantumledger.report' },
+          { name: 'Essays', url: 'https://quantumledger.report/essays' },
+          { name: "Reading Quantinuum's S-1", url: `https://quantumledger.report${URL_PATH}` },
+        ]}
+      />
       <div className="max-w-3xl mx-auto px-5 sm:px-8 py-12">
         <header className="mb-10">
           <p className="text-xs uppercase tracking-[0.2em] text-accent-quantum font-mono mb-3">

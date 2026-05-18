@@ -20,13 +20,28 @@ const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quantumledger.report';
 export function OrganizationLd() {
   return jsonLd({
     '@context': 'https://schema.org',
-    '@type': 'Organization',
+    '@type': 'NewsMediaOrganization',
     name: 'Quantum Ledger',
     alternateName: 'QuantumLedger',
     url: BASE,
-    logo: `${BASE}/opengraph-image`,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${BASE}/opengraph-image`,
+      width: 1200,
+      height: 630,
+    },
     description:
       'Independent, investor-grade intelligence on the quantum computing sector. Daily news with sentiment scoring, live company tracker, hardware benchmarks, and a layered-depth primer.',
+    foundingDate: '2026',
+    founder: {
+      '@type': 'Person',
+      name: 'Connor Reuter',
+      url: `${BASE}/about`,
+      jobTitle: 'Investor',
+      affiliation: { '@type': 'Organization', name: 'Caruso Ventures' },
+    },
+    diversityPolicy: `${BASE}/about`,
+    ethicsPolicy: `${BASE}/methodology`,
     sameAs: [],
     knowsAbout: [
       'Quantum Computing',
@@ -70,27 +85,109 @@ export function ArticleLd({
   description,
   url,
   datePublished,
+  dateModified,
   image,
+  authorName,
+  articleType = 'Article',
 }: {
   headline: string;
   description: string;
   url: string;
   datePublished: string;
+  dateModified?: string;
   image?: string;
+  /** When provided, renders a Person author (preferred for signed essays/briefs). */
+  authorName?: string;
+  /** Use 'NewsArticle' for daily briefs, 'BlogPosting' for opinion essays, 'Article' (default) for everything else. */
+  articleType?: 'Article' | 'NewsArticle' | 'BlogPosting';
 }) {
+  const author = authorName
+    ? {
+        '@type': 'Person',
+        name: authorName,
+        url: `${BASE}/about`,
+      }
+    : { '@type': 'Organization', name: 'Quantum Ledger' };
   return jsonLd({
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': articleType,
     headline,
     description,
     url,
     datePublished,
+    dateModified: dateModified ?? datePublished,
     image: image ?? `${BASE}/opengraph-image`,
-    author: { '@type': 'Organization', name: 'Quantum Ledger' },
+    author,
     publisher: {
-      '@type': 'Organization',
+      '@type': 'NewsMediaOrganization',
       name: 'Quantum Ledger',
-      logo: { '@type': 'ImageObject', url: `${BASE}/opengraph-image` },
+      logo: {
+        '@type': 'ImageObject',
+        url: `${BASE}/opengraph-image`,
+        width: 1200,
+        height: 630,
+      },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  });
+}
+
+/** ItemList schema for ranked / curated lists (ledger-score, companies directory). */
+export function ItemListLd({
+  name,
+  description,
+  url,
+  items,
+}: {
+  name: string;
+  description?: string;
+  url: string;
+  items: { name: string; url: string; description?: string }[];
+}) {
+  return jsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    description,
+    url,
+    numberOfItems: items.length,
+    itemListElement: items.map((it, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: it.url,
+      name: it.name,
+      ...(it.description ? { description: it.description } : {}),
+    })),
+  });
+}
+
+/** CollectionPage schema for index pages (essays index, archive, news firehose). */
+export function CollectionPageLd({
+  name,
+  description,
+  url,
+  items,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  items: { name: string; url: string }[];
+}) {
+  return jsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name,
+    description,
+    url,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: items.length,
+      itemListElement: items.map((it, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: it.url,
+        name: it.name,
+      })),
     },
   });
 }

@@ -10,6 +10,7 @@ import {
   scoreColor,
   scoreBg,
 } from '@/lib/data/ledger-score';
+import { ItemListLd } from '@/components/JsonLd';
 
 export const metadata = {
   alternates: { canonical: '/ledger-score' },
@@ -30,6 +31,16 @@ export default function LedgerScorePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-5 sm:px-8 pb-24">
+      <ItemListLd
+        name="The Ledger Score — Quantum Sector Rankings"
+        description={`The Quantum Ledger's composite score ranking ${sorted.length} quantum-computing companies across technology, capital, commercial traction, and government validation. Edition v1.0, published ${SCORE_PUBLISH_DATE}.`}
+        url="https://quantumledger.report/ledger-score"
+        items={sorted.map((e) => ({
+          name: `${e.name} — Ledger Score ${e.scores.total}`,
+          url: `https://quantumledger.report/companies/${e.slug}`,
+          description: e.thesis,
+        }))}
+      />
       {/* ────────── Masthead ────────── */}
       <header className="pt-8 pb-5 border-b border-text-primary/90">
         <div className="flex flex-wrap items-end justify-between gap-3 pb-5 border-b border-border-muted text-[11px] tracking-[0.08em] uppercase text-text-muted font-mono">

@@ -1,19 +1,41 @@
 import Link from 'next/link';
+import { ArticleLd, BreadcrumbLd } from '@/components/JsonLd';
+
+const URL_PATH = '/essays/cohort-sold-off-clean-reporting';
+const PUBLISHED = '2026-05-15';
 
 export const metadata = {
-  alternates: { canonical: '/essays/cohort-sold-off-clean-reporting' },
-  title: 'The cohort sold off on a clean reporting cycle. Here is why.',
+  alternates: { canonical: URL_PATH },
+  title: 'Why the Quantum Cohort Sold a Clean Q1 Print',
   description:
     "Q1 2026 was the strongest collective reporting season the public quantum pure-plays have ever delivered. Every name closed lower. This is not noise. The multiple compression cycle is beginning. By Connor Reuter, Quantum Ledger.",
   openGraph: {
     title: 'The cohort sold off on a clean reporting cycle. Here is why.',
     description: 'When clean prints stop lifting the cohort, valuation is the problem.',
+    type: 'article',
+    publishedTime: PUBLISHED,
+    authors: ['Connor Reuter'],
   },
 };
 
 export default function EssayPage() {
   return (
     <div className="editorial min-h-screen">
+      <ArticleLd
+        headline="The cohort sold off on a clean reporting cycle. Here is why."
+        description="Q1 2026 was the strongest collective reporting season the public quantum pure-plays have ever delivered, and every name closed lower. This is multiple compression in a cohort priced for execution that hasn't happened."
+        url={`https://quantumledger.report${URL_PATH}`}
+        datePublished={PUBLISHED}
+        authorName="Connor Reuter"
+        articleType="BlogPosting"
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Quantum Ledger', url: 'https://quantumledger.report' },
+          { name: 'Essays', url: 'https://quantumledger.report/essays' },
+          { name: 'The Cohort Sold Off', url: `https://quantumledger.report${URL_PATH}` },
+        ]}
+      />
       <div className="max-w-3xl mx-auto px-5 sm:px-8 py-12">
         <header className="mb-10">
           <p className="text-xs uppercase tracking-[0.2em] text-accent-data font-mono mb-3">

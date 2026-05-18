@@ -1,18 +1,41 @@
 import Link from 'next/link';
+import { ArticleLd, BreadcrumbLd } from '@/components/JsonLd';
+
+const URL_PATH = '/essays/how-to-think-about-quantum';
+const PUBLISHED = '2026-05-13';
 
 export const metadata = {
+  alternates: { canonical: URL_PATH },
   title: 'How to Think About Quantum Computing as an Investor',
   description:
     "A framework for evaluating quantum companies — separating physics from financials, distinguishing utility from supremacy, and understanding what DARPA QBI actually tells you. By Connor Reuter, Quantum Ledger.",
   openGraph: {
     title: 'How to Think About Quantum Computing as an Investor',
     description: 'A framework for evaluating quantum companies that survives the hype.',
+    type: 'article',
+    publishedTime: PUBLISHED,
+    authors: ['Connor Reuter'],
   },
 };
 
 export default function EssayPage() {
   return (
     <div className="editorial min-h-screen">
+      <ArticleLd
+        headline="How to Think About Quantum Computing as an Investor"
+        description="A framework for evaluating quantum companies — separating physics from financials, distinguishing utility from supremacy, and using DARPA QBI as a scoring discount on the rest."
+        url={`https://quantumledger.report${URL_PATH}`}
+        datePublished={PUBLISHED}
+        authorName="Connor Reuter"
+        articleType="BlogPosting"
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Quantum Ledger', url: 'https://quantumledger.report' },
+          { name: 'Essays', url: 'https://quantumledger.report/essays' },
+          { name: 'How to Think About Quantum', url: `https://quantumledger.report${URL_PATH}` },
+        ]}
+      />
       <div className="max-w-3xl mx-auto px-5 sm:px-8 py-12">
         <header className="mb-10">
           <p className="text-xs uppercase tracking-[0.2em] text-accent-quantum font-mono mb-3">
