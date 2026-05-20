@@ -27,7 +27,7 @@ import Link from 'next/link';
 import { fetchLatestBrief, fetchRecentNews, fetchNewsByIds } from '@/lib/data/live';
 import { fetchQuantumQuotes, pickLeadersAndLaggards } from '@/lib/pipeline/quotes';
 import { sectorAverageScore, SECTOR_SCORE_DELTA, sectorMood } from '@/lib/data/ledger-score';
-import { formatDate, formatPct, formatUsd } from '@/lib/utils';
+import { formatDate, formatPct, formatUsd, cleanNewsTitle, displaySummary } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
 import { ArticleLd, BreadcrumbLd } from '@/components/JsonLd';
 import { Giscus } from '@/components/Giscus';
@@ -240,8 +240,13 @@ export default async function BriefPage() {
                             (i === 0 ? 'text-[26px] text-text-primary' : 'text-[19px] text-text-primary')
                           }
                         >
-                          {n.title}
+                          {cleanNewsTitle(n.title)}
                         </p>
+                        {displaySummary(n.title, n.summary) && (
+                          <p className="mt-1.5 text-[13px] text-text-secondary leading-snug max-w-[64ch]">
+                            {displaySummary(n.title, n.summary)}
+                          </p>
+                        )}
                       </div>
                     </a>
                   </li>

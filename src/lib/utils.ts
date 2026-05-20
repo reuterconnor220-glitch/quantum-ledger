@@ -54,3 +54,37 @@ export function sentimentLabel(score: number): 'bull' | 'bear' | 'neutral' | 'mi
   if (Math.abs(score) < 0.1) return 'neutral';
   return 'mixed';
 }
+
+/**
+ * Google News and similar aggregators tack a trailing " - Publisher" onto every
+ * headline. The publisher is already shown in the source-chip on the row, so
+ * stripping it produces a cleaner, less redundant title in the rendered list.
+ *
+ *   "Saudi Arabia Launches Its First Quantum Computer - ForkLog"
+ *   → "Saudi Arabia Launches Its First Quantum Computer"
+ */
+export function cleanNewsTitle(title: string | null | undefined): string {
+  if (!title) return '';
+  return title.replace(/\s+[-–—]\s+[A-Z][\w &.,'’!?:|/]*$/, '').trim();
+}
+
+/**
+ * Some ingestion sources (notably google_news) populate the article summary
+ * with the title itself. Rendering that next to the headline produces a
+ * doubled-headline display. Return the summary only when it adds information.
+ */
+export function displaySummary(
+  title: string | null | undefined,
+  summary: string | null | undefined,
+): string | null {
+  if (!summary) return null;
+  const norm = (s: string) => s.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+  const t = norm(cleanNewsTitle(title ?? ''));
+  const s = norm(summary);
+  if (!t) return summary;
+  if (s === t) return null;
+  const cutoff = Math.min(60, t.length);
+  if (s.startsWith(t.slice(0, cutoff))) return null;
+  if (t.startsWith(s.slice(0, Math.min(60, s.length)))) return null;
+  return summary;
+}

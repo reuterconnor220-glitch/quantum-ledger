@@ -3,24 +3,24 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * The double-slit experiment — pedagogical version.
+ * The double-slit experiment — beginner-friendly version.
  *
- * Three modes:
- *  - 1 slit: single diffraction bump
- *  - 2 slits, unobserved: interference fringes from single photons
- *  - 2 slits, observed: pattern collapses to two bumps (= classical prediction)
+ * Pedagogical premise: the experiment's only point is to show that *observing*
+ * which slit a photon goes through collapses the wave behavior into particle
+ * behavior. Everything else (slit width, wavelength, slit count) is secondary.
  *
- * Visual hooks:
- *  - Photon hits drawn large with a teal glow so they're unmistakable.
- *  - Two prediction curves overlaid: the classical "sum of two slits" expectation (gray
- *    dashed) and the actual quantum probability density (cyan). In observed mode the
- *    two curves coincide — that's the whole pedagogical point.
- *  - Clear "what you should expect" vs "what you actually got" callouts under the SVG.
+ * UI consequence: one big toggle — "Are you watching the slits?" — and the
+ * scene visibly changes when you flip it. Hits reset on every toggle so the
+ * fresh accumulation makes the two patterns unambiguously different. No
+ * sliders, no second mode, no curve overlay clutter on first viewing.
+ *
+ * Advanced controls (single-slit mode, sliders, curve overlay) are tucked
+ * behind a "Show controls" disclosure so the beginner sees the lesson first.
  */
 
 const SCREEN_W = 760;
 const SCREEN_H = 420;
-const SOURCE_X = 50;
+const SOURCE_X = 60;
 const WALL_X = 320;
 const DETECTOR_X = 700;
 const CENTER_Y = SCREEN_H / 2;
@@ -31,46 +31,28 @@ function sinc(x: number) {
   return Math.sin(x) / x;
 }
 
-function classicalDensity(y: number, opts: {
-  slits: 1 | 2;
-  wavelength: number;
-  slitWidth: number;
-  slitSep: number;
-  L: number;
-}): number {
-  const { slits, wavelength, slitWidth, slitSep, L } = opts;
-  const x = y - CENTER_Y;
-  if (slits === 1) {
-    return sinc((Math.PI * slitWidth * x) / (wavelength * L)) ** 2;
-  }
-  const e1 = sinc((Math.PI * slitWidth * (x - slitSep / 2)) / (wavelength * L)) ** 2;
-  const e2 = sinc((Math.PI * slitWidth * (x + slitSep / 2)) / (wavelength * L)) ** 2;
-  return 0.5 * (e1 + e2);
-}
+const WAVELENGTH = 70;
+const SLIT_SEP = 70;
+const SLIT_WIDTH = 20;
+const L = 360;
 
-function quantumDensity(y: number, opts: {
-  slits: 1 | 2;
-  measureWhich: boolean;
-  wavelength: number;
-  slitWidth: number;
-  slitSep: number;
-  L: number;
-}): number {
-  const { slits, measureWhich, wavelength, slitWidth, slitSep, L } = opts;
-  if (slits === 1 || measureWhich) {
-    return classicalDensity(y, opts);
-  }
+function quantumDensity(y: number, slits: 1 | 2, watching: boolean): number {
   const x = y - CENTER_Y;
-  const envelope = sinc((Math.PI * slitWidth * x) / (wavelength * L)) ** 2;
-  const fringe = Math.cos((Math.PI * slitSep * x) / (wavelength * L)) ** 2;
+  const envelope = sinc((Math.PI * SLIT_WIDTH * x) / (WAVELENGTH * L)) ** 2;
+  if (slits === 1) return envelope;
+  if (watching) {
+    const e1 = sinc((Math.PI * SLIT_WIDTH * (x - SLIT_SEP / 2)) / (WAVELENGTH * L)) ** 2;
+    const e2 = sinc((Math.PI * SLIT_WIDTH * (x + SLIT_SEP / 2)) / (WAVELENGTH * L)) ** 2;
+    return 0.5 * (e1 + e2);
+  }
+  const fringe = Math.cos((Math.PI * SLIT_SEP * x) / (WAVELENGTH * L)) ** 2;
   return envelope * fringe;
 }
 
-function sampleY(opts: Parameters<typeof quantumDensity>[1], rng: () => number = Math.random): number {
+function sampleY(slits: 1 | 2, watching: boolean): number {
   for (let attempts = 0; attempts < 200; attempts++) {
-    const y = rng() * SCREEN_H;
-    const p = quantumDensity(y, opts);
-    if (rng() < p) return y;
+    const y = Math.random() * SCREEN_H;
+    if (Math.random() < quantumDensity(y, slits, watching)) return y;
   }
   return CENTER_Y;
 }
@@ -82,51 +64,72 @@ interface Hit {
 }
 
 export function DoubleSlit() {
+  const [watching, setWatching] = useState(false);
   const [slits, setSlits] = useState<1 | 2>(2);
-  const [measureWhich, setMeasureWhich] = useState(false);
-  const [wavelength, setWavelength] = useState(70);
-  const [slitSep, setSlitSep] = useState(70);
-  const [slitWidth, setSlitWidth] = useState(20);
   const [hits, setHits] = useState<Hit[]>([]);
-  const [showCurves, setShowCurves] = useState(true);
-  const [autoFire, setAutoFire] = useState(false);
+  const [autoFire, setAutoFire] = useState(true);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const tCounter = useRef(0);
 
-  const opts = { slits, measureWhich, wavelength, slitWidth, slitSep, L: 360 };
-
+  // Seed with ~80 photons on first mount so the user sees a pattern immediately,
+  // not an empty screen waiting for them to figure out which button to click.
   const seededRef = useRef(false);
   useEffect(() => {
     if (seededRef.current) return;
     seededRef.current = true;
-    const seedOpts = { slits: 2 as 1 | 2, measureWhich: false, wavelength: 70, slitWidth: 20, slitSep: 70, L: 360 };
     setHits(() => {
       const seed: Hit[] = [];
-      for (let i = 0; i < 60; i++) {
-        seed.push({ x: DETECTOR_X + (Math.random() - 0.5) * 4, y: sampleY(seedOpts), t: tCounter.current++ });
+      for (let i = 0; i < 80; i++) {
+        seed.push({
+          x: DETECTOR_X + (Math.random() - 0.5) * 4,
+          y: sampleY(2, false),
+          t: tCounter.current++,
+        });
       }
       return seed;
     });
   }, []);
 
+  // Auto-fire — keeps a stream of photons flowing so the pattern is alive
+  // and the difference between modes becomes visible quickly.
   useEffect(() => {
     if (!autoFire) return;
     const interval = setInterval(() => {
       setHits((h) => {
-        if (h.length >= 1000) return h;
-        const y = sampleY(opts);
-        return [...h, { x: DETECTOR_X + (Math.random() - 0.5) * 4, y, t: tCounter.current++ }];
+        if (h.length >= 800) return h;
+        return [...h, {
+          x: DETECTOR_X + (Math.random() - 0.5) * 4,
+          y: sampleY(slits, watching),
+          t: tCounter.current++,
+        }];
       });
-    }, 28);
+    }, 25);
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoFire, slits, measureWhich, wavelength, slitSep, slitWidth]);
+  }, [autoFire, slits, watching]);
+
+  function toggleWatching() {
+    // Clear the screen on every toggle. Otherwise the previous mode's hits
+    // sit on top of the new mode's hits and the user can't tell what's changed.
+    setHits([]);
+    tCounter.current = 0;
+    setWatching((w) => !w);
+  }
+
+  function setSlitsAndReset(n: 1 | 2) {
+    setHits([]);
+    tCounter.current = 0;
+    setSlits(n);
+  }
 
   function fire(n: number) {
     setHits((h) => {
       const next = [...h];
       for (let i = 0; i < n && next.length < 1500; i++) {
-        const y = sampleY(opts);
-        next.push({ x: DETECTOR_X + (Math.random() - 0.5) * 4, y, t: tCounter.current++ });
+        next.push({
+          x: DETECTOR_X + (Math.random() - 0.5) * 4,
+          y: sampleY(slits, watching),
+          t: tCounter.current++,
+        });
       }
       return next;
     });
@@ -135,40 +138,86 @@ export function DoubleSlit() {
   function reset() {
     setHits([]);
     tCounter.current = 0;
-    setAutoFire(false);
   }
 
-  // Build curves
-  const curveSamples = 100;
-  const classicalSamples: number[] = [];
-  const quantumSamples: number[] = [];
-  let classicalMax = 0;
-  let quantumMax = 0;
-  for (let i = 0; i <= curveSamples; i++) {
-    const y = (i / curveSamples) * SCREEN_H;
-    const c = classicalDensity(y, opts);
-    const q = quantumDensity(y, opts);
-    classicalSamples.push(c);
-    quantumSamples.push(q);
-    if (c > classicalMax) classicalMax = c;
-    if (q > quantumMax) quantumMax = q;
-  }
-  const sharedMax = Math.max(classicalMax, quantumMax);
-  const classicalPoints: string[] = [];
-  const quantumPoints: string[] = [];
-  for (let i = 0; i <= curveSamples; i++) {
-    const y = (i / curveSamples) * SCREEN_H;
-    classicalPoints.push(`${DETECTOR_X + 18 + (classicalSamples[i] / sharedMax) * 38},${y}`);
-    quantumPoints.push(`${DETECTOR_X + 18 + (quantumSamples[i] / sharedMax) * 38},${y}`);
-  }
-
-  const slit1Y = CENTER_Y + (slits === 2 ? -slitSep / 2 : 0);
-  const slit2Y = CENTER_Y + slitSep / 2;
-
-  const curvesMatch = slits === 1 || measureWhich;
+  const slit1Y = CENTER_Y + (slits === 2 ? -SLIT_SEP / 2 : 0);
+  const slit2Y = CENTER_Y + SLIT_SEP / 2;
+  const isWaveBehavior = !watching && slits === 2;
+  const isParticleBehavior = watching || slits === 1;
 
   return (
     <div className="not-prose bg-bg-elevated border border-border rounded-md p-5 my-6 text-text-primary">
+      {/* ────────── The toggle — the only control most beginners need ────────── */}
+      <div className="mb-5 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 items-center">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-accent-data font-mono mb-1.5">
+            The one thing to play with
+          </p>
+          <p className="font-display text-[20px] leading-tight tracking-tight text-text-primary">
+            Are you watching which slit each photon goes through?
+          </p>
+        </div>
+        <button
+          onClick={toggleWatching}
+          className={`group relative inline-flex items-center gap-3 px-5 py-3 rounded-md border transition-all ${
+            watching
+              ? 'bg-accent-warn/15 border-accent-warn text-accent-warn'
+              : 'bg-accent-data/10 border-accent-data text-accent-data'
+          }`}
+        >
+          <span
+            className={`text-2xl leading-none transition-transform ${
+              watching ? 'scale-110' : 'scale-100 opacity-70'
+            }`}
+          >
+            {watching ? '👁' : '🚫'}
+          </span>
+          <div className="text-left">
+            <p className="text-[9px] uppercase tracking-[0.15em] font-mono opacity-70">
+              {watching ? 'watching' : 'not watching'}
+            </p>
+            <p className="font-display text-base leading-tight font-medium">
+              {watching ? 'Click to stop watching' : 'Click to start watching'}
+            </p>
+          </div>
+        </button>
+      </div>
+
+      {/* ────────── Verdict bar — tells you what the screen is showing right now ────────── */}
+      <div
+        className={`mb-4 rounded-md border px-4 py-3 text-sm leading-snug ${
+          isWaveBehavior
+            ? 'bg-accent-data/10 border-accent-data/40 text-text-primary'
+            : 'bg-accent-warn/10 border-accent-warn/40 text-text-primary'
+        }`}
+      >
+        <span className="text-[10px] uppercase tracking-[0.15em] font-mono block mb-1 text-text-muted">
+          {isWaveBehavior ? 'Wave behavior — striped pattern' : 'Particle behavior — two-bump pattern'}
+        </span>
+        {isWaveBehavior && (
+          <>
+            Each photon is going through <strong>both slits at once</strong>, interfering with
+            itself, and landing in the bright bands. The dark gaps are where it cancels itself
+            out. <em>This is not what particles do.</em>
+          </>
+        )}
+        {watching && slits === 2 && (
+          <>
+            Adding a detector at the slits forces each photon to <strong>pick one slit</strong>{' '}
+            (like a particle). The interference vanishes. The screen shows two clumps — exactly
+            what classical bullets would do.{' '}
+            <em>The act of watching changed the result.</em>
+          </>
+        )}
+        {slits === 1 && (
+          <>
+            With only one slit open there&apos;s nothing to interfere with. A single diffraction
+            bump — boring on purpose, this is the control.
+          </>
+        )}
+      </div>
+
+      {/* ────────── The SVG scene ────────── */}
       <div className="overflow-x-auto">
         <svg viewBox={`0 0 ${SCREEN_W} ${SCREEN_H}`} className="w-full h-auto" style={{ minWidth: '640px' }}>
           <defs>
@@ -184,21 +233,15 @@ export function DoubleSlit() {
           </defs>
 
           {/* Source */}
-          <circle cx={SOURCE_X} cy={CENTER_Y} r="22" fill="url(#ds-source-glow)" />
+          <circle cx={SOURCE_X} cy={CENTER_Y} r="24" fill="url(#ds-source-glow)" />
           <circle cx={SOURCE_X} cy={CENTER_Y} r="7" fill="#00D9C0">
             <animate attributeName="r" values="7;10;7" dur="1.6s" repeatCount="indefinite" />
           </circle>
           <text x={SOURCE_X} y={CENTER_Y + 42} fill="#9CA3AF" fontSize="13" fontFamily="ui-monospace" textAnchor="middle">
-            photon source
+            photon gun
           </text>
 
-          {/* Rays */}
-          <line x1={SOURCE_X + 8} y1={CENTER_Y} x2={WALL_X - 6} y2={slit1Y} stroke="#00D9C0" strokeWidth="0.8" strokeOpacity="0.25" strokeDasharray="5,4" />
-          {slits === 2 && (
-            <line x1={SOURCE_X + 8} y1={CENTER_Y} x2={WALL_X - 6} y2={slit2Y} stroke="#00D9C0" strokeWidth="0.8" strokeOpacity="0.25" strokeDasharray="5,4" />
-          )}
-
-          {/* Wall */}
+          {/* Wall with slits */}
           <rect x={WALL_X - 5} y={0} width={10} height={slit1Y - SLIT_HEIGHT / 2} fill="#3A3F47" />
           {slits === 1 ? (
             <rect x={WALL_X - 5} y={slit1Y + SLIT_HEIGHT / 2} width={10} height={SCREEN_H - (slit1Y + SLIT_HEIGHT / 2)} fill="#3A3F47" />
@@ -208,40 +251,55 @@ export function DoubleSlit() {
               <rect x={WALL_X - 5} y={slit2Y + SLIT_HEIGHT / 2} width={10} height={SCREEN_H - (slit2Y + SLIT_HEIGHT / 2)} fill="#3A3F47" />
             </>
           )}
-
-          {/* Observers */}
-          {measureWhich && slits === 2 && (
-            <>
-              <circle cx={WALL_X + 18} cy={slit1Y} r="11" fill="#FFB547" fillOpacity="0.18" />
-              <circle cx={WALL_X + 18} cy={slit1Y} r="6" fill="#FFB547" />
-              <circle cx={WALL_X + 18} cy={slit2Y} r="11" fill="#FFB547" fillOpacity="0.18" />
-              <circle cx={WALL_X + 18} cy={slit2Y} r="6" fill="#FFB547" />
-              <text x={WALL_X + 36} y={slit1Y + 4} fill="#FFB547" fontSize="12" fontFamily="ui-monospace">
-                detector
-              </text>
-              <text x={WALL_X + 36} y={slit2Y + 4} fill="#FFB547" fontSize="12" fontFamily="ui-monospace">
-                detector
-              </text>
-            </>
-          )}
-
-          {/* Wavefronts (only unobserved) */}
-          {!measureWhich && [0, 1, 2, 3, 4].map((i) => (
-            <g key={`wf-${i}`} opacity={0.22 - i * 0.04}>
-              <ellipse cx={WALL_X + 5} cy={slit1Y} rx={30 + i * 40} ry={30 + i * 40} fill="none" stroke="#00D9C0" strokeWidth="0.9" />
-              {slits === 2 && (
-                <ellipse cx={WALL_X + 5} cy={slit2Y} rx={30 + i * 40} ry={30 + i * 40} fill="none" stroke="#00D9C0" strokeWidth="0.9" />
-              )}
-            </g>
-          ))}
-
-          {/* Detector wall */}
-          <line x1={DETECTOR_X} y1={20} x2={DETECTOR_X} y2={SCREEN_H - 20} stroke="#6B7280" strokeWidth="2.5" />
-          <text x={DETECTOR_X} y={SCREEN_H - 4} fill="#9CA3AF" fontSize="13" fontFamily="ui-monospace" textAnchor="middle">
-            detector screen
+          <text x={WALL_X} y={SCREEN_H - 6} fill="#9CA3AF" fontSize="13" fontFamily="ui-monospace" textAnchor="middle">
+            {slits === 2 ? 'two slits' : 'one slit'}
           </text>
 
-          {/* Hits — with glow */}
+          {/* WAVE MODE: visible wavefronts emerge from both slits and overlap.
+              PARTICLE MODE: instead show clean straight paths and a watcher eye. */}
+          {!watching && slits === 2 && (
+            <g>
+              {[0, 1, 2, 3, 4].map((i) => (
+                <g key={`wf-${i}`} opacity={0.28 - i * 0.05}>
+                  <ellipse cx={WALL_X + 5} cy={slit1Y} rx={32 + i * 44} ry={32 + i * 44} fill="none" stroke="#00D9C0" strokeWidth="1.1" />
+                  <ellipse cx={WALL_X + 5} cy={slit2Y} rx={32 + i * 44} ry={32 + i * 44} fill="none" stroke="#00D9C0" strokeWidth="1.1" />
+                </g>
+              ))}
+            </g>
+          )}
+          {watching && slits === 2 && (
+            <g>
+              {/* Watcher eyes at each slit + a clean ray from source through each slit (particle behavior) */}
+              <line x1={SOURCE_X + 8} y1={CENTER_Y} x2={WALL_X - 8} y2={slit1Y} stroke="#FFB547" strokeWidth="1.4" strokeOpacity="0.5" />
+              <line x1={SOURCE_X + 8} y1={CENTER_Y} x2={WALL_X - 8} y2={slit2Y} stroke="#FFB547" strokeWidth="1.4" strokeOpacity="0.5" />
+              <line x1={WALL_X + 8} y1={slit1Y} x2={DETECTOR_X - 5} y2={slit1Y} stroke="#FFB547" strokeWidth="1.4" strokeOpacity="0.5" />
+              <line x1={WALL_X + 8} y1={slit2Y} x2={DETECTOR_X - 5} y2={slit2Y} stroke="#FFB547" strokeWidth="1.4" strokeOpacity="0.5" />
+              <g>
+                <circle cx={WALL_X + 20} cy={slit1Y} r="14" fill="#FFB547" fillOpacity="0.18" />
+                <circle cx={WALL_X + 20} cy={slit1Y} r="8" fill="#FFB547" />
+                <text x={WALL_X + 20} y={slit1Y + 4} fontSize="14" textAnchor="middle">👁</text>
+              </g>
+              <g>
+                <circle cx={WALL_X + 20} cy={slit2Y} r="14" fill="#FFB547" fillOpacity="0.18" />
+                <circle cx={WALL_X + 20} cy={slit2Y} r="8" fill="#FFB547" />
+                <text x={WALL_X + 20} y={slit2Y + 4} fontSize="14" textAnchor="middle">👁</text>
+              </g>
+              <text x={WALL_X + 80} y={slit1Y - 18} fill="#FFB547" fontSize="11" fontFamily="ui-monospace">
+                detector watching
+              </text>
+            </g>
+          )}
+          {slits === 1 && (
+            <line x1={SOURCE_X + 8} y1={CENTER_Y} x2={WALL_X - 8} y2={slit1Y} stroke="#00D9C0" strokeWidth="1.4" strokeOpacity="0.4" />
+          )}
+
+          {/* Detector screen */}
+          <line x1={DETECTOR_X} y1={20} x2={DETECTOR_X} y2={SCREEN_H - 20} stroke="#6B7280" strokeWidth="2.5" />
+          <text x={DETECTOR_X} y={SCREEN_H - 6} fill="#9CA3AF" fontSize="13" fontFamily="ui-monospace" textAnchor="middle">
+            detector
+          </text>
+
+          {/* Photon hits with halo glow */}
           {hits.map((h, i) => (
             <g key={i}>
               <circle cx={h.x} cy={h.y} r="5" fill="url(#ds-photon-glow)" />
@@ -249,234 +307,84 @@ export function DoubleSlit() {
             </g>
           ))}
 
-          {/* Prediction curves */}
-          {showCurves && (
-            <>
-              {!curvesMatch && (
-                <polyline
-                  points={classicalPoints.join(' ')}
-                  fill="none"
-                  stroke="#9CA3AF"
-                  strokeWidth="1.6"
-                  strokeOpacity="0.85"
-                  strokeDasharray="6,4"
-                />
-              )}
-              <polyline
-                points={quantumPoints.join(' ')}
-                fill="none"
-                stroke="#00D9C0"
-                strokeWidth="2"
-                strokeOpacity="0.95"
-              />
-            </>
-          )}
-
-          {/* Top headers */}
-          <text x={WALL_X} y={18} fill="#E8EAED" fontSize="13" fontFamily="ui-monospace" fontWeight="600" textAnchor="middle">
-            {slits === 1 ? 'ONE SLIT' : measureWhich ? 'TWO SLITS · OBSERVED' : 'TWO SLITS · UNOBSERVED'}
+          {/* Top status banner */}
+          <text x={WALL_X} y={20} fill="#E8EAED" fontSize="14" fontFamily="ui-monospace" fontWeight="700" textAnchor="middle">
+            {isWaveBehavior ? 'WAVE BEHAVIOR' : 'PARTICLE BEHAVIOR'}
           </text>
-          <text x={(WALL_X + DETECTOR_X) / 2 + 30} y={18} fill="#9CA3AF" fontSize="13" fontFamily="ui-monospace" textAnchor="middle">
-            {hits.length} photons fired
+          <text x={(WALL_X + DETECTOR_X) / 2 + 40} y={20} fill="#9CA3AF" fontSize="13" fontFamily="ui-monospace" textAnchor="middle">
+            {hits.length} photons
           </text>
-
-          {/* Legend (curves) */}
-          {showCurves && (
-            <g transform={`translate(${DETECTOR_X - 200}, ${SCREEN_H - 32})`}>
-              <line x1="0" y1="0" x2="22" y2="0" stroke="#00D9C0" strokeWidth="2" />
-              <text x="28" y="4" fill="#E8EAED" fontSize="11" fontFamily="ui-monospace">
-                quantum prediction
-              </text>
-              {!curvesMatch && (
-                <g transform="translate(0, 14)">
-                  <line x1="0" y1="0" x2="22" y2="0" stroke="#9CA3AF" strokeWidth="1.6" strokeDasharray="6,4" />
-                  <text x="28" y="4" fill="#9CA3AF" fontSize="11" fontFamily="ui-monospace">
-                    classical (particle) prediction
-                  </text>
-                </g>
-              )}
-            </g>
-          )}
         </svg>
       </div>
 
-      {/* Verdict bar */}
-      <div className={`mt-4 rounded-sm border px-4 py-3 text-sm leading-snug ${
-        curvesMatch
-          ? 'bg-accent-warn/10 border-accent-warn/40 text-text-primary'
-          : 'bg-accent-data/10 border-accent-data/40 text-text-primary'
-      }`}>
-        <span className="font-mono text-[10px] uppercase tracking-[0.15em] block mb-1 text-text-muted">
-          {curvesMatch ? 'matches classical expectation' : 'defies classical expectation'}
-        </span>
-        {slits === 1 && (
-          <>One slit produces a single diffraction bump. A classical-particle model predicts the same thing. Nothing weird yet.</>
-        )}
-        {slits === 2 && !measureWhich && (
-          <>Classical physics says two slits should give two bumps (gray dashed line). Quantum reality gives <strong>interference fringes</strong> (cyan) — even when photons go through one at a time.</>
-        )}
-        {slits === 2 && measureWhich && (
-          <>Adding which-slit detectors collapses the wave. The interference pattern <strong>vanishes</strong> and the result matches the classical two-bump prediction exactly.</>
-        )}
+      {/* ────────── Photon-firing controls — small and below ────────── */}
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <button
+          onClick={() => setAutoFire((v) => !v)}
+          className={`px-4 py-2 text-sm font-mono font-semibold rounded-sm transition border ${
+            autoFire
+              ? 'bg-accent-data text-bg border-accent-data shadow-[0_0_12px_rgba(0,217,192,0.4)]'
+              : 'bg-bg-surface text-text-primary border-border hover:border-accent-data hover:text-accent-data'
+          }`}
+        >
+          {autoFire ? '■ Pause stream' : '▶ Start stream'}
+        </button>
+        <button onClick={() => fire(10)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-data hover:text-accent-data rounded-sm">
+          +10
+        </button>
+        <button onClick={() => fire(100)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-data hover:text-accent-data rounded-sm">
+          +100
+        </button>
+        <button onClick={reset} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-muted border border-border hover:text-text-primary rounded-sm">
+          Clear screen
+        </button>
+        <button
+          onClick={() => setShowAdvanced((v) => !v)}
+          className="ml-auto px-3 py-2 text-xs font-mono text-text-muted border border-border rounded-sm hover:border-text-primary hover:text-text-primary"
+        >
+          {showAdvanced ? 'Hide controls' : 'Show more controls'}
+        </button>
       </div>
 
-      {/* Mode toggles */}
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-        <ModeCard
-          title="1 slit"
-          subtitle="control"
-          active={slits === 1}
-          onClick={() => {
-            setSlits(1);
-            setMeasureWhich(false);
-            reset();
-          }}
-          description="Single diffraction bump. Boring on purpose — the baseline."
-        />
-        <ModeCard
-          title="2 slits · unobserved"
-          subtitle="the famous result"
-          active={slits === 2 && !measureWhich}
-          onClick={() => {
-            setSlits(2);
-            setMeasureWhich(false);
-            reset();
-          }}
-          description="Interference fringes appear — even with one photon at a time."
-          highlight
-        />
-        <ModeCard
-          title="2 slits · observed"
-          subtitle="add a detector"
-          active={slits === 2 && measureWhich}
-          onClick={() => {
-            setSlits(2);
-            setMeasureWhich(true);
-            reset();
-          }}
-          description="Watching the slits collapses the wave. Pattern reverts to two bumps."
-        />
-      </div>
-
-      {/* Controls */}
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-        <div className="space-y-3">
-          <Slider label="Wavelength λ" value={wavelength} min={20} max={140} step={1} onChange={setWavelength} />
-          {slits === 2 && (
-            <Slider label="Slit separation d" value={slitSep} min={30} max={140} step={1} onChange={setSlitSep} />
-          )}
-          <Slider label="Slit width a" value={slitWidth} min={6} max={50} step={1} onChange={setSlitWidth} />
-        </div>
-
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.18em] text-accent-data font-mono mb-2">Fire photons</p>
-          <div className="flex flex-wrap gap-2 mb-3">
-            <button
-              onClick={() => setAutoFire((v) => !v)}
-              className={`px-4 py-2 text-sm font-mono font-semibold rounded-sm transition border ${
-                autoFire
-                  ? 'bg-accent-data text-bg border-accent-data shadow-[0_0_12px_rgba(0,217,192,0.4)]'
-                  : 'bg-bg-surface text-text-primary border-border hover:border-accent-data hover:text-accent-data'
-              }`}
-            >
-              {autoFire ? '■ Stop stream' : '▶ Start stream'}
-            </button>
-            <button onClick={() => fire(1)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-data hover:text-accent-data rounded-sm">+1</button>
-            <button onClick={() => fire(10)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-data hover:text-accent-data rounded-sm">+10</button>
-            <button onClick={() => fire(100)} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-primary border border-border hover:border-accent-data hover:text-accent-data rounded-sm">+100</button>
-            <button onClick={reset} className="px-3 py-2 text-xs font-mono bg-bg-surface text-text-muted border border-border hover:text-text-primary rounded-sm">
-              Reset
-            </button>
+      {showAdvanced && (
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 border-t border-border pt-4">
+          <button
+            onClick={() => setSlitsAndReset(slits === 2 ? 1 : 2)}
+            className={`text-left p-3 rounded-sm border transition bg-bg-surface text-text-primary ${
+              slits === 1 ? 'border-accent-warn/60' : 'border-border hover:border-accent-data'
+            }`}
+          >
+            <p className="font-display text-base leading-tight">
+              Slits: <span className="text-accent-data">{slits === 2 ? 'two (default)' : 'one (control)'}</span>
+            </p>
+            <p className="text-xs mt-1 leading-relaxed text-text-secondary">
+              Click to {slits === 2 ? 'switch to one slit' : 'switch back to two slits'}. One slit
+              gives a single boring bump — that&apos;s the control case proving the interference
+              isn&apos;t coming from the slit edges.
+            </p>
+          </button>
+          <div className="text-xs text-text-muted leading-relaxed p-3 bg-bg-surface/50 border border-border rounded-sm">
+            <p className="font-mono uppercase tracking-[0.12em] text-text-secondary mb-1.5 text-[10px]">
+              What you&apos;re watching for
+            </p>
+            <p>
+              With two slits and no detector, photons land in <strong>vertical stripes</strong>{' '}
+              of bright and dark — like waves overlapping on water. Add the detector and the
+              stripes vanish; you get <strong>two solid clumps</strong> — like classical bullets.
+              That is the experiment.
+            </p>
           </div>
-          <label className="flex items-center gap-2 text-xs font-mono text-text-secondary cursor-pointer">
-            <input
-              type="checkbox"
-              checked={showCurves}
-              onChange={(e) => setShowCurves(e.target.checked)}
-              className="accent-accent-data"
-            />
-            Show prediction curves (classical vs quantum)
-          </label>
         </div>
-      </div>
+      )}
 
       <p className="mt-5 text-xs text-text-muted leading-relaxed border-t border-border pt-3">
-        <strong className="text-text-secondary">Try this:</strong> Start on{' '}
-        <strong className="text-text-secondary">2 slits · unobserved</strong>. Hit{' '}
-        <em>Start stream</em>. Watch single photons hit apparently random spots — but the
-        pattern that <em>emerges</em> tracks the cyan curve, not the gray classical one.
-        Then switch to <strong className="text-text-secondary">2 slits · observed</strong>.
-        The moment you peek at which slit each photon went through, the interference vanishes
-        and the cyan curve snaps onto the classical one. The act of measurement physically
-        changes the experiment.
+        <strong className="text-text-secondary">Try this in 30 seconds:</strong> the stream is
+        already running. Watch the pattern build up — bright stripes, dark gaps. Now click the
+        toggle to start watching the slits. The stripes vanish and two solid clumps emerge. Toggle
+        back and the stripes return. That is the whole experiment. Richard Feynman called it{' '}
+        <em>the only mystery in quantum mechanics</em> — every other quantum weirdness eventually
+        reduces back to this.
       </p>
     </div>
-  );
-}
-
-function ModeCard({
-  title,
-  subtitle,
-  description,
-  active,
-  onClick,
-  highlight = false,
-}: {
-  title: string;
-  subtitle: string;
-  description: string;
-  active: boolean;
-  onClick: () => void;
-  highlight?: boolean;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`text-left p-3 rounded-sm border transition ${
-        active
-          ? 'bg-accent-data/15 border-accent-data text-text-primary'
-          : highlight
-            ? 'bg-bg-surface border-accent-data/40 hover:border-accent-data text-text-primary'
-            : 'bg-bg-surface border-border hover:border-text-secondary text-text-primary'
-      }`}
-    >
-      <p className="font-display text-base leading-tight text-text-primary">{title}</p>
-      <p className="text-[10px] font-mono uppercase tracking-[0.12em] text-text-muted mt-0.5">{subtitle}</p>
-      <p className="text-xs mt-1.5 leading-relaxed text-text-secondary">{description}</p>
-    </button>
-  );
-}
-
-function Slider({
-  label,
-  value,
-  min,
-  max,
-  step,
-  onChange,
-}: {
-  label: string;
-  value: number;
-  min: number;
-  max: number;
-  step: number;
-  onChange: (v: number) => void;
-}) {
-  return (
-    <label className="block">
-      <div className="flex justify-between text-xs font-mono text-text-secondary mb-1">
-        <span>{label}</span>
-        <span className="text-text-primary">{value}</span>
-      </div>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full accent-accent-data"
-      />
-    </label>
   );
 }

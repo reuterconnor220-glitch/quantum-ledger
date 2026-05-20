@@ -17,7 +17,7 @@
 
 import Link from 'next/link';
 import { fetchRecentNews } from '@/lib/data/live';
-import { formatDate } from '@/lib/utils';
+import { formatDate, cleanNewsTitle, displaySummary } from '@/lib/utils';
 import { SentimentChip } from '@/components/SentimentChip';
 
 export const metadata = {
@@ -263,11 +263,11 @@ export default async function NewsPage({
                           : 'text-[17px] text-text-primary')
                       }
                     >
-                      {n.title}
+                      {cleanNewsTitle(n.title)}
                     </p>
-                    {n.summary && (
+                    {displaySummary(n.title, n.summary) && (
                       <p className="mt-1.5 text-[13px] text-text-secondary leading-snug max-w-[64ch]">
-                        {n.summary}
+                        {displaySummary(n.title, n.summary)}
                       </p>
                     )}
                   </div>
